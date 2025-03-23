@@ -4,8 +4,10 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch --env-file=.env src/server.ts"
+    "dev": "tsx watch --env-file=.env src/server.ts",
+    "build": "tsup src/server.ts",
+    "lint": "npx @biomejs/biome check --write src",
+    "start": "node --env-file=.env dist/server.cjs"
   },
   "keywords": [],
   "author": "",
@@ -20,11 +22,12 @@
     "@types/node": "^22.13.10",
     "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.11.11",
-    "drizzle-kit": "^0.30.5",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "tsup": "^8.4.0",
+    "drizzle-kit": "^0.30.5",
     "@date-fns/tz": "^1.2.0",
     "@fastify/cors": "^11.0.0",
     "@fastify/swagger": "^9.4.2",

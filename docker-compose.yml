@@ -8,3 +8,16 @@ services:
       - POSTGRESQL_USERNAME=nexo
       - POSTGRESQL_PASSWORD=nexo
       - POSTGRESQL_DATABASE=nexo
+    network_mode: host
+  api:
+    build: ./server
+    container_name: api-nexo
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://nexo:nexo@localhost:5432/nexo
+      # - JWT_SECRET=550552ce-fdc6-479e-a7ee-542783f95d80
+      # - ENVIRONMENT=production
+    depends_on:
+      - bd
+    network_mode: host

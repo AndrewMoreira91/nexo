@@ -7,9 +7,12 @@ export const getTasks = async (userId: string) => {
 	const user = await getUser(userId)
 	if (!user) throw new Error('User not found')
 
-	const tasksResponse = await db.select().from(tasks).where(eq(tasks.userId, userId))
+	const tasksResponse = await db
+		.select()
+		.from(tasks)
+		.where(eq(tasks.userId, userId))
 
 	return {
-		tasks: tasksResponse
+		tasks: tasksResponse,
 	}
 }

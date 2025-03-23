@@ -1,2 +1,0 @@
-ALTER TABLE "daily_progress" ADD COLUMN "total_session_focus_duration" integer DEFAULT 0 NOT NULL;--> statement-breakpoint
-ALTER TABLE "users" ADD COLUMN "sessions_duration" integer DEFAULT 0 NOT NULL;

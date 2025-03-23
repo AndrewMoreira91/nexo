@@ -19,7 +19,7 @@ export const getTasksRoute: FastifyPluginAsyncZod = async (app) => {
 							isCompleted: z.boolean(),
 							userId: z.string(),
 						}),
-					)
+					),
 				},
 				security: [{ bearerAuth: [] }],
 			},

@@ -26,7 +26,7 @@ export const updateTask = async ({
 	title,
 	userId,
 }: UpdateTaskInput) => {
-	let dailyProgress: DailyProgressType | null = null;
+	let dailyProgress: DailyProgressType | null = null
 
 	if (isCompleted) {
 		const { dailyProgress: dp } = await createDailyProgress(userId)

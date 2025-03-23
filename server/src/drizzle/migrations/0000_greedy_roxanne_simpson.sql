@@ -1,6 +1,17 @@
+CREATE TABLE "daily_progress" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"date" date NOT NULL,
+	"is_goal_complete" boolean DEFAULT false NOT NULL,
+	"sessions_completed" integer DEFAULT 0 NOT NULL,
+	"total_session_focus_duration" integer DEFAULT 0 NOT NULL,
+	"streak" integer DEFAULT 0 NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "sessions" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
+	"daily_progress_id" uuid NOT NULL,
 	"duration" integer DEFAULT 0 NOT NULL,
 	"type" text NOT NULL,
 	"start_time" timestamp NOT NULL,
@@ -9,8 +20,9 @@ CREATE TABLE "sessions" (
 );
 --> statement-breakpoint
 CREATE TABLE "tasks" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" text NOT NULL,
 	"user_id" uuid NOT NULL,
+	"daily_progress_id" uuid,
 	"is_completed" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
@@ -20,5 +32,8 @@ CREATE TABLE "users" (
 	"email" text NOT NULL,
 	"password" text NOT NULL,
 	"daily_session_target" integer DEFAULT 0 NOT NULL,
+	"sessions_duration" integer DEFAULT 0 NOT NULL,
+	"streak" integer DEFAULT 0 NOT NULL,
+	"longest_streak" integer DEFAULT 0 NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
