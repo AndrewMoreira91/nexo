@@ -1,0 +1,1 @@
+ALTER TABLE "sessions" ADD COLUMN "daily_progress_id" uuid NOT NULL;

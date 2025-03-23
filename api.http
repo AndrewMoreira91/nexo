@@ -1,0 +1,52 @@
+### Create user
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+	"name": "Caio",
+	"email": "caio@example.com",
+	"password": "123456"
+}
+
+### Login Route
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+	"email": "caio@example.com",
+	"password": "123456"
+}
+
+### Start Session Route
+POST http://localhost:3000/start-session
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlYjBkOS0zYTVkLTRlYTUtOTk3ZS0zZGE5YTFkOWI0ODEiLCJpYXQiOjE3NDI3MzU3MTAsImV4cCI6MTc0MjgyMjExMH0.r7_ClKffofAhAr_CZ9HO4UWUe8BOv4lvMzsN6Gb-F88
+
+{
+	"type": "focus"
+}
+
+
+### End Session Route
+PUT http://localhost:3000/end-session
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlYjBkOS0zYTVkLTRlYTUtOTk3ZS0zZGE5YTFkOWI0ODEiLCJpYXQiOjE3NDI3MzU3MTAsImV4cCI6MTc0MjgyMjExMH0.r7_ClKffofAhAr_CZ9HO4UWUe8BOv4lvMzsN6Gb-F88
+
+{
+	"duration": 1547,
+	"sessionId": "651041a6-43a2-4cbe-9787-1e4bff2bd419"
+}
+
+### Get Sessions Data Route
+GET http://localhost:3000/get-data-progress
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlYjBkOS0zYTVkLTRlYTUtOTk3ZS0zZGE5YTFkOWI0ODEiLCJpYXQiOjE3NDI3MzU3MTAsImV4cCI6MTc0MjgyMjExMH0.r7_ClKffofAhAr_CZ9HO4UWUe8BOv4lvMzsN6Gb-F88
+
+### Teste Route
+POST http://localhost:3000/teste
+Content-Type: application/json
+
+{
+	"duration": 1547,
+	"sessionId": "15ad7976-414f-4cf8-9db2-5c64317438e1"
+}

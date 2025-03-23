@@ -1,0 +1,10 @@
+services:
+  bd:
+    image: bitnami/postgresql
+    container_name: postgres-nexo
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USERNAME=nexo
+      - POSTGRESQL_PASSWORD=nexo
+      - POSTGRESQL_DATABASE=nexo
