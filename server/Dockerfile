@@ -12,6 +12,6 @@ EXPOSE ${PORT}
 
 RUN npm ci --only=production
 
-RUN npm run build
+RUN npx drizzle-kit migrate && npm run build
 
 CMD ["npm", "start"]
