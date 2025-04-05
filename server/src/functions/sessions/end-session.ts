@@ -1,18 +1,6 @@
-import {
-	endOfDay,
-	endOfTomorrow,
-	setDate,
-	startOfDay,
-	startOfTomorrow,
-	startOfYesterday,
-} from 'date-fns'
-import { and, eq, gte, isNotNull, lte, sql } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
-import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
 import { sessions } from '../../drizzle/schemas/session-schema'
-import { users } from '../../drizzle/schemas/user-schema'
-import { env } from '../../env'
-import { dateTodayTest } from '../../tests/configs'
 import { dateToday } from '../../utils/getDate'
 import { updateDailyProgress } from '../daily-progress/update-daily-progress'
 import { getUser } from '../user/get-user'

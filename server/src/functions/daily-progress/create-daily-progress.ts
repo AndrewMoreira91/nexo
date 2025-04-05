@@ -24,8 +24,6 @@ export const createDailyProgress = async (userId: string) => {
 
 	const yesterday = setDate(dateToday, dateToday.getDate() - 1).toUTCString()
 
-	console.log('startOfYesterday', yesterday)
-
 	const lastDailyProgress = await db
 		.select({ streak: dailyProgress.streak })
 		.from(dailyProgress)

@@ -9,14 +9,12 @@ import { format } from 'date-fns'
 export const dailyDataUpdate = async () => {
 	const formattedDateToday = format(dateToday, 'yyyy-MM-dd')
 
-	console.log('Running daily data update')
 	const usersData = await db
 		.select({
 			id: users.id,
 			name: users.name,
 		})
 		.from(users)
-	console.log('Users data', usersData)
 
 	for (const user of usersData) {
 		const lastDailyProgress = await db

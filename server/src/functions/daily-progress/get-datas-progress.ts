@@ -4,7 +4,6 @@ import { asc, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
 import { dateToday } from '../../utils/getDate'
-import { getUser } from '../user/get-user'
 
 type ResultType = {
 	[key: string]: {
@@ -17,9 +16,6 @@ type ResultType = {
 }
 
 export const getDatasProgress = async (userId: string) => {
-	const user = await getUser(userId)
-	if (!user) throw new Error('User not found')
-
 	const formattedDateToday = format(dateToday, 'yyyy-MM-dd')
 
 	const dailyProgressData = await db
