@@ -7,7 +7,7 @@ export const tasks = pgTable('tasks', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	userId: uuid('user_id').notNull(),
 	dailyProgressId: uuid('daily_progress_id'),
-	title: text('id').notNull(),
+	title: text('title').notNull(),
 	isCompleted: boolean('is_completed').notNull().default(false),
 })
 

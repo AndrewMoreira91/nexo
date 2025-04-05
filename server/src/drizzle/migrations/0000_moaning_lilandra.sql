@@ -20,9 +20,10 @@ CREATE TABLE "sessions" (
 );
 --> statement-breakpoint
 CREATE TABLE "tasks" (
-	"id" text NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"daily_progress_id" uuid,
+	"title" text NOT NULL,
 	"is_completed" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint

@@ -6,4 +6,7 @@ export const pg = new postgres.Pool({
 	connectionString: env.DATABASE_URL,
 })
 
-export const db = drizzle(pg)
+export const db = drizzle({
+	client: pg,
+	logger: env.ENVIRONMENT === 'development',
+})
