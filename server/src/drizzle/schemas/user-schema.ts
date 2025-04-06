@@ -9,8 +9,10 @@ export const users = pgTable('users', {
 	name: text('name').notNull(),
 	email: text('email').notNull().unique(),
 	password: text('password').notNull(),
-	dailySessionTarget: integer('daily_session_target').notNull().default(0),
-	sessionDuration: integer('sessions_duration').notNull().default(0),
+	dailySessionTarget: integer('daily_session_target').notNull().default(2),
+	focusSessionDuration: integer('focus_session_duration').notNull().default(1500),
+	shortBreakSessionDuration: integer('short_break_session_duration').notNull().default(300),
+	longBreakSessionDuration: integer('long_break_session_duration').notNull().default(900),
 	streak: integer('streak').notNull().default(0),
 	longestStreak: integer('longest_streak').notNull().default(0),
 })

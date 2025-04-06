@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "daily_session_target" SET DEFAULT 2;
