@@ -1,0 +1,105 @@
+import { FaFireAlt, FaTasks } from "react-icons/fa";
+import { FiTarget } from "react-icons/fi";
+import { GoGraph } from "react-icons/go";
+import { useNavigate } from "react-router";
+import img from "../assets/medium-shot-woman-working-laptop 1.png";
+import Button from "../components/Button";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import MenuInfo from "../components/MenuInfo";
+import { useAuth } from "../context/auth.context";
+
+
+const WelcomePage = () => {
+	const navigate = useNavigate();
+	const { isAuthenticated } = useAuth();
+
+	if (isAuthenticated) {
+		navigate("/dashboard");
+	}
+
+	return (
+		<div>
+			<Header />
+			<main className="bg-background">
+				<section className="flex items-center px-16 mt-10 gap-4">
+					<div className="flex flex-col gap-4">
+						<h2 className="font-bold text-5xl">Maximize seu foco,</h2>
+						<h2 className="font-bold text-5xl text-primary">alcance seus objetivos</h2>
+						<p className="font-medium text-gray-500 text-xl/6">
+							Use o metodo Pomodoro para transformar seu tempo em produtividade. Estabeleça metas, matenha o foco e acompanhe o progresso.
+						</p>
+						<div className="flex gap-4">
+							<a href="/login">
+								<Button type="button" size="large" theme="primary">
+									<span>Começar agora</span>
+								</Button>
+							</a>
+						</div>
+					</div>
+
+					<img src={img} alt="Mulher trabalhando no laptop" />
+				</section>
+
+				<section className="flex flex-col gap-6 bg-white px-16 py-16 items-center">
+					<div className="flex flex-col items-center gap-2">
+						<h3 className="font-semibold text-4xl">
+							Recursos principais
+						</h3>
+						<span className="font-medium text-gray-400">
+							Tudo o que você precisa para maximizar a sua produtividade
+						</span>
+					</div>
+					<div className="flex gap-4">
+						<MenuInfo
+							title="Defina metas"
+							description="Defina metas diárias e semanais para acompanhar seu progresso e se manter motivado."
+						>
+							<FiTarget size={28} className="text-primary" />
+						</MenuInfo>
+						<MenuInfo
+							title="Contador de Streak"
+							description="Mantenha sua motivação com sequências de dias concluídos"
+						>
+							<FaFireAlt size={28} className="text-primary" />
+						</MenuInfo>
+						<MenuInfo
+							title="Gestão de tarefas"
+							description="Organize e acompanhe suas tarefas por sessão"
+						>
+							<FaTasks size={28} className="text-primary" />
+						</MenuInfo>
+						<MenuInfo
+							title="Dashboard"
+							description="Visualize relatórios e estatísticas detalhadas"
+						>
+							<GoGraph size={28} className="text-primary" />
+						</MenuInfo>
+					</div>
+				</section>
+
+				<section className="flex flex-col items-center gap-8 bg-primary-bg py-16">
+					<h3 className="font-bold text-4xl">
+						Pronto para aumentar sua produtividade?
+					</h3>
+					<span className="text-2xl font-medium text-gray-500">
+						Comece agora mesmo e transforme sua forma de estudar
+					</span>
+					<a href="/login">
+						<Button
+							type="button"
+							theme="primary"
+							size="large"
+						>
+							Começar Gratuitamente
+						</Button>
+					</a>
+				</section>
+			</main >
+
+			<Footer />
+		</div >
+	);
+};
+
+export default WelcomePage;
