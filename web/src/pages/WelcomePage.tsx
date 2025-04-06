@@ -22,11 +22,11 @@ const WelcomePage = () => {
 		<div>
 			<Header />
 			<main className="bg-background">
-				<section className="flex items-center px-16 mt-10 gap-4">
+				<section className="flex flex-col md:flex-row items-center px-7 sm:px-16 mt-10 gap-4">
 					<div className="flex flex-col gap-4">
-						<h2 className="font-bold text-5xl">Maximize seu foco,</h2>
-						<h2 className="font-bold text-5xl text-primary">alcance seus objetivos</h2>
-						<p className="font-medium text-gray-500 text-xl/6">
+						<h2 className="font-bold text-4xl md:text-5xl">Maximize seu foco,</h2>
+						<h2 className="font-bold text-4xl md:text-5xl text-primary">alcance seus objetivos</h2>
+						<p className="font-medium text-gray-500 text-sm md:text-xl/6">
 							Use o metodo Pomodoro para transformar seu tempo em produtividade. Estabeleça metas, matenha o foco e acompanhe o progresso.
 						</p>
 						<div className="flex gap-4">
@@ -38,19 +38,19 @@ const WelcomePage = () => {
 						</div>
 					</div>
 
-					<img src={img} alt="Mulher trabalhando no laptop" />
+					<img src={img} className="w-full sm:w-auto" alt="Mulher trabalhando no laptop" />
 				</section>
 
-				<section className="flex flex-col gap-6 bg-white px-16 py-16 items-center">
+				<section className="flex flex-col gap-6 bg-white px-7 sm:px-16 py-16 items-center">
 					<div className="flex flex-col items-center gap-2">
-						<h3 className="font-semibold text-4xl">
+						<h3 className="font-semibold text-2xl sm:text-4xl">
 							Recursos principais
 						</h3>
-						<span className="font-medium text-gray-400">
+						<span className="font-medium text-gray-400 text-[14px] sm:text-base">
 							Tudo o que você precisa para maximizar a sua produtividade
 						</span>
 					</div>
-					<div className="flex gap-4">
+					<div className="flex flex-col md:flex-row gap-4">
 						<MenuInfo
 							title="Defina metas"
 							description="Defina metas diárias e semanais para acompanhar seu progresso e se manter motivado."
@@ -78,11 +78,11 @@ const WelcomePage = () => {
 					</div>
 				</section>
 
-				<section className="flex flex-col items-center gap-8 bg-primary-bg py-16">
-					<h3 className="font-bold text-4xl">
+				<section className="flex flex-col items-center gap-2 sm:gap-8 bg-primary-bg px-7 py-16">
+					<h3 className="font-bold text-3xl sm:text-4xl">
 						Pronto para aumentar sua produtividade?
 					</h3>
-					<span className="text-2xl font-medium text-gray-500">
+					<span className="tex-xl sm:text-2xl font-medium text-gray-500">
 						Comece agora mesmo e transforme sua forma de estudar
 					</span>
 					<a href="/login">
