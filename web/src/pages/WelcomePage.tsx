@@ -30,11 +30,14 @@ const WelcomePage = () => {
 							Use o metodo Pomodoro para transformar seu tempo em produtividade. Estabeleça metas, matenha o foco e acompanhe o progresso.
 						</p>
 						<div className="flex gap-4">
-							<a href="/login">
-								<Button type="button" size="large" theme="primary">
-									<span>Começar agora</span>
-								</Button>
-							</a>
+							<Button
+								type="button"
+								size="large"
+								theme="primary"
+								onClick={() => navigate("/login")}
+							>
+								<span>Começar agora</span>
+							</Button>
 						</div>
 					</div>
 
@@ -85,15 +88,14 @@ const WelcomePage = () => {
 					<span className="tex-xl sm:text-2xl font-medium text-gray-500">
 						Comece agora mesmo e transforme sua forma de estudar
 					</span>
-					<a href="/login">
-						<Button
-							type="button"
-							theme="primary"
-							size="large"
-						>
-							Começar Gratuitamente
-						</Button>
-					</a>
+					<Button
+						type="button"
+						theme="primary"
+						size="large"
+						onClick={() => navigate("/login")}
+					>
+						Começar Gratuitamente
+					</Button>
 				</section>
 			</main >
 

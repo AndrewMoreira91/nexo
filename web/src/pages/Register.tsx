@@ -1,22 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import Button from "../components/Button";
+import Header from "../components/Header";
 import { useAuth } from "../context/auth.context";
 
+import imgSaly from "../assets/saly.png";
+import Input from "../components/Input";
+
 const RegisterPage = () => {
+	const navigate = useNavigate();
+	const { register, isAuthenticated } = useAuth();
+	const [errorMessage, setErrorMessage] = useState("");
+
 	const [formData, setFormData] = useState({
 		username: "",
 		email: "",
 		password: "",
+		confirmPassword: "",
 	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
+		if (name === "confirmPassword") {
+
+		}
+
 		setFormData({ ...formData, [name]: value });
 	};
-
-	const navigate = useNavigate();
-
-	const { register, isAuthenticated, user } = useAuth();
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -29,87 +39,110 @@ const RegisterPage = () => {
 	};
 
 	useEffect(() => {
-		console.log("User:", user);
-
 		if (isAuthenticated) {
 			navigate("/dashboard");
 		}
-	}, [isAuthenticated, navigate, user]);
+	}, [isAuthenticated, navigate]);
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100">
-			<div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-				<h2 className="mb-6 text-2xl font-bold text-center text-gray-800">
-					Register
-				</h2>
-				<form onSubmit={handleSubmit}>
-					<div className="mb-4">
-						<label
-							htmlFor="username"
-							className="block mb-2 text-sm font-medium text-gray-600"
-						>
-							Username
-						</label>
-						<input
-							type="text"
-							id="username"
-							name="username"
-							value={formData.username}
-							onChange={handleChange}
-							className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-							placeholder="Enter your username"
-							required
-						/>
+		<div className="bg-background">
+			<Header />
+			<div className="flex flex-row">
+				<section className="flex-1 m-8 sm:mt-6 md:ml-24">
+					<div>
+						<h2 className="text-3xl font-semibold">Cire sua conta</h2>
+						<div className="flex flex-col mt-8">
+							<span>Se você já tem uma conta registrada</span>
+							<span>Faça o {" "}
+								<button
+									type="button"
+									className="font-semibold text-primary cursor-pointer"
+									onClick={() => navigate("/login")}
+								>
+									login aqui
+								</button>
+							</span>
+						</div>
 					</div>
-					<div className="mb-4">
-						<label
-							htmlFor="email"
-							className="block mb-2 text-sm font-medium text-gray-600"
-						>
-							Email
-						</label>
-						<input
-							type="email"
-							id="email"
-							name="email"
-							value={formData.email}
-							onChange={handleChange}
-							className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-							placeholder="Enter your email"
-							required
-						/>
+					<form onSubmit={handleSubmit} className="mt-6 max-w-lg">
+						<div className="flex flex-col gap-4">
+							<div>
+								<label htmlFor="name" className="block text-sm font-medium text-gray-700">
+									Nome
+								</label>
+								<Input
+									type="text"
+									id="username"
+									name="username"
+									value={formData.username}
+									onChange={handleChange}
+									required
+								/>
+							</div>
+							<div>
+								<label htmlFor="email" className="block text-sm font-medium text-gray-700">
+									Email
+								</label>
+								<Input
+									type="email"
+									id="email"
+									name="email"
+									value={formData.email}
+									onChange={handleChange}
+									required
+								/>
+							</div>
+							<div>
+								<label htmlFor="password" className="block text-sm font-medium text-gray-700">
+									Senha
+								</label>
+								<Input
+									type="password"
+									id="password"
+									name="password"
+									value={formData.password}
+									onChange={handleChange}
+									required
+								/>
+							</div>
+
+							<div>
+								<label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+									Confirme a senha
+								</label>
+								<Input
+									type="password"
+									id="confirm-password"
+									name="confirmPassword"
+									value={formData.confirmPassword}
+									onChange={handleChange}
+									required
+								/>
+								{
+									formData.password !== formData.confirmPassword &&
+									formData.confirmPassword.length > 0 &&
+									<div className="text-sm text-red-500 mt-1">
+										As senhas não coincidem
+									</div>
+								}
+							</div>
+							<Button
+								type="submit"
+								size="small"
+							>
+								Criar conta
+							</Button>
+						</div>
+					</form>
+				</section>
+
+				<section className="hidden flex-1 sm:flex flex-col gap-6 items-center justify-center p-8 mr-6 my-6 bg-[#000842] rounded-2xl">
+					<div className="w-full">
+						<h3 className="text-white text-start text-4xl font-bold w-full">Cria sua conta no Nexo</h3>
+						<span className="text-white text-start w-full">E saiba o que é ter hábito de estudar</span>
 					</div>
-					<div className="mb-6">
-						<label
-							htmlFor="password"
-							className="block mb-2 text-sm font-medium text-gray-600"
-						>
-							Password
-						</label>
-						<input
-							type="password"
-							id="password"
-							name="password"
-							value={formData.password}
-							onChange={handleChange}
-							className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-							placeholder="Enter your password"
-							required
-						/>
-					</div>
-					<button
-						type="submit"
-						className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-					>
-						Register
-					</button>
-					<p>
-						Já tem uma conta?{" "}
-						<a href="/login" className="text-blue-500 hover:underline">
-							Login
-						</a>
-					</p>
-				</form>
+					<img src={imgSaly} alt="Saly" />
+				</section>
 			</div>
 		</div>
 	);
