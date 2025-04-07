@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
 			${theme === 'primary' && 'bg-primary text-white hover:bg-primary-hover'}
 			${theme === 'outline' && 'bg-transparent text-primary border border-primary hover:text-primary-hover hover:border-primary-hover'}
 			${theme === 'outline-secondary' && 'bg-transparent text-gray-500 border border-gray-500 hover:bg-gray-500 hover:text-white'}
-			font-bold rounded-2xl cursor-pointer transition
+			font-bold rounded-2xl cursor-pointer transition flex fle-row gap-2 items-center justify-center
 			`}
 			{...props}
 		>

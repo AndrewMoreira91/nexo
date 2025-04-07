@@ -1,7 +1,7 @@
 
 const Footer: React.FC = () => {
 	return (
-		<footer className="flex flex-col items-center bg-white text-gray-500 py-4">
+		<footer className="flex flex-col items-center bg-white text-gray-500 py-4 border-t border-gray-300">
 			<p className="text-sm">
 				&copy; {new Date().getFullYear()} Nexo. Todos os direitos reservados.
 			</p>

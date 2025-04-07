@@ -10,7 +10,7 @@ const LoginPage = () => {
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 
-	const { login, isAuthenticated, user } = useAuth();
+	const { login, isAuthenticated } = useAuth();
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -22,12 +22,10 @@ const LoginPage = () => {
 	};
 
 	useEffect(() => {
-		console.log("User:", user);
-
 		if (isAuthenticated) {
 			navigate("/dashboard");
 		}
-	}, [isAuthenticated, navigate, user]);
+	}, [isAuthenticated, navigate]);
 
 	return (
 		<div className="bg-background">
