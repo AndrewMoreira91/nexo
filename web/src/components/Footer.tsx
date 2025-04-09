@@ -1,7 +1,17 @@
+import type { ComponentProps } from "react"
 
-const Footer: React.FC = () => {
+type FooterProps = {
+	className?: ComponentProps<"footer">["className"]
+}
+
+const Footer: React.FC<FooterProps> = ({ className }) => {
 	return (
-		<footer className="flex flex-col items-center bg-white text-gray-500 py-4 border-t border-gray-300">
+		<footer
+			className={`
+			flex flex-col items-center bg-white text-gray-500 py-4 border-t border-gray-300
+			${className}
+			`}
+		>
 			<p className="text-sm">
 				&copy; {new Date().getFullYear()} Nexo. Todos os direitos reservados.
 			</p>

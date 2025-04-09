@@ -27,7 +27,7 @@ const WelcomePage = () => {
 						<h2 className="font-bold text-4xl md:text-5xl">Maximize seu foco,</h2>
 						<h2 className="font-bold text-4xl md:text-5xl text-primary">alcance seus objetivos</h2>
 						<p className="font-medium text-gray-500 text-sm md:text-xl/6">
-							Use o metodo Pomodoro para transformar seu tempo em produtividade. Estabeleça metas, matenha o foco e acompanhe o progresso.
+							Use o metodo <strong className="text-primary">Pomodoro</strong> para transformar seu tempo em produtividade. Estabeleça metas, matenha o foco e acompanhe o progresso.
 						</p>
 						<div className="flex gap-4">
 							<Button
@@ -41,7 +41,7 @@ const WelcomePage = () => {
 						</div>
 					</div>
 
-					<img src={img} className="w-full sm:w-auto" alt="Mulher trabalhando no laptop" />
+					<img src={img} className="w-full md:w-sm lg:w-auto" alt="Mulher trabalhando no laptop" />
 				</section>
 
 				<section className="flex flex-col gap-6 bg-white px-7 sm:px-16 py-16 items-center">

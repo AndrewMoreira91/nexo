@@ -12,7 +12,7 @@ const MenuInfo: React.FC<MenuInfoProps> = ({ title, description, children }) => 
 			<div className="p-5 bg-primary-bg rounded-full">
 				{children}
 			</div>
-			<h4 className="font-semibold text-xl">
+			<h4 className="font-semibold text-xl text-center">
 				{title}
 			</h4>
 			<p className="font-medium text-gray-400 text-base/5 text-center">

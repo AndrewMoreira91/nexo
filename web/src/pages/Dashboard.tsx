@@ -41,7 +41,7 @@ const DashboardPage = () => {
 							<Progressbar percentage={68} />
 
 							<span className="font-medium text-gray-500">Falta pouco para completar sua meta, não desista!</span>
-							<Button size="large">
+							<Button size="large" onClick={() => navigate('/pomodoro')}>
 								<FaPlay className="text-white" />
 								<span className="font-semibold text-base">Começar Concentração</span>
 							</Button>

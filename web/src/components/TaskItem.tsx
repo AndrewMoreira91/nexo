@@ -14,7 +14,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ title, description, isCompleted, ta
 		flex flex-row items-center justify-between px-4 py-6 w-full rounded-l-lg border border-gray-200
 		${isCompleted ? 'bg-primary-success-bg' : 'bg-white'}
 		`}>
-			<div className="flex flex-row w-full gap-3">
+			<div className="flex flex-row gap-3">
 				{!isCompleted && <CheckBox />}
 				<div>
 					<h2 className="font-medium text-lg">{title}</h2>
