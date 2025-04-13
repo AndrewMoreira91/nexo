@@ -52,17 +52,17 @@ const DashboardPage = () => {
 		<div className="bg-background">
 			<Header />
 
-			<main className="px-16 my-12">
+			<main className="px-6 sm:px-16 my-12">
 				<div>
-					<h3 className="font-bold text-3xl">Bem vindo, Andrew!</h3>
-					<span className="font-medium text-xl text-gray-500">
+					<h3 className="font-bold text-2xl sm:text-3xl">Bem vindo, Andrew!</h3>
+					<span className="font-medium text-base sm:text-xl text-gray-500">
 						Vamos começar mais um dia produtivo?
 					</span>
 				</div>
 
 				<div className="flex flex-col gap-8 my-12">
-					<Container className="justify-between">
-						<div className="flex flex-col gap-4 w-1/2 ">
+					<Container className="flex flex-col sm:flex-row gap-5 justify-between">
+						<div className="flex flex-col gap-4 w-full sm:w-1/2 ">
 							<div className="flex gap-4">
 								<span className="font-semibold text-xl">Meta diária</span>
 								<span className="font-medium text-xl text-primary">
@@ -97,7 +97,7 @@ const DashboardPage = () => {
 						<TaskContainer taskList={taskListFake} />
 					</Container>
 
-					<Container className="justify-between gap-8">
+					<Container className="flex-col md:flex-row justify-between gap-8">
 						<MenuData
 							title="Tempo total"
 							textMain="12h 45min"

@@ -14,7 +14,7 @@ const MenuData: React.FC<MenuDataProps> = ({
 	title,
 }) => {
 	return (
-		<div className="flex flex-1 flex-col gap-4 border border-gray-300 py-4 px-6 rounded-2xl max-w-xs">
+		<div className="flex flex-1 flex-col gap-4 border border-gray-300 py-4 px-6 rounded-2xl w-full md:max-w-xs">
 			<div className="flex flex-row items-center gap-4">
 				{children}
 				<span className="font-semibold">{title}</span>

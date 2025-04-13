@@ -45,34 +45,36 @@ const Header = () => {
 	})
 
 	return (
-		<header
-			className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200 relative"
-		>
-			<button
-				type="button"
-				className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
-				onClick={handleClickOnLogo}
+		<div className="relative">
+			<header
+				className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200"
 			>
-				<LogoNexoIcon />
-				<span className="font-bold text-3xl text-primary">NEXO</span>
-			</button>
-			<button
-				type="button"
-				onClick={() => dropdownRef.current?.classList.toggle("hidden")}
-				ref={avatarRef}
-				className="cursor-pointer"
-			>
-				<Avatar
-					src="https://github.com/AndrewMoreira91.png"
-					size="lg"
-					color="primary"
-					alt={user?.name}
-				/>
-			</button>
+				<button
+					type="button"
+					className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
+					onClick={handleClickOnLogo}
+				>
+					<LogoNexoIcon />
+					<span className="font-bold text-3xl text-primary">NEXO</span>
+				</button>
+				<button
+					type="button"
+					onClick={() => dropdownRef.current?.classList.toggle("hidden")}
+					ref={avatarRef}
+					className="cursor-pointer"
+				>
+					<Avatar
+						src="https://github.com/AndrewMoreira91.png"
+						size="lg"
+						color="primary"
+						alt={user?.name}
+					/>
+				</button>
+			</header>
 			{isAuthenticated &&
 				<div
 					ref={dropdownRef}
-					className="hidden flex-col gap-6 bg-white shadow-2xl p-6 rounded-2xl absolute right-0 mx-16 top-9/12"
+					className="hidden flex-col gap-6 bg-white shadow-2xl p-6 rounded-2xl absolute left-0 sm:left-auto right-0 mx-6 sm:mx-16 top-[60px]"
 				>
 					<div className="flex flex-col">
 						<div className="flex flex-row gap-3">
@@ -115,7 +117,7 @@ const Header = () => {
 					</ul>
 				</div>
 			}
-		</header>
+		</div>
 	);
 };
 
