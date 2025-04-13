@@ -97,12 +97,12 @@ const PomodoroPage = () => {
 			{isLoading ? (
 				<Loader />
 			) : (
-				<main className={`flex flex-col px-16 gap-12 ${selectedMode}`}>
-					<section className="w-full bg- flex flex-col gap-5 items-center bg-primary-bg py-6 rounded-lg">
+				<main className={`flex flex-col px-6 sm:px-16 gap-12 ${selectedMode}`}>
+					<section className="w-full p-4 flex flex-col gap-5 items-center bg-primary-bg py-6 rounded-lg">
 						{selectedMode === 'focus' && (
 							<>
 								<h3 className="font-bold text-3xl">Sessão de foco</h3>
-								<span className="font-medium text-xl text-gray-500">
+								<span className="font-medium text-xl text-gray-500 text-center">
 									Matenha o foco, você está progredindo a cada minuto
 								</span>
 							</>
@@ -110,7 +110,7 @@ const PomodoroPage = () => {
 						{selectedMode === 'shortBreak' && (
 							<>
 								<h3 className="font-bold text-3xl">Pausa curta</h3>
-								<span className="font-medium text-xl text-gray-500">
+								<span className="font-medium text-xl text-gray-500 text-center">
 									Aproveite para fazer um lanche ou tomar uma água
 								</span>
 							</>
@@ -118,7 +118,7 @@ const PomodoroPage = () => {
 						{selectedMode === 'longBreak' && (
 							<>
 								<h3 className="font-bold text-3xl">Pausa longa</h3>
-								<span className="font-medium text-xl text-gray-500">
+								<span className="font-medium text-xl text-gray-500 text-center">
 									Aproveite para descansar e relaxar
 								</span>
 							</>
@@ -164,7 +164,7 @@ const PomodoroPage = () => {
 						/>
 					</section>
 
-					<Container className="justify-between gap-8">
+					<Container className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-8">
 						<MenuData
 							title="Sessão atual"
 							textMain="2/4"

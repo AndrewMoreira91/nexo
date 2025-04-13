@@ -16,7 +16,7 @@ const ButtonPill: FC<ButtonPillProps> = ({
 		<button
 			{...props}
 			className={`
-			font-medium py-2 px-4 rounded-full transition
+			font-medium py-2 px-2 sm:px-4 rounded-full transition
 			${isDisabled ? "bg-gray-200 opacity-50 cursor-not-allowed" : "cursor-pointer"}
 			${!isDisabled && theme === "primary" && "bg-primary text-white hover:bg-primary-hover"}
 			${!isDisabled && theme === "secondary" && "bg-gray-200 text-gray-600 hover:bg-gray-300"}
