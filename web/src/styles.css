@@ -4,6 +4,10 @@
 	--color-primary: var(--primary);
 	--color-primary-bg: var(--primary-bg);
 	--color-primary-hover: var(--primary-hover);
+@theme inline {
+	--color-primary: var(--primary);
+	--color-primary-bg: var(--primary-bg);
+	--color-primary-hover: var(--primary-hover);
 	--color-background: #F9FAFB;
 	--color-primary-success: #21725E;
 	--color-primary-success-bg: #E7FAF5;
