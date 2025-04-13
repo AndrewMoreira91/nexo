@@ -9,7 +9,6 @@ import Header from "../components/Header";
 import MenuInfo from "../components/MenuInfo";
 import { useAuth } from "../context/auth.context";
 
-
 const WelcomePage = () => {
 	const navigate = useNavigate();
 	const { isAuthenticated } = useAuth();
@@ -24,10 +23,16 @@ const WelcomePage = () => {
 			<main className="bg-background">
 				<section className="flex flex-col md:flex-row items-center px-7 sm:px-16 mt-10 gap-4">
 					<div className="flex flex-col gap-4">
-						<h2 className="font-bold text-4xl md:text-5xl">Maximize seu foco,</h2>
-						<h2 className="font-bold text-4xl md:text-5xl text-primary">alcance seus objetivos</h2>
+						<h2 className="font-bold text-4xl md:text-5xl">
+							Maximize seu foco,
+						</h2>
+						<h2 className="font-bold text-4xl md:text-5xl text-primary">
+							alcance seus objetivos
+						</h2>
 						<p className="font-medium text-gray-500 text-sm md:text-xl/6">
-							Use o metodo <strong className="text-primary">Pomodoro</strong> para transformar seu tempo em produtividade. Estabeleça metas, matenha o foco e acompanhe o progresso.
+							Use o metodo <strong className="text-primary">Pomodoro</strong>{" "}
+							para transformar seu tempo em produtividade. Estabeleça metas,
+							matenha o foco e acompanhe o progresso.
 						</p>
 						<div className="flex gap-4">
 							<Button
@@ -41,7 +46,11 @@ const WelcomePage = () => {
 						</div>
 					</div>
 
-					<img src={img} className="w-full md:w-sm lg:w-auto" alt="Mulher trabalhando no laptop" />
+					<img
+						src={img}
+						className="w-full md:w-sm lg:w-auto"
+						alt="Mulher trabalhando no laptop"
+					/>
 				</section>
 
 				<section className="flex flex-col gap-6 bg-white px-7 sm:px-16 py-16 items-center">
@@ -97,10 +106,10 @@ const WelcomePage = () => {
 						Começar Gratuitamente
 					</Button>
 				</section>
-			</main >
+			</main>
 
 			<Footer />
-		</div >
+		</div>
 	);
 };
 

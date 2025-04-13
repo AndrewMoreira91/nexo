@@ -36,7 +36,8 @@ const LoginPage = () => {
 						<h2 className="text-3xl font-semibold">Entre na sua conta</h2>
 						<div className="flex flex-col mt-8">
 							<span>Se você ainda não tem uma conta</span>
-							<span>Faça o {" "}
+							<span>
+								Faça o{" "}
 								<button
 									type="button"
 									className="font-semibold text-primary cursor-pointer"
@@ -50,7 +51,10 @@ const LoginPage = () => {
 					<form onSubmit={handleSubmit} className="mt-6 max-w-lg">
 						<div className="flex flex-col gap-4">
 							<div>
-								<label htmlFor="email" className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor="email"
+									className="block text-sm font-medium text-gray-700"
+								>
 									Email
 								</label>
 								<input
@@ -63,7 +67,10 @@ const LoginPage = () => {
 								/>
 							</div>
 							<div>
-								<label htmlFor="password" className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor="password"
+									className="block text-sm font-medium text-gray-700"
+								>
 									Senha
 								</label>
 								<input
@@ -75,10 +82,7 @@ const LoginPage = () => {
 									required
 								/>
 							</div>
-							<Button
-								type="submit"
-								size="small"
-							>
+							<Button type="submit" size="small">
 								Entrar
 							</Button>
 						</div>
@@ -87,8 +91,12 @@ const LoginPage = () => {
 
 				<section className="hidden flex-1 sm:flex flex-col gap-6 items-center justify-center p-8 mr-6 my-6 bg-[#000842] rounded-2xl">
 					<div className="w-full">
-						<h3 className="text-white text-start text-4xl font-bold w-full">Entre no Nexo</h3>
-						<span className="text-white text-start w-full">E comece a ter o hábito de estudar</span>
+						<h3 className="text-white text-start text-4xl font-bold w-full">
+							Entre no Nexo
+						</h3>
+						<span className="text-white text-start w-full">
+							E comece a ter o hábito de estudar
+						</span>
 					</div>
 					<img src={imgSaly} alt="Saly" />
 				</section>

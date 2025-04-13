@@ -10,14 +10,8 @@ const Error404Page = () => {
 			<p className="text-gray-500 mt-2">
 				A página que você está procurando não existe ou foi removida.
 			</p>
-			<a
-				href="/"
-			>
-				<Button
-					size="large"
-				>
-					Voltar para o início
-				</Button>
+			<a href="/">
+				<Button size="large">Voltar para o início</Button>
 			</a>
 		</div>
 	);

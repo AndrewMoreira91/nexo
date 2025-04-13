@@ -6,8 +6,8 @@ const AvatarIcon = ({ color }: AvatarIconProps) => {
 	return (
 		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 		<svg
-			width="55"
-			height="55"
+			width="50"
+			height="50"
 			viewBox="0 0 55 55"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,8 @@
-import type { ComponentProps } from "react"
+import type { ComponentProps } from "react";
 
 type FooterProps = {
-	className?: ComponentProps<"footer">["className"]
-}
+	className?: ComponentProps<"footer">["className"];
+};
 
 const Footer: React.FC<FooterProps> = ({ className }) => {
 	return (
@@ -24,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
 				</a>
 			</div>
 		</footer>
-	)
-}
+	);
+};
 
-export default Footer
+export default Footer;

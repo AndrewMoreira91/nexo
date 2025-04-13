@@ -17,7 +17,11 @@ const Header = () => {
 
 	return (
 		<header className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200">
-			<button type="button" className="flex items-center cursor-pointer" onClick={handleClickOnLogo}>
+			<button
+				type="button"
+				className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
+				onClick={handleClickOnLogo}
+			>
 				<LogoNexoIcon />
 				<span className="font-bold text-3xl text-primary">NEXO</span>
 			</button>

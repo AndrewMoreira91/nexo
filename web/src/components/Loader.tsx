@@ -1,4 +1,4 @@
-import { DotLoader } from "react-spinners"
+import { DotLoader } from "react-spinners";
 
 const Loader = () => {
 	return (
@@ -10,7 +10,7 @@ const Loader = () => {
 				data-testid="loader"
 			/>
 		</div>
-	)
-}
+	);
+};
 
-export default Loader
+export default Loader;

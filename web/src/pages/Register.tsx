@@ -22,7 +22,6 @@ const RegisterPage = () => {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		if (name === "confirmPassword") {
-
 		}
 
 		setFormData({ ...formData, [name]: value });
@@ -53,7 +52,8 @@ const RegisterPage = () => {
 						<h2 className="text-3xl font-semibold">Cire sua conta</h2>
 						<div className="flex flex-col mt-8">
 							<span>Se você já tem uma conta registrada</span>
-							<span>Faça o {" "}
+							<span>
+								Faça o{" "}
 								<button
 									type="button"
 									className="font-semibold text-primary cursor-pointer"
@@ -67,7 +67,10 @@ const RegisterPage = () => {
 					<form onSubmit={handleSubmit} className="mt-6 max-w-lg">
 						<div className="flex flex-col gap-4">
 							<div>
-								<label htmlFor="name" className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor="name"
+									className="block text-sm font-medium text-gray-700"
+								>
 									Nome
 								</label>
 								<Input
@@ -80,7 +83,10 @@ const RegisterPage = () => {
 								/>
 							</div>
 							<div>
-								<label htmlFor="email" className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor="email"
+									className="block text-sm font-medium text-gray-700"
+								>
 									Email
 								</label>
 								<Input
@@ -93,7 +99,10 @@ const RegisterPage = () => {
 								/>
 							</div>
 							<div>
-								<label htmlFor="password" className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor="password"
+									className="block text-sm font-medium text-gray-700"
+								>
 									Senha
 								</label>
 								<Input
@@ -107,7 +116,10 @@ const RegisterPage = () => {
 							</div>
 
 							<div>
-								<label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+								<label
+									htmlFor="confirm-password"
+									className="block text-sm font-medium text-gray-700"
+								>
 									Confirme a senha
 								</label>
 								<Input
@@ -118,18 +130,14 @@ const RegisterPage = () => {
 									onChange={handleChange}
 									required
 								/>
-								{
-									formData.password !== formData.confirmPassword &&
-									formData.confirmPassword.length > 0 &&
-									<div className="text-sm text-red-500 mt-1">
-										As senhas não coincidem
-									</div>
-								}
+								{formData.password !== formData.confirmPassword &&
+									formData.confirmPassword.length > 0 && (
+										<div className="text-sm text-red-500 mt-1">
+											As senhas não coincidem
+										</div>
+									)}
 							</div>
-							<Button
-								type="submit"
-								size="small"
-							>
+							<Button type="submit" size="small">
 								Criar conta
 							</Button>
 						</div>
@@ -138,8 +146,12 @@ const RegisterPage = () => {
 
 				<section className="hidden flex-1 sm:flex flex-col gap-6 items-center justify-center p-8 mr-6 my-6 bg-[#000842] rounded-2xl">
 					<div className="w-full">
-						<h3 className="text-white text-start text-4xl font-bold w-full">Cria sua conta no Nexo</h3>
-						<span className="text-white text-start w-full">E saiba o que é ter hábito de estudar</span>
+						<h3 className="text-white text-start text-4xl font-bold w-full">
+							Cria sua conta no Nexo
+						</h3>
+						<span className="text-white text-start w-full">
+							E saiba o que é ter hábito de estudar
+						</span>
 					</div>
 					<img src={imgSaly} alt="Saly" />
 				</section>

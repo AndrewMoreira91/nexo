@@ -7,6 +7,6 @@ const CheckBox = () => {
 			/>
 		</div>
 	);
-}
+};
 
 export default CheckBox;

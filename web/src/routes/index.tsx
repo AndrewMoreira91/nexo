@@ -27,5 +27,5 @@ export const router = createBrowserRouter([
 	{
 		path: "/pomodoro",
 		element: <PomodoroPage />,
-	}
+	},
 ]);

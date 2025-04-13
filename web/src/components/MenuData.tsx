@@ -1,11 +1,11 @@
-import type React from 'react'
+import type React from "react";
 
 type MenuDataProps = {
-	title: string
-	textMain: string
-	description: string
-	children: React.ReactNode
-}
+	title: string;
+	textMain: string;
+	description: string;
+	children: React.ReactNode;
+};
 
 const MenuData: React.FC<MenuDataProps> = ({
 	description,
@@ -24,7 +24,7 @@ const MenuData: React.FC<MenuDataProps> = ({
 				<span className="font-medium text-gray-500">{description}</span>
 			</div>
 		</div>
-	)
-}
+	);
+};
 
-export default MenuData
+export default MenuData;

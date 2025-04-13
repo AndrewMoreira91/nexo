@@ -28,7 +28,9 @@ const DashboardPage = () => {
 			<main className="px-16 my-12">
 				<div>
 					<h3 className="font-bold text-3xl">Bem vindo, Andrew!</h3>
-					<span className="font-medium text-xl text-gray-500">Vamos começar mais um dia produtivo?</span>
+					<span className="font-medium text-xl text-gray-500">
+						Vamos começar mais um dia produtivo?
+					</span>
 				</div>
 
 				<div className="flex flex-col gap-8 my-12">
@@ -36,14 +38,20 @@ const DashboardPage = () => {
 						<div className="flex flex-col gap-4 w-1/2 ">
 							<div className="flex gap-4">
 								<span className="font-semibold text-xl">Meta diária</span>
-								<span className="font-medium text-xl text-primary">2h 30min / 4h</span>
+								<span className="font-medium text-xl text-primary">
+									2h 30min / 4h
+								</span>
 							</div>
 							<Progressbar percentage={68} />
 
-							<span className="font-medium text-gray-500">Falta pouco para completar sua meta, não desista!</span>
-							<Button size="large" onClick={() => navigate('/pomodoro')}>
+							<span className="font-medium text-gray-500">
+								Falta pouco para completar sua meta, não desista!
+							</span>
+							<Button size="large" onClick={() => navigate("/pomodoro")}>
 								<FaPlay className="text-white" />
-								<span className="font-semibold text-base">Começar Concentração</span>
+								<span className="font-semibold text-base">
+									Começar Concentração
+								</span>
 							</Button>
 						</div>
 
@@ -69,9 +77,21 @@ const DashboardPage = () => {
 
 						<div className="flex flex-col gap-4">
 							<TaskItem title="Task title" isCompleted={true} />
-							<TaskItem title="Task title" isCompleted={false} tagType="pending" />
-							<TaskItem title="Task title" isCompleted={false} tagType="pending" />
-							<TaskItem title="Task title" isCompleted={false} tagType="pending" />
+							<TaskItem
+								title="Task title"
+								isCompleted={false}
+								tagType="pending"
+							/>
+							<TaskItem
+								title="Task title"
+								isCompleted={false}
+								tagType="pending"
+							/>
+							<TaskItem
+								title="Task title"
+								isCompleted={false}
+								tagType="pending"
+							/>
 						</div>
 					</Container>
 
