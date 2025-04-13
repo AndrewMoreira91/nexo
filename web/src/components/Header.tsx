@@ -1,11 +1,16 @@
+import { Avatar } from "@mui/joy";
+import { useRef } from "react";
+import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
-import AvatarIcon from "../assets/AvatarIcon";
 import LogoNexoIcon from "../assets/LogoNexoIcon";
 import { useAuth } from "../context/auth.context";
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { isAuthenticated } = useAuth();
+	const { isAuthenticated, user, lougout } = useAuth();
+
+	const avatarRef = useRef<HTMLButtonElement>(null);
+	const dropdownRef = useRef<HTMLDivElement>(null);
 
 	function handleClickOnLogo() {
 		if (isAuthenticated) {
@@ -15,8 +20,34 @@ const Header = () => {
 		}
 	}
 
+	avatarRef.current?.addEventListener("mouseenter", () => {
+		if (dropdownRef.current) {
+			dropdownRef.current.classList.remove("hidden");
+		}
+	})
+
+	avatarRef.current?.addEventListener("mouseleave", () => {
+		if (dropdownRef.current) {
+			dropdownRef.current.classList.add("hidden");
+		}
+	})
+
+	dropdownRef.current?.addEventListener("mouseenter", () => {
+		if (dropdownRef.current) {
+			dropdownRef.current.classList.remove("hidden");
+		}
+	})
+
+	dropdownRef.current?.addEventListener("mouseleave", () => {
+		if (dropdownRef.current) {
+			dropdownRef.current.classList.add("hidden");
+		}
+	})
+
 	return (
-		<header className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200">
+		<header
+			className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200 relative"
+		>
 			<button
 				type="button"
 				className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
@@ -25,7 +56,65 @@ const Header = () => {
 				<LogoNexoIcon />
 				<span className="font-bold text-3xl text-primary">NEXO</span>
 			</button>
-			<AvatarIcon color="#3471FF" />
+			<button
+				type="button"
+				onClick={() => dropdownRef.current?.classList.toggle("hidden")}
+				ref={avatarRef}
+				className="cursor-pointer"
+			>
+				<Avatar
+					src="https://github.com/AndrewMoreira91.png"
+					size="lg"
+					color="primary"
+					alt={user?.name}
+				/>
+			</button>
+			{isAuthenticated &&
+				<div
+					ref={dropdownRef}
+					className="hidden flex-col gap-6 bg-white shadow-2xl p-6 rounded-2xl absolute right-0 mx-16 top-9/12"
+				>
+					<div className="flex flex-col">
+						<div className="flex flex-row gap-3">
+							<Avatar
+								src="https://github.com/AndrewMoreira91.png"
+								size="md"
+								color="primary"
+								variant="outlined"
+								alt={user?.name}
+							/>
+							<h3 className="font-semibold text-2xl">{user?.name}</h3>
+						</div>
+						<div className="w-full h-[1px] bg-gray-300 mt-2" />
+					</div>
+
+					<ul className="flex flex-col gap-6">
+						<button
+							type="button"
+							className="cursor-pointer hover:bg-gray-100 px-4 py-2 rounded-2xl"
+						>
+							<li className="flex flex-row gap-3 items-center">
+								<div className="bg-primary-bg p-2 rounded-full">
+									<IoMdSettings size={25} className="text-primary" />
+								</div>
+								<span className="font-medium text-xl">Perfil e definições</span>
+							</li>
+						</button>
+						<button
+							type="button"
+							className="cursor-pointer hover:bg-gray-100 px-4 py-2 rounded-2xl"
+							onClick={lougout}
+						>
+							<li className="flex flex-row gap-3 items-center">
+								<div className="bg-primary-bg p-2 rounded-full">
+									<IoMdExit size={25} className="text-primary" />
+								</div>
+								<span className="font-medium text-xl">Sair da conta</span>
+							</li>
+						</button>
+					</ul>
+				</div>
+			}
 		</header>
 	);
 };

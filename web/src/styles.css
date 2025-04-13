@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import '@fontsource/inter';
+
 
 @theme inline {
 	--color-primary: var(--primary);

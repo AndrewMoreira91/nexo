@@ -1,25 +1,52 @@
-import { useEffect } from "react";
-import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa6";
-import { useNavigate } from "react-router";
-import Button from "../components/Button";
-import Container from "../components/Conteiner";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import MenuData from "../components/MenuData";
-import Progressbar from "../components/Progressbar";
-import TaskItem from "../components/TaskItem";
-import { useAuth } from "../context/auth.context";
+import { useEffect } from 'react'
+import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from 'react-icons/fa'
+import { useNavigate } from 'react-router'
+import Button from '../components/Button'
+import Container from '../components/Conteiner'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
+import MenuData from '../components/MenuData'
+import Progressbar from '../components/Progressbar'
+import TaskContainer from '../components/TaskContainer'
+import { useAuth } from '../context/auth.context'
+import type { TaskType } from '../types'
+
+const taskListFake = [
+	{
+		id: '1',
+		title: 'Estudar React',
+		description: 'Assistir aulas e praticar com projetos',
+		isCompleted: false,
+	},
+	{
+		id: '2',
+		title: 'Fazer exercícios',
+		description: 'Treino de 30 minutos',
+		isCompleted: false,
+	},
+	{
+		id: '3',
+		title: 'Ler um livro',
+		description: 'Ler 20 páginas de um livro de desenvolvimento pessoal',
+		isCompleted: false,
+	},
+	{
+		id: '4',
+		title: 'Planejar a semana',
+		description: 'Organizar tarefas e compromissos no planner',
+		isCompleted: false,
+	},
+] as TaskType[]
 
 const DashboardPage = () => {
-	const { user } = useAuth();
-	const navigate = useNavigate();
+	const { user } = useAuth()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (!user) {
-			navigate("/login");
+			navigate('/login')
 		}
-	}, [user, navigate]);
+	}, [user, navigate])
 
 	return (
 		<div className="bg-background">
@@ -47,7 +74,7 @@ const DashboardPage = () => {
 							<span className="font-medium text-gray-500">
 								Falta pouco para completar sua meta, não desista!
 							</span>
-							<Button size="large" onClick={() => navigate("/pomodoro")}>
+							<Button size="large" onClick={() => navigate('/pomodoro')}>
 								<FaPlay className="text-white" />
 								<span className="font-semibold text-base">
 									Começar Concentração
@@ -67,32 +94,7 @@ const DashboardPage = () => {
 					</Container>
 
 					<Container className="flex flex-col gap-4">
-						<div className="flex flex-row justify-between w-full">
-							<h5 className="font-bold text-xl">Tarefas</h5>
-							<Button>
-								<FaPlus className="text-white" />
-								Nova Tarefa
-							</Button>
-						</div>
-
-						<div className="flex flex-col gap-4">
-							<TaskItem title="Task title" isCompleted={true} />
-							<TaskItem
-								title="Task title"
-								isCompleted={false}
-								tagType="pending"
-							/>
-							<TaskItem
-								title="Task title"
-								isCompleted={false}
-								tagType="pending"
-							/>
-							<TaskItem
-								title="Task title"
-								isCompleted={false}
-								tagType="pending"
-							/>
-						</div>
+						<TaskContainer taskList={taskListFake} />
 					</Container>
 
 					<Container className="justify-between gap-8">
@@ -123,7 +125,7 @@ const DashboardPage = () => {
 
 			<Footer />
 		</div>
-	);
-};
+	)
+}
 
-export default DashboardPage;
+export default DashboardPage

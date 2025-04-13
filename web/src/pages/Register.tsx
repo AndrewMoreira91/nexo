@@ -4,8 +4,8 @@ import Button from "../components/Button";
 import Header from "../components/Header";
 import { useAuth } from "../context/auth.context";
 
+import { Input } from "@mui/joy";
 import imgSaly from "../assets/saly.png";
-import Input from "../components/Input";
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -80,6 +80,7 @@ const RegisterPage = () => {
 									value={formData.username}
 									onChange={handleChange}
 									required
+									placeholder="Digite seu nome"
 								/>
 							</div>
 							<div>
@@ -96,6 +97,7 @@ const RegisterPage = () => {
 									value={formData.email}
 									onChange={handleChange}
 									required
+									placeholder="Digite seu email"
 								/>
 							</div>
 							<div>
@@ -112,6 +114,7 @@ const RegisterPage = () => {
 									value={formData.password}
 									onChange={handleChange}
 									required
+									placeholder="Digite sua senha"
 								/>
 							</div>
 
@@ -129,6 +132,7 @@ const RegisterPage = () => {
 									value={formData.confirmPassword}
 									onChange={handleChange}
 									required
+									placeholder="Confirme sua senha"
 								/>
 								{formData.password !== formData.confirmPassword &&
 									formData.confirmPassword.length > 0 && (

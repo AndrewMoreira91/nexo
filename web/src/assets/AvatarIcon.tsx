@@ -1,13 +1,14 @@
 type AvatarIconProps = {
 	color?: string;
+	size?: string;
 };
 
-const AvatarIcon = ({ color }: AvatarIconProps) => {
+const AvatarIcon = ({ color, size }: AvatarIconProps) => {
 	return (
 		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 		<svg
-			width="50"
-			height="50"
+			width={size ? size : "55"}
+			height={size ? size : "55"}
 			viewBox="0 0 55 55"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

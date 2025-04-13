@@ -9,3 +9,11 @@ export type UserType = {
 	streak: number;
 	longestStreak: number;
 };
+
+export type TaskType = {
+	id: string
+	title: string
+	description?: string
+	isCompleted: boolean
+	inProgress?: boolean
+}

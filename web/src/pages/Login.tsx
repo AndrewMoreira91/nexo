@@ -1,3 +1,4 @@
+import { Input } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import imgSaly from "../assets/saly.png";
@@ -57,12 +58,12 @@ const LoginPage = () => {
 								>
 									Email
 								</label>
-								<input
+								<Input
 									type="email"
 									id="email"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+									placeholder="Digite o seu email"
 									required
 								/>
 							</div>
@@ -73,12 +74,12 @@ const LoginPage = () => {
 								>
 									Senha
 								</label>
-								<input
+								<Input
 									type="password"
 									id="password"
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
-									className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+									placeholder="Digite a sua senha"
 									required
 								/>
 							</div>
