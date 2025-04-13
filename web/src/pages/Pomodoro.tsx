@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FaClock, FaFireAlt, FaPause, FaPlay, FaPlus } from 'react-icons/fa'
 import { FiTarget } from 'react-icons/fi'
 import { GrPowerReset } from 'react-icons/gr'
@@ -13,11 +13,11 @@ import TaskItem from '../components/TaskItem'
 import { useAuth } from '../context/auth.context'
 import { startTimer, stopTimer } from '../utils/timer'
 
-type ModesType = 'pomodoro' | 'pausa curta' | 'pausa longa'
+type ModesType = 'focus' | 'shortBreak' | 'longBreak'
 
 const PomodoroPage = () => {
 	const { user, isLoading } = useAuth()
-	const [selectedMode, setSelectedMode] = useState<ModesType>('pomodoro')
+	const [selectedMode, setSelectedMode] = useState<ModesType>('focus')
 	const [timeLeft, setTimeLeft] = useState<number>(0)
 	const [isTimerRunning, setIsTimerRunning] = useState(false)
 
@@ -43,44 +43,57 @@ const PomodoroPage = () => {
 		)
 	}
 
-	function handleClickReset() {
-		if (!isTimerRunning) {
-			stopTimer()
-			setIsTimerRunning(false)
-		}
-
+	const changeTimeLeft = useCallback(() => {
 		if (!user) return null
-		if (selectedMode === 'pomodoro') {
-			setTimeLeft(user.focusSessionDuration)
-		} else if (selectedMode === 'pausa curta') {
-			setTimeLeft(user.shortBreakSessionDuration)
-		} else if (selectedMode === 'pausa longa') {
-			setTimeLeft(user.longBreakSessionDuration)
+		if (selectedMode === 'focus') {
+			setTimeLeft(user?.focusSessionDuration)
+		} else if (selectedMode === 'shortBreak') {
+			setTimeLeft(user?.shortBreakSessionDuration)
+		} else if (selectedMode === 'longBreak') {
+			setTimeLeft(user?.longBreakSessionDuration)
 		}
+	}, [selectedMode, user])
+
+	function handleClickReset() {
+		stopTimer()
 		setIsTimerRunning(false)
+		changeTimeLeft()
 	}
 
 	useEffect(() => {
-		if (!user) return undefined
-		if (selectedMode === 'pomodoro') {
-			setTimeLeft(user.focusSessionDuration)
-			// setTimeLeft(10)
-		} else if (selectedMode === 'pausa curta') {
-			setTimeLeft(user.shortBreakSessionDuration)
-		} else if (selectedMode === 'pausa longa') {
-			setTimeLeft(user.longBreakSessionDuration)
-		}
-	}, [selectedMode, user])
+		changeTimeLeft()
+	}, [changeTimeLeft])
 
 	return (
 		<div>
 			<Header />
 			{isLoading ? <Loader />
-				: <main className="flex flex-col px-16 gap-12">
-					<section className="w-full flex flex-col gap-5 items-center bg-primary-bg py-6 rounded-lg">
-						{isLoading && <p>Loading...</p>}
-						<h3 className="font-bold text-3xl">Sessão de foco</h3>
-						<span className="font-medium text-xl text-gray-500">Matenha o foco, você está progredindo a cada minuto</span>
+				: <main className={`flex flex-col px-16 gap-12 ${selectedMode}`}>
+					<section className="w-full bg- flex flex-col gap-5 items-center bg-primary-bg py-6 rounded-lg">
+						{
+							selectedMode === 'focus' && (
+								<>
+									<h3 className="font-bold text-3xl">Sessão de foco</h3>
+									<span className="font-medium text-xl text-gray-500">Matenha o foco, você está progredindo a cada minuto</span>
+								</>
+							)
+						}
+						{
+							selectedMode === 'shortBreak' && (
+								<>
+									<h3 className="font-bold text-3xl">Pausa curta</h3>
+									<span className="font-medium text-xl text-gray-500">Aproveite para fazer um lanche ou tomar uma água</span>
+								</>
+							)
+						}
+						{
+							selectedMode === 'longBreak' && (
+								<>
+									<h3 className="font-bold text-3xl">Pausa longa</h3>
+									<span className="font-medium text-xl text-gray-500">Aproveite para descansar e relaxar</span>
+								</>
+							)
+						}
 
 						<span className="font-bold text-8xl text-primary">
 							{`${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`}
@@ -111,10 +124,12 @@ const PomodoroPage = () => {
 						</div>
 
 						<ButtonGroup
+							keys={["focus", "shortBreak", "longBreak"]}
 							values={["pomodoro", "pausa curta", "pausa longa"]}
-							setSelectedValue={(value: string) => {
+							onValueSelect={(value: string) => {
 								setSelectedMode(value as ModesType)
 							}}
+							disableDeselection={isTimerRunning}
 						/>
 
 					</section>
