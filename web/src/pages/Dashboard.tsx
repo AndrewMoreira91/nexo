@@ -1,55 +1,30 @@
-import { useEffect } from 'react'
-import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from 'react-icons/fa'
-import { useNavigate } from 'react-router'
-import Button from '../components/Button'
-import Container from '../components/Conteiner'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
-import Loader from '../components/Loader'
-import MenuData from '../components/MenuData'
-import Progressbar from '../components/Progressbar'
-import TaskContainer from '../components/TaskContainer'
-import { useAuth } from '../context/auth.context'
-import type { TaskType } from '../types'
-
-const taskListFake = [
-	{
-		id: '1',
-		title: 'Estudar React',
-		description: 'Assistir aulas e praticar com projetos',
-		isCompleted: false,
-	},
-	{
-		id: '2',
-		title: 'Fazer exercícios',
-		description: 'Treino de 30 minutos',
-		isCompleted: false,
-	},
-	{
-		id: '3',
-		title: 'Ler um livro',
-		description: 'Ler 20 páginas de um livro de desenvolvimento pessoal',
-		isCompleted: false,
-	},
-	{
-		id: '4',
-		title: 'Planejar a semana',
-		description: 'Organizar tarefas e compromissos no planner',
-		isCompleted: false,
-	},
-] as TaskType[]
+import { useEffect } from "react";
+import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
+import { useNavigate } from "react-router";
+import Button from "../components/Button";
+import Container from "../components/Conteiner";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Loader from "../components/Loader";
+import MenuData from "../components/MenuData";
+import Progressbar from "../components/Progressbar";
+import TaskContainer from "../components/TaskContainer";
+import { useAuth } from "../context/auth.context";
 
 const DashboardPage = () => {
-	const { user, isLoading } = useAuth()
-	const navigate = useNavigate()
+	const { user, isLoading } = useAuth();
+	const navigate = useNavigate();
+
+	// const [taskList, setTaskList] = useState<TaskType[]>([])
+
+	const timeTotalTarget =
+		((user?.dailySessionTarget ?? 0) * (user?.focusSessionDuration ?? 0)) / 60;
 
 	useEffect(() => {
 		if (!user) {
-			navigate('/login')
+			navigate("/login");
 		}
-	}, [user, navigate])
-
-	console.log('user', user)
+	}, [user, navigate]);
 
 	return (
 		<div className="bg-background">
@@ -59,7 +34,9 @@ const DashboardPage = () => {
 			) : (
 				<main className="px-6 sm:px-16 my-12">
 					<div>
-						<h3 className="font-bold text-2xl sm:text-3xl">Bem vindo, Andrew!</h3>
+						<h3 className="font-bold text-2xl sm:text-3xl">
+							Bem vindo, Andrew!
+						</h3>
 						<span className="font-medium text-base sm:text-xl text-gray-500">
 							Vamos começar mais um dia produtivo?
 						</span>
@@ -71,7 +48,11 @@ const DashboardPage = () => {
 								<div className="flex gap-4">
 									<span className="font-semibold text-xl">Meta diária</span>
 									<span className="font-medium text-xl text-primary">
-										2h 30min / 4h
+										1h 12min /{" "}
+										{`
+										${Math.floor(timeTotalTarget / 60)}h 
+										${timeTotalTarget % 60 < 10 ? "0" : ""}${timeTotalTarget % 60}min
+										`}
 									</span>
 								</div>
 								<Progressbar percentage={68} />
@@ -79,7 +60,7 @@ const DashboardPage = () => {
 								<span className="font-medium text-gray-500">
 									Falta pouco para completar sua meta, não desista!
 								</span>
-								<Button size="large" onClick={() => navigate('/pomodoro')}>
+								<Button size="large" onClick={() => navigate("/pomodoro")}>
 									<FaPlay className="text-white" />
 									<span className="font-semibold text-base">
 										Começar Concentração
@@ -92,14 +73,20 @@ const DashboardPage = () => {
 									<FaFireAlt className="text-primary text-4xl" />
 								</div>
 								<div className="flex flex-col">
-									<span className="font-semibold text-xl">Dias consecutivos</span>
-									<span className="font-bold text-4xl text-primary">7 dias</span>
+									<span className="font-semibold text-xl">
+										Dias consecutivos
+									</span>
+									<span className="font-bold text-4xl text-primary">
+										{(user?.longestStreak ?? 0) <= 1
+											? `${user?.longestStreak ?? 0} dia`
+											: `${user?.longestStreak} dias`}
+									</span>
 								</div>
 							</div>
 						</Container>
 
-						<Container className="flex flex-col gap-4">
-							<TaskContainer taskList={taskListFake} />
+						<Container className="flex flex-col gap-4 relative">
+							<TaskContainer />
 						</Container>
 
 						<Container className="flex-col md:flex-row justify-between gap-8">
@@ -130,7 +117,7 @@ const DashboardPage = () => {
 			)}
 			<Footer />
 		</div>
-	)
-}
+	);
+};
 
-export default DashboardPage
+export default DashboardPage;

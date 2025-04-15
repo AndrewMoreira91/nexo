@@ -10,7 +10,6 @@ import imgSaly from "../assets/saly.png";
 const RegisterPage = () => {
 	const navigate = useNavigate();
 	const { register, isAuthenticated } = useAuth();
-	const [errorMessage, setErrorMessage] = useState("");
 
 	const [formData, setFormData] = useState({
 		username: "",
@@ -29,9 +28,6 @@ const RegisterPage = () => {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Email:", formData.email);
-		console.log("Password:", formData.password);
-
 		const { username, email, password } = formData;
 		register({ name: username, email, password });
 		navigate("/dashboard");

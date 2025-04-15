@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
+import { api } from "../libs/api";
 import type { UserType } from "../types";
 
 type LoginData = {
@@ -27,19 +28,22 @@ type AuthContextType = {
 	isLoading: boolean;
 };
 
-const userFake = {
-	id: "123456789",
-	name: "John Doe",
-	email: "johndoe@example.com",
-	dailySessionTarget: 60,
-	streak: 5,
-	longestStreak: 10,
-	focusSessionDuration: 1500,
-	shortBreakSessionDuration: 300,
-	longBreakSessionDuration: 900,
-} as UserType;
-
 const authContext = createContext({} as AuthContextType);
+
+type LoginResponse = {
+	user: {
+		id: string;
+		name: string;
+		email: string;
+		dailySessionTarget: number;
+		focusSessionDuration: number;
+		shortBreakSessionDuration: number;
+		longBreakSessionDuration: number;
+		streak: number;
+		longestStreak: number;
+	};
+	accessToken: string;
+};
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<UserType | null>(null);
@@ -47,29 +51,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	useEffect(() => {
 		const userLocalStorage = localStorage.getItem("user");
-		if (userLocalStorage) {
+		const accessTokenLocalStorage = localStorage.getItem("accessToken");
+		if (userLocalStorage && accessTokenLocalStorage) {
 			const userParsed = JSON.parse(userLocalStorage);
 			setUser(userParsed);
+			const accessTokenParsed = accessTokenLocalStorage;
+			api.defaults.headers.common.Authorization = `Bearer ${accessTokenParsed}`;
 		}
-		setTimeout(() => {
-			setIsLoading(false);
-		}, 1000);
+		setIsLoading(false);
 	}, []);
 
-	const login = ({ email, password }: LoginData) => {
-		console.log("Login", { email, password });
-		setUser(userFake);
-		localStorage.setItem("user", JSON.stringify(userFake));
+	const login = async ({ email, password }: LoginData) => {
+		setIsLoading(true);
+		try {
+			const response = await api.post<LoginResponse>("login", {
+				email,
+				password,
+			});
+			console.log("Login response:", response.data);
+			setUser(response.data.user);
+			api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
+
+			localStorage.setItem("accessToken", response.data.accessToken);
+			localStorage.setItem("user", JSON.stringify(response.data.user));
+
+			setIsLoading(false);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error("Login error:", error.message);
+			} else {
+				console.error("Login error:", error);
+			}
+			setIsLoading(false);
+		}
 	};
 
 	const register = ({ name, email, password }: RegisterData) => {
 		console.log("Register", { name, email, password });
-		setUser(userFake);
-		localStorage.setItem("user", JSON.stringify(userFake));
+		setUser(user);
+		localStorage.setItem("user", JSON.stringify(user));
 	};
 
 	const lougout = () => {
-		console.log("Logout");
 		setUser(null);
 		localStorage.removeItem("user");
 	};

@@ -11,9 +11,9 @@ export type UserType = {
 };
 
 export type TaskType = {
-	id: string
-	title: string
-	description?: string
-	isCompleted: boolean
-	inProgress?: boolean
-}
+	id: string;
+	title: string;
+	description?: string;
+	isCompleted: boolean;
+	inProgress?: boolean;
+};

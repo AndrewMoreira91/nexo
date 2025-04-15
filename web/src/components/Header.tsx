@@ -24,31 +24,29 @@ const Header = () => {
 		if (dropdownRef.current) {
 			dropdownRef.current.classList.remove("hidden");
 		}
-	})
+	});
 
 	avatarRef.current?.addEventListener("mouseleave", () => {
 		if (dropdownRef.current) {
 			dropdownRef.current.classList.add("hidden");
 		}
-	})
+	});
 
 	dropdownRef.current?.addEventListener("mouseenter", () => {
 		if (dropdownRef.current) {
 			dropdownRef.current.classList.remove("hidden");
 		}
-	})
+	});
 
 	dropdownRef.current?.addEventListener("mouseleave", () => {
 		if (dropdownRef.current) {
 			dropdownRef.current.classList.add("hidden");
 		}
-	})
+	});
 
 	return (
 		<div className="relative">
-			<header
-				className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200"
-			>
+			<header className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200">
 				<button
 					type="button"
 					className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
@@ -71,7 +69,7 @@ const Header = () => {
 					/>
 				</button>
 			</header>
-			{isAuthenticated &&
+			{isAuthenticated && (
 				<div
 					ref={dropdownRef}
 					className="hidden flex-col gap-6 bg-white shadow-2xl p-6 rounded-2xl absolute left-0 sm:left-auto right-0 mx-6 sm:mx-16 top-[60px]"
@@ -116,7 +114,7 @@ const Header = () => {
 						</button>
 					</ul>
 				</div>
-			}
+			)}
 		</div>
 	);
 };
