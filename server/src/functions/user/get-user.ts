@@ -10,7 +10,11 @@ export const getUser = async (userId: string) => {
 				name: users.name,
 				email: users.email,
 				dailySessionTarget: users.dailySessionTarget,
-				sessionDuration: users.sessionDuration,
+				focusSessionDuration: users.focusSessionDuration,
+				shortBreakSessionDuration: users.shortBreakSessionDuration,
+				longBreakSessionDuration: users.longBreakSessionDuration,
+				streak: users.streak,
+				longestStreak: users.longestStreak,
 			})
 			.from(users)
 			.where(eq(users.id, userId))

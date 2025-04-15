@@ -17,15 +17,18 @@ export const loginRoute: FastifyPluginAsyncZod = async (app) => {
 					}),
 					response: {
 						200: z.object({
-							token: z.string(),
 							user: z.object({
 								id: z.string(),
 								name: z.string(),
 								email: z.string(),
 								dailySessionTarget: z.number(),
+								focusSessionDuration: z.number(),
+								shortBreakSessionDuration: z.number(),
+								longBreakSessionDuration: z.number(),
 								streak: z.number(),
 								longestStreak: z.number(),
 							}),
+							accessToken: z.string(),
 						}),
 					},
 				},
@@ -33,9 +36,9 @@ export const loginRoute: FastifyPluginAsyncZod = async (app) => {
 			async (request) => {
 				const { email, password } = request.body
 
-				const { user, token } = await login({ email, password })
+				const { user, accessToken } = await login({ email, password })
 
-				return { token, user }
+				return { accessToken, user }
 			},
 		)
 	} catch (error) {

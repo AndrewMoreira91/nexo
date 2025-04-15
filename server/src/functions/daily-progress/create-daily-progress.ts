@@ -1,9 +1,8 @@
-import { format, setDay, startOfYesterday } from 'date-fns'
 import { setDate } from 'date-fns'
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
-import { dateToday } from '../../utils/getDate'
+import { dateToday } from '../../helpers/getDate'
 
 export const createDailyProgress = async (userId: string) => {
 	const alreadyDailyProgress = await db

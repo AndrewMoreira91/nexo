@@ -3,7 +3,7 @@ import { eachDayOfInterval } from 'date-fns/fp'
 import { asc, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
-import { dateToday } from '../../utils/getDate'
+import { dateToday } from '../../helpers/getDate'
 
 type ResultType = {
 	[key: string]: {

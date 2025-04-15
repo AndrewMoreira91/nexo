@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { sessions } from '../../drizzle/schemas/session-schema'
-import { dateToday } from '../../utils/getDate'
+import { dateToday } from '../../helpers/getDate'
 import { updateDailyProgress } from '../daily-progress/update-daily-progress'
 import { getUser } from '../user/get-user'
 

@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
-import { dateToday } from '../../utils/getDate'
+import { dateToday } from '../../helpers/getDate'
 import { createDailyProgress } from './create-daily-progress'
 
 interface UpdatedDailyProgressResponse {

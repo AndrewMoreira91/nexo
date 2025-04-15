@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { db } from '../../drizzle'
 import { users } from '../../drizzle/schemas/user-schema'
-import { createToken } from '../../utils/createToken'
+import { createToken } from '../../helpers/createToken'
 
 interface CreateUserProps {
 	name: string
@@ -28,13 +28,17 @@ export const createUser = async ({
 			name: users.name,
 			email: users.email,
 			dailySessionTarget: users.dailySessionTarget,
-			sessionDuration: users.sessionDuration,
+			focusSessionDuration: users.focusSessionDuration,
+			shortBreakSessionDuration: users.shortBreakSessionDuration,
+			longBreakSessionDuration: users.longBreakSessionDuration,
+			streak: users.streak,
+			longestStreak: users.longestStreak,
 		})
 
-	const token = createToken(user[0].id)
+	const acessToken = createToken(user[0].id)
 
 	return {
 		user: user[0],
-		token,
+		acessToken,
 	}
 }

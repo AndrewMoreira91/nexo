@@ -11,7 +11,7 @@ export const getTasksRoute: FastifyPluginAsyncZod = async (app) => {
 				summary: 'Get all tasks for a user',
 				tags: ['tasks'],
 				response: {
-					201: z.array(
+					200: z.array(
 						z.object({
 							id: z.string(),
 							dailyProgressId: z.string().nullable(),

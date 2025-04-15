@@ -2,7 +2,7 @@ import { and, eq, isNull } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { sessions } from '../../drizzle/schemas/session-schema'
 import { users } from '../../drizzle/schemas/user-schema'
-import { dateToday } from '../../utils/getDate'
+import { dateToday } from '../../helpers/getDate'
 import { createDailyProgress } from '../daily-progress/create-daily-progress'
 
 interface CreateSessionProps {

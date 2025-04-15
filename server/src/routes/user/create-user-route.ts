@@ -21,18 +21,22 @@ export const createUserRoute: FastifyPluginAsyncZod = async (app) => {
 							name: z.string(),
 							email: z.string(),
 							dailySessionTarget: z.number(),
-							sessionDuration: z.number(),
+							focusSessionDuration: z.number(),
+							shortBreakSessionDuration: z.number(),
+							longBreakSessionDuration: z.number(),
+							streak: z.number(),
+							longestStreak: z.number(),
 						}),
-						token: z.string(),
+						acessToken: z.string(),
 					}),
 				},
 			},
 		},
 		async (request, reply) => {
 			const { email, name, password } = request.body
-			const { user, token } = await createUser({ email, name, password })
+			const { user, acessToken } = await createUser({ email, name, password })
 
-			reply.code(201).send({ user, token })
+			reply.code(201).send({ user, acessToken })
 		},
 	)
 }

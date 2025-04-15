@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import { eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { users } from '../../drizzle/schemas/user-schema'
-import { createToken } from '../../utils/createToken'
+import { createToken } from '../../helpers/createToken'
 
 interface LoginProps {
 	email: string
@@ -17,7 +17,7 @@ export const login = async ({ email, password }: LoginProps) => {
 		const isPasswordValid = await bcrypt.compare(password, user[0].password)
 		if (!isPasswordValid) throw new Error('Invalid email or password')
 
-		const token = createToken(user[0].id)
+		const accessToken = createToken(user[0].id)
 
 		return {
 			user: {
@@ -25,10 +25,13 @@ export const login = async ({ email, password }: LoginProps) => {
 				email: user[0].email,
 				name: user[0].name,
 				dailySessionTarget: user[0].dailySessionTarget,
+				focusSessionDuration: user[0].focusSessionDuration,
+				shortBreakSessionDuration: user[0].shortBreakSessionDuration,
+				longBreakSessionDuration: user[0].longBreakSessionDuration,
 				streak: user[0].streak,
 				longestStreak: user[0].longestStreak,
 			},
-			token,
+			accessToken,
 		}
 	} catch (error) {
 		console.error(error)
