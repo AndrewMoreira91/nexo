@@ -5,44 +5,13 @@ import { GrPowerReset } from "react-icons/gr";
 import Button from "../components/Button";
 import ButtonGroup from "../components/ButtonGroup";
 import Container from "../components/Conteiner";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
-import type { TaskType } from "../types";
 import { startTimer, stopTimer } from "../utils/timer";
 
 type ModesType = "focus" | "shortBreak" | "longBreak";
-
-const taskListFake = [
-	{
-		id: "1",
-		title: "Estudar React",
-		description: "Assistir aulas e praticar com projetos",
-		isCompleted: true,
-	},
-	{
-		id: "2",
-		title: "Fazer exercícios",
-		description: "Treino de 30 minutos",
-		isCompleted: false,
-		inProgress: true,
-	},
-	{
-		id: "3",
-		title: "Ler um livro",
-		description: "Ler 20 páginas de um livro de desenvolvimento pessoal",
-		isCompleted: false,
-	},
-	{
-		id: "4",
-		title: "Planejar a semana",
-		description: "Organizar tarefas e compromissos no planner",
-		isCompleted: false,
-	},
-] as TaskType[];
 
 const PomodoroPage = () => {
 	const { user, isLoading } = useAuth();
@@ -92,8 +61,7 @@ const PomodoroPage = () => {
 	}, [changeTimeLeft]);
 
 	return (
-		<div>
-			<Header />
+		<>
 			{isLoading ? (
 				<Loader />
 			) : (
@@ -189,12 +157,11 @@ const PomodoroPage = () => {
 					</Container>
 
 					<Container className="flex flex-col gap-4">
-						<TaskContainer taskList={taskListFake} />
+						<TaskContainer />
 					</Container>
 				</main>
 			)}
-			<Footer />
-		</div>
+		</>
 	);
 };
 

@@ -3,8 +3,6 @@ import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import Container from "../components/Conteiner";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import Progressbar from "../components/Progressbar";
@@ -14,8 +12,6 @@ import { useAuth } from "../context/auth.context";
 const DashboardPage = () => {
 	const { user, isLoading } = useAuth();
 	const navigate = useNavigate();
-
-	// const [taskList, setTaskList] = useState<TaskType[]>([])
 
 	const timeTotalTarget =
 		((user?.dailySessionTarget ?? 0) * (user?.focusSessionDuration ?? 0)) / 60;
@@ -27,8 +23,7 @@ const DashboardPage = () => {
 	}, [user, navigate]);
 
 	return (
-		<div className="bg-background">
-			<Header />
+		<>
 			{isLoading && user === null ? (
 				<Loader />
 			) : (
@@ -115,8 +110,7 @@ const DashboardPage = () => {
 					</div>
 				</main>
 			)}
-			<Footer />
-		</div>
+		</>
 	);
 };
 

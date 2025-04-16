@@ -4,8 +4,6 @@ import { GoGraph } from "react-icons/go";
 import { useNavigate } from "react-router";
 import img from "../assets/medium-shot-woman-working-laptop 1.png";
 import Button from "../components/Button";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import MenuInfo from "../components/MenuInfo";
 import { useAuth } from "../context/auth.context";
 
@@ -18,8 +16,7 @@ const WelcomePage = () => {
 	}
 
 	return (
-		<div>
-			<Header />
+		<>
 			<main className="bg-background">
 				<section className="flex flex-col md:flex-row items-center px-7 sm:px-16 mt-10 gap-4">
 					<div className="flex flex-col gap-4">
@@ -30,9 +27,9 @@ const WelcomePage = () => {
 							alcance seus objetivos
 						</h2>
 						<p className="font-medium text-gray-500 text-sm md:text-xl/6">
-							Use o metodo <strong className="text-primary">Pomodoro</strong>{" "}
+							Use o método <strong className="text-primary">Pomodoro</strong>{" "}
 							para transformar seu tempo em produtividade. Estabeleça metas,
-							matenha o foco e acompanhe o progresso.
+							mantenha o foco e acompanhe o progresso.
 						</p>
 						<div className="flex gap-4">
 							<Button
@@ -107,9 +104,7 @@ const WelcomePage = () => {
 					</Button>
 				</section>
 			</main>
-
-			<Footer />
-		</div>
+		</>
 	);
 };
 

@@ -7,7 +7,7 @@ import { useAuth } from "../context/auth.context";
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { isAuthenticated, user, lougout } = useAuth();
+	const { isAuthenticated, user, logout } = useAuth();
 
 	const avatarRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
@@ -103,7 +103,7 @@ const Header = () => {
 						<button
 							type="button"
 							className="cursor-pointer hover:bg-gray-100 px-4 py-2 rounded-2xl"
-							onClick={lougout}
+							onClick={logout}
 						>
 							<li className="flex flex-row gap-3 items-center">
 								<div className="bg-primary-bg p-2 rounded-full">

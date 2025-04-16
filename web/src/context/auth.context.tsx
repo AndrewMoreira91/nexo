@@ -22,7 +22,7 @@ type RegisterData = {
 type AuthContextType = {
 	login: (data: LoginData) => void;
 	register: (data: RegisterData) => void;
-	lougout: () => void;
+	logout: () => void;
 	user: UserType | null;
 	isAuthenticated: boolean;
 	isLoading: boolean;
@@ -30,7 +30,7 @@ type AuthContextType = {
 
 const authContext = createContext({} as AuthContextType);
 
-type LoginResponse = {
+type UserResponse = {
 	user: {
 		id: string;
 		name: string;
@@ -64,11 +64,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const login = async ({ email, password }: LoginData) => {
 		setIsLoading(true);
 		try {
-			const response = await api.post<LoginResponse>("login", {
+			const response = await api.post<UserResponse>("login", {
 				email,
 				password,
 			});
-			console.log("Login response:", response.data);
+
 			setUser(response.data.user);
 			api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
 
@@ -86,13 +86,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		}
 	};
 
-	const register = ({ name, email, password }: RegisterData) => {
-		console.log("Register", { name, email, password });
-		setUser(user);
-		localStorage.setItem("user", JSON.stringify(user));
+	const register = async ({ name, email, password }: RegisterData) => {
+		setIsLoading(true);
+		try {
+			const response = await api.post('/user', {
+				name,
+				email,
+				password,
+			})
+
+			setUser(response.data.user);
+			api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
+
+			localStorage.setItem("accessToken", response.data.accessToken);
+			localStorage.setItem("user", JSON.stringify(response.data.user));
+
+			setIsLoading(false);
+		} catch (error) {
+			console.log(error)
+			setIsLoading(false);
+		}
 	};
 
-	const lougout = () => {
+	const logout = () => {
 		setUser(null);
 		localStorage.removeItem("user");
 	};
@@ -104,7 +120,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				user,
 				isAuthenticated: !!user,
 				register,
-				lougout,
+				logout,
 				isLoading,
 			}}
 		>

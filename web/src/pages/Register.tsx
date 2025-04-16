@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
-import Header from "../components/Header";
 import { useAuth } from "../context/auth.context";
 
 import { Input } from "@mui/joy";
@@ -40,8 +39,7 @@ const RegisterPage = () => {
 	}, [isAuthenticated, navigate]);
 
 	return (
-		<div className="bg-background">
-			<Header />
+		<>
 			<div className="flex flex-row">
 				<section className="flex-1 m-8 sm:mt-6 md:ml-24">
 					<div>
@@ -156,7 +154,7 @@ const RegisterPage = () => {
 					<img src={imgSaly} alt="Saly" />
 				</section>
 			</div>
-		</div>
+		</>
 	);
 };
 
