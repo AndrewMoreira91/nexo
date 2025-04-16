@@ -35,10 +35,10 @@ export const createUser = async ({
 			longestStreak: users.longestStreak,
 		})
 
-	const acessToken = createToken(user[0].id)
+	const accessToken = createToken(user[0].id)
 
 	return {
 		user: user[0],
-		acessToken,
+		accessToken,
 	}
 }

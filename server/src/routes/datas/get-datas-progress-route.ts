@@ -16,18 +16,19 @@ export const getDataProgressRoute: FastifyPluginAsyncZod = async (app) => {
 							bearerAuth: [],
 						},
 					],
+					querystring: z.object({
+						daysPrevious: z.string().optional(),
+					}),
 					response: {
-						201: z.object({
-							result: z.array(
-								z.object({
-									date: z.string(),
-									isGoalComplete: z.boolean(),
-									sessionsCompleted: z.number(),
-									totalSessionFocusDuration: z.number(),
-									streak: z.number(),
-								}),
-							),
-						}),
+						201: z.array(
+							z.object({
+								date: z.string(),
+								isGoalComplete: z.boolean(),
+								sessionsCompleted: z.number(),
+								totalSessionFocusDuration: z.number(),
+								streak: z.number(),
+							}),
+						),
 						401: z.object({
 							message: z.string(),
 						}),
@@ -37,10 +38,15 @@ export const getDataProgressRoute: FastifyPluginAsyncZod = async (app) => {
 			},
 			async (req, reply) => {
 				const { id: userId } = req.user
+				const { daysPrevious } = req.query
 
-				const { result } = await getDatasProgress(userId)
+				const query = {
+					daysPrevious: daysPrevious ? Number(daysPrevious) : 0,
+				}
 
-				reply.status(200).send({ result })
+				const { result } = await getDatasProgress(userId, query)
+
+				reply.status(200).send(result)
 			},
 		)
 	} catch (error) {

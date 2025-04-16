@@ -1,26 +1,26 @@
 ### Create user
-POST http://localhost:3000/user
+POST http://localhost:3333/user
 Content-Type: application/json
 
 {
-	"name": "Caio",
-	"email": "caio@example.com",
+	"name": "Andrew Moreira",
+	"email": "andrew@gmail.com",
 	"password": "123456"
 }
 
 ### Login Route
-POST http://localhost:3000/login
+POST http://localhost:3333/login
 Content-Type: application/json
 
 {
-	"email": "caio@example.com",
+	"email": "andrew@gmail.com",
 	"password": "123456"
 }
 
 ### Start Session Route
-POST http://localhost:3000/start-session
+POST http://localhost:3333/start-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlYjBkOS0zYTVkLTRlYTUtOTk3ZS0zZGE5YTFkOWI0ODEiLCJpYXQiOjE3NDI3MzU3MTAsImV4cCI6MTc0MjgyMjExMH0.r7_ClKffofAhAr_CZ9HO4UWUe8BOv4lvMzsN6Gb-F88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDQ3MzE1NTQsImV4cCI6MTc0NDgxNzk1NH0.xoQSOCanxSN0uM1a2jINjDXDsa5XFrXdwdVzy2IXG08
 
 {
 	"type": "focus"
@@ -28,22 +28,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlY
 
 
 ### End Session Route
-PUT http://localhost:3000/end-session
+PUT http://localhost:3333/end-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlYjBkOS0zYTVkLTRlYTUtOTk3ZS0zZGE5YTFkOWI0ODEiLCJpYXQiOjE3NDI3MzU3MTAsImV4cCI6MTc0MjgyMjExMH0.r7_ClKffofAhAr_CZ9HO4UWUe8BOv4lvMzsN6Gb-F88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDQ3MzE1NTQsImV4cCI6MTc0NDgxNzk1NH0.xoQSOCanxSN0uM1a2jINjDXDsa5XFrXdwdVzy2IXG08
 
 {
 	"duration": 1547,
-	"sessionId": "651041a6-43a2-4cbe-9787-1e4bff2bd419"
+	"sessionId": "b8164b3e-a7e3-42fe-89d3-940201148977"
 }
 
 ### Get Sessions Data Route
-GET http://localhost:3000/get-data-progress
+GET http://localhost:3333/get-data-progress
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYjZlYjBkOS0zYTVkLTRlYTUtOTk3ZS0zZGE5YTFkOWI0ODEiLCJpYXQiOjE3NDI3MzU3MTAsImV4cCI6MTc0MjgyMjExMH0.r7_ClKffofAhAr_CZ9HO4UWUe8BOv4lvMzsN6Gb-F88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDQ3MzE1NTQsImV4cCI6MTc0NDgxNzk1NH0.xoQSOCanxSN0uM1a2jINjDXDsa5XFrXdwdVzy2IXG08
 
 ### Teste Route
-POST http://localhost:3000/teste
+POST http://localhost:3333/teste
 Content-Type: application/json
 
 {
