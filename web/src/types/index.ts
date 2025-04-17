@@ -17,3 +17,9 @@ export type TaskType = {
 	isCompleted: boolean;
 	inProgress?: boolean;
 };
+
+export type TaskEditType = {
+	taskId: string;
+	newTitle?: string;
+	isCompleted?: boolean;
+};

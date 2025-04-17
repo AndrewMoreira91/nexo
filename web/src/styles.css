@@ -9,6 +9,9 @@
 	--color-primary-success: #21725e;
 	--color-primary-success-bg: #e7faf5;
 	--color-primary-border: #b5d0c9;
+	--color-primary-danger: #a82525;
+	--color-primary-danger-bg: #ffe8e8;
+	--color-primary-danger-hover: #8c1f1f;
 }
 
 @layer base {

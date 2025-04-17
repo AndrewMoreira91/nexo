@@ -13,6 +13,6 @@ const ProtectRouteLayout = () => {
 		return <Navigate to="/login" replace />;
 	}
 	return <Outlet />;
-}
+};
 
 export default ProtectRouteLayout;

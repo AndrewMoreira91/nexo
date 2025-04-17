@@ -4,8 +4,8 @@ import DashboardPage from "../pages/Dashboard";
 import Error404Page from "../pages/Error404";
 import LoginPage from "../pages/Login";
 import PomodoroPage from "../pages/Pomodoro";
-import RegisterPage from "../pages/Register";
 import WelcomePage from "../pages/WelcomePage";
+import RegisterPage from "../pages/auth/Register";
 import ProtectRouteLayout from "./ProtectRoute";
 
 export const router = createBrowserRouter([
@@ -35,11 +35,11 @@ export const router = createBrowserRouter([
 						element: <PomodoroPage />,
 					},
 					{
-						path: 'dashboard',
+						path: "dashboard",
 						element: <DashboardPage />,
-					}
-				]
+					},
+				],
 			},
-		]
+		],
 	},
 ]);

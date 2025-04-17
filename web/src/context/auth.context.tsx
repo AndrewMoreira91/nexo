@@ -89,11 +89,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const register = async ({ name, email, password }: RegisterData) => {
 		setIsLoading(true);
 		try {
-			const response = await api.post('/user', {
+			const response = await api.post("/user", {
 				name,
 				email,
 				password,
-			})
+			});
 
 			setUser(response.data.user);
 			api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 			setIsLoading(false);
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			setIsLoading(false);
 		}
 	};

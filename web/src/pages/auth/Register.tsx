@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import Button from "../components/Button";
-import { useAuth } from "../context/auth.context";
+import Button from "../../components/Button";
+import { useAuth } from "../../context/auth.context";
 
 import { Input } from "@mui/joy";
-import imgSaly from "../assets/saly.png";
+import imgSaly from "../../assets/saly.png";
 
 const RegisterPage = () => {
 	const navigate = useNavigate();

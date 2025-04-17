@@ -8,87 +8,66 @@ import {
 	Skeleton,
 	Stack,
 } from "@mui/joy";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type FC, type FormEvent, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { api } from "../libs/api";
-import type { TaskType } from "../types";
+import { useFetchTasks, usePostTask } from "../hooks/task-hooks";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
 
 const TaskContainer: FC = () => {
 	const [modalOpen, setModalOpen] = useState(false);
-	const [taskTitle, setTaskTitle] = useState("");
 
-	const queryClient = useQueryClient();
+	const fetchTasks = useFetchTasks();
+	const postTask = usePostTask();
 
 	const handleNewTask = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setModalOpen(false);
 
-		const task = event.currentTarget.task.value;
-		setTaskTitle(task);
+		const taskValue = event.currentTarget.task.value;
 
-		mutate(task);
+		postTask.mutate(taskValue);
 	};
-
-	const fetchTasks = async () => {
-		const response = await api.get<TaskType[]>("/task");
-		return response.data;
-	};
-
-	const postTask = async () => {
-		const response = await api.post<TaskType>("/task", {
-			title: taskTitle,
-		});
-		return response.data;
-	};
-
-	const { data: taskList, isLoading: isTaksLoading } = useQuery({
-		queryKey: ["tasks"],
-		queryFn: fetchTasks,
-		refetchOnWindowFocus: true,
-	});
-
-	const { mutate } = useMutation({
-		mutationFn: postTask,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["tasks"] });
-		},
-	});
 
 	return (
 		<>
 			<div className="flex flex-row justify-between w-full relative">
 				<h5 className="font-bold text-xl">Tarefas</h5>
-				<Button onClick={() => setModalOpen(true)}>
+				<Button
+					isLoading={postTask.isPending || fetchTasks.isLoading}
+					onClick={() => setModalOpen(true)}
+				>
 					<FaPlus className="text-white" />
 					Nova Tarefa
 				</Button>
 			</div>
 			<Skeleton
-				loading={isTaksLoading}
+				loading={fetchTasks.isLoading}
 				animation="wave"
 				variant="text"
 				sx={{ width: "100%" }}
 			/>
 			<Skeleton
-				loading={isTaksLoading}
+				loading={fetchTasks.isLoading}
 				animation="wave"
 				variant="text"
 				sx={{ width: "100%" }}
 			/>
 			<Skeleton
-				loading={isTaksLoading}
+				loading={fetchTasks.isLoading}
 				animation="wave"
 				variant="text"
 				sx={{ width: "100%" }}
 			/>
 
 			<div className="flex flex-col gap-4">
-				{taskList?.map((task) => (
+				{fetchTasks.data?.length === 0 && (
+					<span>{"Você não tem nenhuma task :("}</span>
+				)}
+				{fetchTasks.data?.map((task) => (
 					<TaskItem
 						key={task.id}
+						id={task.id}
 						title={task.title}
 						description={task.description}
 						isCompleted={task.isCompleted}
