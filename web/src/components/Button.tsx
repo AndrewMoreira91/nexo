@@ -23,13 +23,14 @@ const Button: React.FC<ButtonProps> = ({
 		<button
 			onClick={onClick}
 			className={`
-			${size === "large" ? "text-lg px-6 py-4" : "px-6 py-2"}
+			${size === "large" ? "text-lg px-6 py-4" : "px-4 py-2"}
 			${theme === "primary" && "bg-primary text-white hover:bg-primary-hover"}
 			${theme === "outline" && "bg-transparent text-primary border border-primary hover:text-primary-hover hover:border-primary-hover"}
 			${theme === "outline-secondary" && "bg-transparent text-gray-500 border border-gray-500 hover:bg-gray-500 hover:text-white"}
 			font-bold rounded-2xl cursor-pointer transition  inset-0 flex items-center justify-center
 			${className}
 			`}
+			disabled={isLoading}
 			{...props}
 		>
 			{isLoading && (

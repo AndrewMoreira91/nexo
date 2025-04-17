@@ -10,6 +10,8 @@ import {
 } from "@mui/joy";
 import { type FC, type FormEvent, useState } from "react";
 import { FaPlus } from "react-icons/fa";
+import { IoReload } from "react-icons/io5";
+import { MdError } from "react-icons/md";
 import { useFetchTasks, usePostTask } from "../hooks/task-hooks";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
@@ -27,6 +29,10 @@ const TaskContainer: FC = () => {
 		const taskValue = event.currentTarget.task.value;
 
 		postTask.mutate(taskValue);
+
+		if (postTask.isError) {
+			alert("Erro ao criar a tarefa");
+		}
 	};
 
 	return (
@@ -61,8 +67,25 @@ const TaskContainer: FC = () => {
 			/>
 
 			<div className="flex flex-col gap-4">
+				{fetchTasks.isError && (
+					<div className="flex flex-row items-center gap-1">
+						<span className="text-primary-danger font-semibold text-lg">
+							Erro ao carregar as tarefas
+						</span>
+						<MdError className="text-primary-danger" size={20} />
+						<Button
+							size="small"
+							theme="outline"
+							onClick={() => fetchTasks.refetch()}
+						>
+							Tentar novamente
+							<IoReload size={25} className="text-primary" />
+						</Button>
+					</div>
+				)}
 				{fetchTasks.data?.length === 0 && (
 					<span>{"Você não tem nenhuma task :("}</span>
+
 				)}
 				{fetchTasks.data?.map((task) => (
 					<TaskItem
