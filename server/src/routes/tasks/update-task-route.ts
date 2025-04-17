@@ -5,15 +5,17 @@ import { verifyToken } from '../../middlewares/verifyToken'
 
 export const updateTaskRoute: FastifyPluginAsyncZod = async (app) => {
 	app.put(
-		'/task',
+		'/task/:taskId',
 		{
 			schema: {
 				summary: 'Update a task',
 				tags: ['tasks'],
 				body: z.object({
-					id: z.string().nonempty(),
 					title: z.string().optional(),
 					isCompleted: z.boolean().optional(),
+				}),
+				params: z.object({
+					taskId: z.string(),
 				}),
 				response: {
 					201: z.object({
@@ -29,7 +31,8 @@ export const updateTaskRoute: FastifyPluginAsyncZod = async (app) => {
 			preHandler: verifyToken,
 		},
 		async (req, reply) => {
-			const { title, id, isCompleted } = req.body
+			const { title, isCompleted } = req.body
+			const { taskId: id } = req.params
 			const { id: userId } = req.user
 
 			const { task } = await updateTask({ id, title, isCompleted, userId })
