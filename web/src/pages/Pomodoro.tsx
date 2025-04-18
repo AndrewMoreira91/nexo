@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { FaClock, FaFireAlt, FaPause, FaPlay } from "react-icons/fa";
 import { FiTarget } from "react-icons/fi";
@@ -9,14 +10,18 @@ import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
-import { useFetchDataProgress } from "../hooks/data-hooks";
+import { getDataProgress } from "../services/data-service";
 import { startTimer, stopTimer } from "../utils/timer";
 
 type ModesType = "focus" | "shortBreak" | "longBreak";
 
 const PomodoroPage = () => {
 	const { user, isLoading } = useAuth();
-	const { data: dataProgress } = useFetchDataProgress();
+	const { data: dataProgress } = useQuery({
+		queryKey: ["dataProgress"],
+		queryFn: () => getDataProgress({ daysPrevious: 0 }),
+		refetchOnWindowFocus: false,
+	});;
 
 	const [selectedMode, setSelectedMode] = useState<ModesType>("focus");
 	const [timeLeft, setTimeLeft] = useState<number>(0);

@@ -1,7 +1,20 @@
 import { api } from "../libs/api";
-import type { DataProgressType } from "../types";
+import type { DataProgressType, DataStatisticsType } from "../types";
 
-export const getDataProgressToday = async () => {
-	const response = await api.get<DataProgressType[]>("/get-data-progress");
+type QueryOptions = {
+	daysPrevious?: number;
+};
+
+export const getDataProgress = async ({ daysPrevious = 0 }: QueryOptions) => {
+	const response = await api.get<DataProgressType[]>(
+		`/get-data-progress?daysPrevious=${daysPrevious}`,
+	);
+	return response.data;
+};
+
+export const getDataStatistics = async ({ daysPrevious = 0 }: QueryOptions) => {
+	const response = await api.get<DataStatisticsType>(
+		`/get-data-statistic?daysPrevious=${daysPrevious}`,
+	);
 	return response.data;
 };

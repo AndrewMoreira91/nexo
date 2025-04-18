@@ -1,4 +1,5 @@
 import { Tooltip } from "@mui/joy";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
 import { useNavigate } from "react-router";
@@ -9,12 +10,24 @@ import MenuData from "../components/MenuData";
 import Progressbar from "../components/Progressbar";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
-import { useFetchDataProgress } from "../hooks/data-hooks";
+import { getDataProgress, getDataStatistics } from "../services/data-service";
 import { formattedTime } from "../utils/formatted-time";
+import { getDayOfWeek } from "../utils/getDayOfWeek";
 
 const DashboardPage = () => {
 	const { user, isLoading } = useAuth();
-	const { data: dataProgress } = useFetchDataProgress();
+
+	const { data: dataProgress } = useQuery({
+		queryKey: ["dataProgress"],
+		queryFn: () => getDataProgress({ daysPrevious: 0 }),
+		refetchOnWindowFocus: false,
+	});;
+
+	const { data: dataStatistics } = useQuery({
+		queryKey: ["dataStatistics"],
+		queryFn: () => getDataStatistics({ daysPrevious: 7 }),
+		refetchOnWindowFocus: false,
+	});
 
 	const navigate = useNavigate();
 
@@ -104,22 +117,22 @@ const DashboardPage = () => {
 						<Container className="flex-col md:flex-row justify-between gap-8">
 							<MenuData
 								title="Tempo total"
-								textMain="12h 45min"
+								textMain={`${formattedTime(dataStatistics?.totalSessionFocusDuration ?? 0)}`}
 								description="Está semana"
 							>
 								<FaClock className="text-primary text-4xl" />
 							</MenuData>
 							<MenuData
 								title="Tarefas concluídas"
-								textMain="24"
+								textMain={`${dataStatistics?.numTasksCompleted ?? 0}`}
 								description="Está semana"
 							>
 								<FaCheck className="text-primary text-4xl" />
 							</MenuData>
 							<MenuData
 								title="Melhor dia"
-								textMain="Segunda"
-								description="4h 30min"
+								textMain={getDayOfWeek(dataStatistics?.bestDay.date ?? 0)}
+								description={formattedTime(dataStatistics?.bestDay.timeCompleted ?? 0)}
 							>
 								<FaTrophy className="text-primary text-4xl" />
 							</MenuData>

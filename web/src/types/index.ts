@@ -31,3 +31,22 @@ export type DataProgressType = {
 	totalSessionFocusDuration: number;
 	streak: number;
 };
+
+export type DataStatisticsType = {
+	totalSessionFocusDuration: number;
+	sessionsFocusCompleted: number;
+	numTasksCompleted: number;
+	tasksCompleted: TaskType[];
+	dailyMediaDuration: number;
+	weeklyTrend?: number;
+	bestDay: {
+		date: string;
+		timeCompleted: number;
+		isTargetCompleted: boolean;
+	};
+	worstDay: {
+		date: string;
+		timeCompleted: number;
+		isTargetCompleted: boolean;
+	};
+};
