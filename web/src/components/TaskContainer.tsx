@@ -85,7 +85,6 @@ const TaskContainer: FC = () => {
 				)}
 				{fetchTasks.data?.length === 0 && (
 					<span>{"Você não tem nenhuma task :("}</span>
-
 				)}
 				{fetchTasks.data?.map((task) => (
 					<TaskItem

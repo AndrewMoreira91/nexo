@@ -35,7 +35,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 	isCompleted,
 	tagType = "success",
 	onDelete,
-	onEdit
+	onEdit,
 }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 

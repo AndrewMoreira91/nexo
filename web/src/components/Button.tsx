@@ -42,7 +42,9 @@ const Button: React.FC<ButtonProps> = ({
 					/>
 				</div>
 			)}
-			<div className={`${isLoading && "opacity-0"} flex flex-row gap-2 items-center justify-center`}>
+			<div
+				className={`${isLoading && "opacity-0"} flex flex-row gap-2 items-center justify-center`}
+			>
 				{children}
 			</div>
 		</button>

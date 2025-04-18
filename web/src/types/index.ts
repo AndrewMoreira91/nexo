@@ -23,3 +23,11 @@ export type TaskEditType = {
 	newTitle?: string;
 	isCompleted?: boolean;
 };
+
+export type DataProgressType = {
+	date: string;
+	isGoalComplete: boolean;
+	sessionsCompleted: number;
+	totalSessionFocusDuration: number;
+	streak: number;
+};

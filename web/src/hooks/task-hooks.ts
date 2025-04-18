@@ -4,7 +4,7 @@ import {
 	fetchTasks,
 	postTask,
 	updateTask,
-} from "../services/taskService";
+} from "../services/task-service";
 import type { TaskType } from "../types";
 
 export const useFetchTasks = () => {
@@ -12,7 +12,7 @@ export const useFetchTasks = () => {
 		queryKey: ["tasks"],
 		queryFn: fetchTasks,
 		refetchOnWindowFocus: false,
-		staleTime: 1000 * 60 * 5, // 5 minutes
+		staleTime: 1000 * 60 * 10, // 10 minutes
 	});
 };
 
