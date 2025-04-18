@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { loginRoute } from './auth/login-route'
 import { getDataProgressRoute } from './datas/get-datas-progress-route'
+import { getDataStatisticRoute } from './datas/get-datas-statistic-route'
 import { createSessionRoute } from './sessions/create-session-route'
 import { endSessionRoute } from './sessions/end-session-route'
 import { createTaskRoute } from './tasks/create-task-route'
@@ -22,4 +23,5 @@ export const routes = (app: FastifyInstance) => {
 	app.register(deleteTaskRoute)
 
 	app.register(getDataProgressRoute)
+	app.register(getDataStatisticRoute)
 }
