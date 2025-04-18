@@ -1,20 +1,25 @@
+import { Tooltip } from "@mui/joy";
 import { useEffect } from "react";
 import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import Button from "../components/Button";
-import Container from "../components/Conteiner";
+import Container from "../components/Container";
 import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import Progressbar from "../components/Progressbar";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
+import { useFetchDataProgress } from "../hooks/data-hooks";
+import { formattedTime } from "../utils/formatted-time";
 
 const DashboardPage = () => {
 	const { user, isLoading } = useAuth();
+	const { data: dataProgress } = useFetchDataProgress();
+
 	const navigate = useNavigate();
 
 	const timeTotalTarget =
-		((user?.dailySessionTarget ?? 0) * (user?.focusSessionDuration ?? 0)) / 60;
+		(user?.dailySessionTarget ?? 0) * (user?.focusSessionDuration ?? 0);
 
 	useEffect(() => {
 		if (!user) {
@@ -30,7 +35,7 @@ const DashboardPage = () => {
 				<main className="px-6 sm:px-16 my-12">
 					<div>
 						<h3 className="font-bold text-2xl sm:text-3xl">
-							Bem vindo, Andrew!
+							Bem Vindo {user?.name.split(" ").slice(0, 2).join(" ")}!
 						</h3>
 						<span className="font-medium text-base sm:text-xl text-gray-500">
 							Vamos começar mais um dia produtivo?
@@ -43,14 +48,26 @@ const DashboardPage = () => {
 								<div className="flex gap-4">
 									<span className="font-semibold text-xl">Meta diária</span>
 									<span className="font-medium text-xl text-primary">
-										1h 12min /{" "}
-										{`
-										${Math.floor(timeTotalTarget / 60)}h 
-										${timeTotalTarget % 60 < 10 ? "0" : ""}${timeTotalTarget % 60}min
-										`}
+										<Tooltip title="Tempo decorrido">
+											<span>
+												{formattedTime(
+													dataProgress?.[0].totalSessionFocusDuration ?? 0,
+												)}{" "}
+											</span>
+										</Tooltip>
+										/
+										<Tooltip title="Tempo de sua meta">
+											<span>{formattedTime(timeTotalTarget)}</span>
+										</Tooltip>
 									</span>
 								</div>
-								<Progressbar percentage={68} />
+								<Progressbar
+									percentage={
+										((dataProgress?.[0].totalSessionFocusDuration ?? 0) /
+											timeTotalTarget) *
+										100
+									}
+								/>
 
 								<span className="font-medium text-gray-500">
 									Falta pouco para completar sua meta, não desista!

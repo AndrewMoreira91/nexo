@@ -4,17 +4,20 @@ import { FiTarget } from "react-icons/fi";
 import { GrPowerReset } from "react-icons/gr";
 import Button from "../components/Button";
 import ButtonGroup from "../components/ButtonGroup";
-import Container from "../components/Conteiner";
+import Container from "../components/Container";
 import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
+import { useFetchDataProgress } from "../hooks/data-hooks";
 import { startTimer, stopTimer } from "../utils/timer";
 
 type ModesType = "focus" | "shortBreak" | "longBreak";
 
 const PomodoroPage = () => {
 	const { user, isLoading } = useAuth();
+	const { data: dataProgress } = useFetchDataProgress();
+
 	const [selectedMode, setSelectedMode] = useState<ModesType>("focus");
 	const [timeLeft, setTimeLeft] = useState<number>(0);
 	const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -25,9 +28,7 @@ const PomodoroPage = () => {
 			setIsTimerRunning(false);
 			return;
 		}
-
 		setIsTimerRunning(true);
-
 		startTimer(() => {
 			setTimeLeft((prevTimeLeft) => {
 				if (prevTimeLeft <= 0) {
@@ -71,7 +72,7 @@ const PomodoroPage = () => {
 							<>
 								<h3 className="font-bold text-3xl">Sessão de foco</h3>
 								<span className="font-medium text-xl text-gray-500 text-center">
-									Matenha o foco, você está progredindo a cada minuto
+									Mantenha o foco, você está progredindo a cada minuto
 								</span>
 							</>
 						)}
@@ -135,21 +136,25 @@ const PomodoroPage = () => {
 					<Container className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-8">
 						<MenuData
 							title="Sessão atual"
-							textMain="2/4"
+							textMain={`
+								${(dataProgress?.[0].sessionsCompleted ?? 0) + 1}/${user?.dailySessionTarget ?? 0}
+							`}
 							description="Pomodoros"
 						>
 							<FaClock className="text-primary text-4xl" />
 						</MenuData>
 						<MenuData
 							title="Meta diária"
-							textMain="62.5%"
+							textMain={`
+								${((dataProgress?.[0].sessionsCompleted ?? 0) / (user?.dailySessionTarget ?? 0)) * 100}%
+							`}
 							description="Completada"
 						>
 							<FiTarget className="text-primary text-4xl" />
 						</MenuData>
 						<MenuData
 							title="Streak"
-							textMain="7 dias"
+							textMain={`${user?.streak} dias`}
 							description="Consecutivos"
 						>
 							<FaFireAlt className="text-primary text-4xl" />
