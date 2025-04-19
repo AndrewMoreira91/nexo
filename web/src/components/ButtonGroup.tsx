@@ -1,38 +1,38 @@
-import { type FC, useState } from "react";
-import ButtonPill from "./ButtonPill";
+import type { FC } from 'react'
+import ButtonPill from './ButtonPill'
 
 type ButtonGroupProps = {
-	values: string[];
-	keys: string[];
-	disableDeselection?: boolean;
-	onValueSelect?: (value: string) => void;
-};
+	values: string[]
+	keys: string[]
+	disableDeselection?: boolean
+	onValueSelect?: (value: string) => void
+	selectedValue?: string
+}
 
 const ButtonGroup: FC<ButtonGroupProps> = ({
 	keys,
 	values,
 	onValueSelect,
 	disableDeselection = false,
+	selectedValue = values[0],
 }) => {
-	const [selected, setLocalSelected] = useState(0);
 	return (
 		<div className="flex flex-row gap-4">
-			{keys?.map((value, index) => (
+			{keys?.map((key, index) => (
 				<ButtonPill
 					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					key={index}
 					onClick={() => {
-						setLocalSelected(index);
-						onValueSelect?.(value);
+						onValueSelect?.(key)
 					}}
-					theme={selected === index ? "primary" : "secondary"}
-					isDisabled={disableDeselection && selected !== index}
+					theme={selectedValue === key ? 'primary' : 'secondary'}
+					isDisabled={disableDeselection && selectedValue !== key}
 				>
 					{values[index]}
 				</ButtonPill>
 			))}
 		</div>
-	);
-};
+	)
+}
 
-export default ButtonGroup;
+export default ButtonGroup

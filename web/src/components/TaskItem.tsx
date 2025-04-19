@@ -1,5 +1,6 @@
 import {
 	Button,
+	Checkbox,
 	DialogTitle,
 	FormControl,
 	Input,
@@ -15,13 +16,11 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import { IoMdMore } from "react-icons/io";
 import { useDeleteTask, useUpdateTask } from "../hooks/task-hooks";
 import ButtonPill from "./ButtonPill";
-import CheckBox from "./CheckBox";
 import Tag from "./Tag";
 
 type TaskItemProps = {
 	id: string;
 	title: string;
-	tagType?: "pending" | "in-progress" | "success";
 	description?: string;
 	isCompleted?: boolean;
 	onEdit?: (newTitle: string) => void;
@@ -33,13 +32,14 @@ const TaskItem: React.FC<TaskItemProps> = ({
 	title,
 	description,
 	isCompleted,
-	tagType = "success",
 	onDelete,
 	onEdit,
 }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 
 	const [titleValue, setTitleValue] = useState(title);
+
+	const [isSelected, setIsSelected] = useState(false);
 
 	const deleteTask = useDeleteTask();
 	const updateTask = useUpdateTask();
@@ -89,12 +89,15 @@ const TaskItem: React.FC<TaskItemProps> = ({
 		<>
 			<div
 				className={`
-		flex flex-row gap- items-center justify-between px-4 py-6 w-full rounded-l-lg border border-gray-200
-		${isCompleted ? "bg-primary-success-bg" : "bg-white"}
+				flex flex-row gap- items-center justify-between px-4 py-6 w-full rounded-l-lg border 
+				${isSelected ? "border-primary" : "border-gray-200"}
+				${isCompleted ? "bg-primary-success-bg" : "bg-white"}
 		`}
 			>
 				<div className="flex flex-row gap-3 items-center">
-					{!isCompleted && <CheckBox />}
+					{!isCompleted && (
+						<Checkbox onChange={() => setIsSelected(!isSelected)} />
+					)}
 					<div>
 						<Skeleton
 							loading={updateTask.isPending}
@@ -116,7 +119,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
 				</div>
 
 				<div className="flex flex-row gap-2 items-center">
-					<Tag type={isCompleted ? "success" : tagType} />
+					<Tag
+						type={
+							isCompleted ? "success" : isSelected ? "in-progress" : "pending"
+						}
+					/>
 					<button
 						type="button"
 						className="block sm:hidden active:bg-primary-bg rounded-full p-1"

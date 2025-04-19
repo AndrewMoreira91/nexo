@@ -9,6 +9,9 @@ export const getDataProgress = async ({ daysPrevious = 0 }: QueryOptions) => {
 	const response = await api.get<DataProgressType[]>(
 		`/get-data-progress?daysPrevious=${daysPrevious}`,
 	);
+	if (response.data.length === 0) {
+		return null;
+	}
 	return response.data;
 };
 

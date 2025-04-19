@@ -1,4 +1,4 @@
-let timer: number | null = null;
+let timer: NodeJS.Timeout | null = null;
 
 export function startTimer(onTick: () => void) {
 	if (timer) clearInterval(timer);

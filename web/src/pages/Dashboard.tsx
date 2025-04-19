@@ -11,6 +11,7 @@ import Progressbar from "../components/Progressbar";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
 import { getDataProgress, getDataStatistics } from "../services/data-service";
+import { calculateProgress } from "../utils/calculateProgress";
 import { formattedTime } from "../utils/formatted-time";
 import { getDayOfWeek } from "../utils/getDayOfWeek";
 
@@ -21,7 +22,7 @@ const DashboardPage = () => {
 		queryKey: ["dataProgress"],
 		queryFn: () => getDataProgress({ daysPrevious: 0 }),
 		refetchOnWindowFocus: false,
-	});;
+	});
 
 	const { data: dataStatistics } = useQuery({
 		queryKey: ["dataStatistics"],
@@ -75,11 +76,10 @@ const DashboardPage = () => {
 									</span>
 								</div>
 								<Progressbar
-									percentage={
-										((dataProgress?.[0].totalSessionFocusDuration ?? 0) /
-											timeTotalTarget) *
-										100
-									}
+									percentage={calculateProgress(
+										dataProgress?.[0].totalSessionFocusDuration ?? 0,
+										timeTotalTarget,
+									)}
 								/>
 
 								<span className="font-medium text-gray-500">
@@ -132,7 +132,9 @@ const DashboardPage = () => {
 							<MenuData
 								title="Melhor dia"
 								textMain={getDayOfWeek(dataStatistics?.bestDay.date ?? 0)}
-								description={formattedTime(dataStatistics?.bestDay.timeCompleted ?? 0)}
+								description={formattedTime(
+									dataStatistics?.bestDay.timeCompleted ?? 0,
+								)}
 							>
 								<FaTrophy className="text-primary text-4xl" />
 							</MenuData>

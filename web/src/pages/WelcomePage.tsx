@@ -1,7 +1,7 @@
 import { FaFireAlt, FaTasks } from "react-icons/fa";
 import { FiTarget } from "react-icons/fi";
 import { GoGraph } from "react-icons/go";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import img from "../assets/medium-shot-woman-working-laptop 1.png";
 import Button from "../components/Button";
 import MenuInfo from "../components/MenuInfo";
@@ -12,7 +12,7 @@ const WelcomePage = () => {
 	const { isAuthenticated } = useAuth();
 
 	if (isAuthenticated) {
-		navigate("/dashboard");
+		return <Navigate to="/pomodoro" replace />;
 	}
 
 	return (

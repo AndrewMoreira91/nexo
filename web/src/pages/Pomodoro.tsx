@@ -10,34 +10,87 @@ import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
+import { api } from "../libs/api";
 import { getDataProgress } from "../services/data-service";
+import { calculateProgress } from "../utils/calculateProgress";
 import { startTimer, stopTimer } from "../utils/timer";
 
-type ModesType = "focus" | "shortBreak" | "longBreak";
+type SessionsType = "focus" | "shortBreak" | "longBreak";
+type StartSessionResponse = {
+	id: string;
+	userId: string;
+	dailyProgressId: string;
+	duration: number;
+	type: string;
+	startTime: string;
+	endTime: string;
+	sessionEndDate: string;
+};
 
 const PomodoroPage = () => {
 	const { user, isLoading } = useAuth();
-	const { data: dataProgress } = useQuery({
+
+	const {
+		data: dataProgress,
+		isLoading: loadingDataProgress,
+		refetch: dataProgressRefetch,
+	} = useQuery({
 		queryKey: ["dataProgress"],
 		queryFn: () => getDataProgress({ daysPrevious: 0 }),
 		refetchOnWindowFocus: false,
-	});;
+	});
 
-	const [selectedMode, setSelectedMode] = useState<ModesType>("focus");
-	const [timeLeft, setTimeLeft] = useState<number>(0);
+	const currentSession:
+		| { timeDuration: number; timeLeft: number; type: SessionsType }
+		| undefined = JSON.parse(localStorage.getItem("currentSession") || "{}");
+
+	const [timeLeft, setTimeLeft] = useState<number>(
+		currentSession?.timeLeft || 0,
+	);
+	const [timeDuration, setTimeDuration] = useState<number>(
+		currentSession?.timeDuration || 0,
+	);
+
 	const [isTimerRunning, setIsTimerRunning] = useState(false);
+	const [selectedMode, setSelectedMode] = useState<SessionsType>(
+		currentSession?.type || "focus",
+	);
 
-	function toggleTimer() {
+	saveCurrentSession();
+
+	function saveCurrentSession() {
+		localStorage.setItem(
+			"currentSession",
+			JSON.stringify({
+				timeLeft,
+				timeDuration,
+				type: selectedMode,
+			}),
+		);
+	}
+
+	async function toggleTimer() {
 		if (isTimerRunning) {
 			stopTimer();
 			setIsTimerRunning(false);
 			return;
 		}
+
+		const response = await api.post<StartSessionResponse>("start-session", {
+			type: selectedMode as SessionsType,
+		});
+		localStorage.setItem("sessionId", response.data.id);
+
 		setIsTimerRunning(true);
+
 		startTimer(() => {
+			setTimeDuration((prevTimeDuration) => {
+				return prevTimeDuration + 1;
+			});
+
 			setTimeLeft((prevTimeLeft) => {
-				if (prevTimeLeft <= 0) {
-					setIsTimerRunning(false);
+				if (prevTimeLeft === 0) {
+					finalizeSession();
 					return 0;
 				}
 				return prevTimeLeft - 1;
@@ -45,26 +98,92 @@ const PomodoroPage = () => {
 		});
 	}
 
-	const changeTimeLeft = useCallback(() => {
-		if (!user) return null;
-		if (selectedMode === "focus") {
-			setTimeLeft(user?.focusSessionDuration);
-		} else if (selectedMode === "shortBreak") {
-			setTimeLeft(user?.shortBreakSessionDuration);
-		} else if (selectedMode === "longBreak") {
-			setTimeLeft(user?.longBreakSessionDuration);
+	async function finalizeSession() {
+		setIsTimerRunning(false);
+		stopTimer();
+		try {
+			if (!isTimerRunning) {
+				const currentSession:
+					| { timeDuration: number; timeLeft: number; type: SessionsType }
+					| undefined = JSON.parse(localStorage.getItem("currentSession") || "{}")
+
+				const sessionId = localStorage.getItem("sessionId");
+				if (sessionId) {
+					await api.put("end-session", {
+						sessionId,
+						duration: currentSession?.timeDuration,
+					});
+				}
+
+				dataProgressRefetch();
+
+				localStorage.removeItem("sessionId");
+
+				if (selectedMode === "focus") {
+					const sessionFocusConcluded =
+						Number(localStorage.getItem("sessionsFocusConcluded")) || 0;
+
+					console.log(sessionFocusConcluded);
+
+					if (sessionFocusConcluded === 2) {
+						setSelectedMode("longBreak");
+						changeTimeLeft("longBreak");
+						localStorage.setItem(
+							"sessionsFocusConcluded",
+							JSON.stringify(0),
+						);
+					} else {
+						setSelectedMode("shortBreak");
+						changeTimeLeft("shortBreak");
+						localStorage.setItem(
+							"sessionsFocusConcluded",
+							JSON.stringify(sessionFocusConcluded + 1),
+						);
+					}
+				}
+
+				setSelectedMode("focus");
+				changeTimeLeft("focus");
+				setTimeDuration(0);
+			}
+		} catch (error) {
+			console.error("Error finalizing session:", error);
 		}
-	}, [selectedMode, user]);
+	}
+
+	function handleModeChange(value: string) {
+		const mode = value as SessionsType;
+		setSelectedMode(mode);
+		changeTimeLeft(mode);
+		setTimeDuration(0);
+	}
 
 	function handleClickReset() {
 		stopTimer();
+		setTimeDuration(0);
 		setIsTimerRunning(false);
-		changeTimeLeft();
+		changeTimeLeft(selectedMode);
 	}
 
+	const changeTimeLeft = useCallback(
+		(mode: SessionsType) => {
+			if (!user) return null;
+			if (mode === "focus") {
+				setTimeLeft(user?.focusSessionDuration);
+			} else if (mode === "shortBreak") {
+				setTimeLeft(user?.shortBreakSessionDuration);
+			} else if (mode === "longBreak") {
+				setTimeLeft(user?.longBreakSessionDuration);
+			}
+		},
+		[user],
+	);
+
 	useEffect(() => {
-		changeTimeLeft();
-	}, [changeTimeLeft]);
+		if (timeLeft === 0 && !isTimerRunning) {
+			changeTimeLeft(selectedMode);
+		}
+	}, [changeTimeLeft, timeLeft, selectedMode, isTimerRunning]);
 
 	return (
 		<>
@@ -131,39 +250,59 @@ const PomodoroPage = () => {
 						<ButtonGroup
 							keys={["focus", "shortBreak", "longBreak"]}
 							values={["pomodoro", "pausa curta", "pausa longa"]}
-							onValueSelect={(value: string) => {
-								setSelectedMode(value as ModesType);
-							}}
+							selectedValue={selectedMode}
+							onValueSelect={handleModeChange}
 							disableDeselection={isTimerRunning}
 						/>
 					</section>
 
 					<Container className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-8">
-						<MenuData
-							title="Sessão atual"
-							textMain={`
-								${(dataProgress?.[0].sessionsCompleted ?? 0) + 1}/${user?.dailySessionTarget ?? 0}
+						{(dataProgress?.length === 0 || dataProgress === null) &&
+							!loadingDataProgress && (
+								<div className="flex flex-col gap-4">
+									<span className="font-bold text-2xl">
+										Você não tem dados ainda
+									</span>
+									<span className="font-medium text-lg text-gray-500">
+										Complete uma sessão para começar a acompanhar seu progresso
+									</span>
+								</div>
+							)}
+						{dataProgress !== null && (
+							<>
+								<MenuData
+									isLoading={loadingDataProgress}
+									title="Sessão atual"
+									textMain={`
+								${(dataProgress?.[0]?.sessionsCompleted ?? 0) + 1}/${user?.dailySessionTarget ?? 0}
 							`}
-							description="Pomodoros"
-						>
-							<FaClock className="text-primary text-4xl" />
-						</MenuData>
-						<MenuData
-							title="Meta diária"
-							textMain={`
-								${((dataProgress?.[0].sessionsCompleted ?? 0) / (user?.dailySessionTarget ?? 0)) * 100}%
+									description="Pomodoros"
+								>
+									<FaClock className="text-primary text-4xl" />
+								</MenuData>
+								<MenuData
+									isLoading={loadingDataProgress}
+									title="Meta diária"
+									textMain={`
+								${calculateProgress(dataProgress?.[0]?.sessionsCompleted ?? 0, user?.dailySessionTarget ?? 0)}%
 							`}
-							description="Completada"
-						>
-							<FiTarget className="text-primary text-4xl" />
-						</MenuData>
-						<MenuData
-							title="Streak"
-							textMain={`${user?.streak} dias`}
-							description="Consecutivos"
-						>
-							<FaFireAlt className="text-primary text-4xl" />
-						</MenuData>
+									description="Completada"
+								>
+									<FiTarget className="text-primary text-4xl" />
+								</MenuData>
+								<MenuData
+									isLoading={loadingDataProgress}
+									title="Streak"
+									textMain={`
+									${dataProgress?.[0].streak ?? 0}
+									${dataProgress?.[0].streak === 1 ? "dia" : "dias"}
+									`}
+									description="Consecutivos"
+								>
+									<FaFireAlt className="text-primary text-4xl" />
+								</MenuData>
+							</>
+						)}
 					</Container>
 
 					<Container className="flex flex-col gap-4">
