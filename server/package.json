@@ -4,7 +4,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file=.env src/server.ts",
+    "dev": "tsx watch --env-file=.env-local src/server.ts",
     "migrate": "npx drizzle-kit migrate",
     "build": "tsup src/server.ts",
     "lint": "npx @biomejs/biome check --write src",

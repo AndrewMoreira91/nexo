@@ -1,3 +1,4 @@
+import { subDays } from 'date-fns'
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
@@ -29,6 +30,15 @@ export const updateDailyProgress = async ({
 	sessionsCompleted,
 	totalSessionFocusDuration,
 }: UpdateDailyProgressProps): Promise<UpdatedDailyProgressResponse> => {
+	const yesterday = subDays(dateToday, 1).toUTCString()
+
+	const lastDailyProgress = await db
+		.select({ streak: dailyProgress.streak })
+		.from(dailyProgress)
+		.where(
+			and(eq(dailyProgress.userId, userId), eq(dailyProgress.date, yesterday)),
+		)
+
 	const alreadyDailyProgress = await db
 		.select()
 		.from(dailyProgress)
@@ -47,8 +57,7 @@ export const updateDailyProgress = async ({
 				sessionsCompleted,
 				totalSessionFocusDuration,
 				streak: isGoalComplete
-					? alreadyDailyProgress[0].streak + 1
-					: alreadyDailyProgress[0].streak,
+					? lastDailyProgress[0].streak + 1 : 0,
 			})
 			.where(
 				and(
