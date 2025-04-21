@@ -6,7 +6,6 @@ self.onmessage = (event) => {
 		let elapsedTime = 0;
 
 		interval = setInterval(() => {
-			console.log("Worker interval tick");
 			elapsedTime++;
 			const remainingTime = duration - elapsedTime;
 

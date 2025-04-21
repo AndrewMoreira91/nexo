@@ -11,7 +11,7 @@ import Progressbar from "../components/Progressbar";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
 import { getDataProgress, getDataStatistics } from "../services/data-service";
-import { calculateProgress } from "../utils/calculateProgress";
+import { calculateProgress } from "../utils/calculate-progress";
 import { formattedTime } from "../utils/formatted-time";
 import { getDayOfWeek } from "../utils/getDayOfWeek";
 

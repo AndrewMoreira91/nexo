@@ -149,8 +149,5 @@ export const getStatisticDatas = async (
 	}
 	result.weeklyTrend = weeklyTrend
 
-	console.log(dayWeekTrendItens)
-	console.log(dailyProgressData)
-
 	return { result }
 }

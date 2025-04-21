@@ -10,11 +10,11 @@ import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
+import { useTimer } from "../hooks/useTimer";
 import { api } from "../libs/api";
 import { getDataProgress } from "../services/data-service";
 import type { DataProgressType, UserType } from "../types";
-import { calculateProgress } from "../utils/calculateProgress";
-import { timerFunction } from "../utils/timer";
+import { calculateProgress } from "../utils/calculate-progress";
 
 type SessionType = "focus" | "shortBreak" | "longBreak";
 
@@ -55,7 +55,7 @@ const PomodoroPage = () => {
 	);
 	const [isTimerRunning, setIsTimerRunning] = useState(false);
 
-	const { startTimer, stopTimer } = timerFunction({
+	const { startTimer, stopTimer } = useTimer({
 		duration: timeLeft,
 		onTick: handleTimerTick,
 		onComplete: (accumulatedTime) => handleSessionComplete(accumulatedTime),
@@ -309,9 +309,8 @@ function renderProgressData(
 			<MenuData
 				isLoading={isLoading}
 				title="Streak"
-				textMain={`${dataProgress?.[0]?.streak ?? 0} ${
-					dataProgress?.[0]?.streak === 1 ? "dia" : "dias"
-				}`}
+				textMain={`${dataProgress?.[0]?.streak ?? 0} ${dataProgress?.[0]?.streak === 1 ? "dia" : "dias"
+					}`}
 				description="Consecutivos"
 			>
 				<FaFireAlt className="text-primary text-4xl" />
