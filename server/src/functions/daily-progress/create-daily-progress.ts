@@ -21,13 +21,13 @@ export const createDailyProgress = async (userId: string) => {
 		}
 	}
 
-	const yesterday = setDate(dateToday, dateToday.getDate() - 1).toUTCString()
+	const lastDay = setDate(dateToday, dateToday.getDate() - 1).toUTCString()
 
 	const lastDailyProgress = await db
 		.select({ streak: dailyProgress.streak })
 		.from(dailyProgress)
 		.where(
-			and(eq(dailyProgress.userId, userId), eq(dailyProgress.date, yesterday)),
+			and(eq(dailyProgress.userId, userId), eq(dailyProgress.date, lastDay)),
 		)
 
 	const dailyProgressData = await db

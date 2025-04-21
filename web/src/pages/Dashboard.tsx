@@ -102,9 +102,9 @@ const DashboardPage = () => {
 										Dias consecutivos
 									</span>
 									<span className="font-bold text-4xl text-primary">
-										{(user?.longestStreak ?? 0) <= 1
-											? `${user?.longestStreak ?? 0} dia`
-											: `${user?.longestStreak} dias`}
+										{(dataStatistics?.streak ?? 0) <= 1
+											? `${dataStatistics?.streak ?? 0} dia`
+											: `${dataStatistics?.streak} dias`}
 									</span>
 								</div>
 							</div>

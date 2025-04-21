@@ -33,6 +33,8 @@ export type DataProgressType = {
 };
 
 export type DataStatisticsType = {
+	streak: number;
+	longestStreak: number;
 	totalSessionFocusDuration: number;
 	sessionsFocusCompleted: number;
 	numTasksCompleted: number;

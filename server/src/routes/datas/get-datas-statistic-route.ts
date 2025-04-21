@@ -24,6 +24,8 @@ export const getDataStatisticRoute: FastifyPluginAsyncZod = async (app) => {
 							totalSessionFocusDuration: z.number(),
 							sessionsFocusCompleted: z.number(),
 							numTasksCompleted: z.number(),
+							streak: z.number(),
+							longestStreak: z.number(),
 							tasksCompleted: z.array(
 								z.object({
 									id: z.string(),

@@ -49,6 +49,8 @@ export const updateDailyProgress = async ({
 			),
 		)
 
+	const lastStreak = lastDailyProgress?.[0]?.streak ?? 0
+
 	if (alreadyDailyProgress.length > 0) {
 		const dailyProgressUpdated = await db
 			.update(dailyProgress)
@@ -57,7 +59,7 @@ export const updateDailyProgress = async ({
 				sessionsCompleted,
 				totalSessionFocusDuration,
 				streak: isGoalComplete
-					? (lastDailyProgress?.[0]?.streak ?? 0) + 1 : 0,
+					? lastStreak + 1 : lastStreak,
 			})
 			.where(
 				and(

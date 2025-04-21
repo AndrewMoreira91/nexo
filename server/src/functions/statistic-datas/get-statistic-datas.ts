@@ -3,6 +3,7 @@ import { and, asc, eq, gt } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
 import { tasks } from '../../drizzle/schemas/tasks-schema'
+import { users } from '../../drizzle/schemas/user-schema'
 import { dateToday } from '../../helpers/getDate'
 
 type QueryProps = {
@@ -17,6 +18,8 @@ type TaskType = {
 }
 
 type ResultType = {
+	streak: number
+	longestStreak: number
 	totalSessionFocusDuration: number
 	sessionsFocusCompleted: number
 	numTasksCompleted: number
@@ -40,6 +43,20 @@ export const getStatisticDatas = async (
 	{ daysPrevious = 0 }: QueryProps,
 ) => {
 	const formattedDateToday = format(dateToday, 'yyyy-MM-dd')
+
+	const [user] = await db.
+		select({
+			streak: users.streak,
+			longestStreak: users.longestStreak,
+		})
+		.from(users)
+		.where(
+			and(
+				eq(users.id, userId),
+			),
+		).limit(1)
+
+	if (!user) throw new Error('User not found')
 
 	const previousDateFromDays = format(
 		subDays(dateToday, daysPrevious),
@@ -84,6 +101,8 @@ export const getStatisticDatas = async (
 			timeCompleted: 0,
 			isTargetCompleted: false,
 		},
+		streak: 0,
+		longestStreak: 0,
 	}
 
 	const dayWeekTrendItens = []
@@ -148,6 +167,8 @@ export const getStatisticDatas = async (
 		}
 	}
 	result.weeklyTrend = weeklyTrend
+	result.streak = user.streak
+	result.longestStreak = user.longestStreak
 
 	return { result }
 }

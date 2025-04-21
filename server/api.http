@@ -20,7 +20,7 @@ Content-Type: application/json
 ### Start Session Route
 POST http://localhost:3333/start-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDQ3MzE1NTQsImV4cCI6MTc0NDgxNzk1NH0.xoQSOCanxSN0uM1a2jINjDXDsa5XFrXdwdVzy2IXG08
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
 {
 	"type": "focus"
@@ -30,17 +30,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3N
 ### End Session Route
 PUT http://localhost:3333/end-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDQ3MzE1NTQsImV4cCI6MTc0NDgxNzk1NH0.xoQSOCanxSN0uM1a2jINjDXDsa5XFrXdwdVzy2IXG08
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
 {
 	"duration": 1547,
 	"sessionId": "b8164b3e-a7e3-42fe-89d3-940201148977"
 }
 
-### Get Sessions Data Route
+### Get Sessions Data Progress Route
 GET http://localhost:3333/get-data-progress
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDQ3MzE1NTQsImV4cCI6MTc0NDgxNzk1NH0.xoQSOCanxSN0uM1a2jINjDXDsa5XFrXdwdVzy2IXG08
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
+
+### Get Sessions Data Statistics Route
+GET http://localhost:3333/get-data-statistic?daysPrevious=7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
 ### Teste Route
 POST http://localhost:3333/teste

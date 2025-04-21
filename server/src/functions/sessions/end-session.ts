@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { sessions } from '../../drizzle/schemas/session-schema'
+import { users } from '../../drizzle/schemas/user-schema'
 import { dateToday } from '../../helpers/getDate'
 import { updateDailyProgress } from '../daily-progress/update-daily-progress'
 import { getUser } from '../user/get-user'
@@ -48,8 +49,8 @@ export const endSession = async ({
 				),
 			)
 
-		const isGoalComplete = user.dailySessionTarget <= userFocusSessions.length
 		const sessionsCompleted = userFocusSessions.length
+		const isGoalComplete = user.dailySessionTarget <= sessionsCompleted
 		const totalSessionFocusDuration = userFocusSessions.reduce(
 			(acc, session) => acc + session.duration,
 			0,
@@ -61,6 +62,10 @@ export const endSession = async ({
 			sessionsCompleted,
 			totalSessionFocusDuration,
 		})
+
+		await db.update(users).set({
+			streak: dailyProgress.streak,
+		}).where(eq(users.id, userId))
 
 		return {
 			session: session[0],
