@@ -93,13 +93,6 @@ const TaskContainer: FC = () => {
 						title={task.title}
 						description={task.description}
 						isCompleted={task.isCompleted}
-						tagType={
-							task.inProgress
-								? "in-progress"
-								: task.isCompleted
-									? "success"
-									: "pending"
-						}
 					/>
 				))}
 			</div>

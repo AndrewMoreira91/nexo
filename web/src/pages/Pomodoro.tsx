@@ -1,187 +1,189 @@
-import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useState } from 'react'
-import { FaClock, FaFireAlt, FaPause, FaPlay } from 'react-icons/fa'
-import { FiTarget } from 'react-icons/fi'
-import { GrPowerReset } from 'react-icons/gr'
-import Button from '../components/Button'
-import ButtonGroup from '../components/ButtonGroup'
-import Container from '../components/Container'
-import Loader from '../components/Loader'
-import MenuData from '../components/MenuData'
-import TaskContainer from '../components/TaskContainer'
-import { useAuth } from '../context/auth.context'
-import { api } from '../libs/api'
-import { getDataProgress } from '../services/data-service'
-import type { DataProgressType, UserType } from '../types'
-import { calculateProgress } from '../utils/calculateProgress'
-import { timerFunction } from '../utils/timer'
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
+import { FaClock, FaFireAlt, FaPause, FaPlay } from "react-icons/fa";
+import { FiTarget } from "react-icons/fi";
+import { GrPowerReset } from "react-icons/gr";
+import Button from "../components/Button";
+import ButtonGroup from "../components/ButtonGroup";
+import Container from "../components/Container";
+import Loader from "../components/Loader";
+import MenuData from "../components/MenuData";
+import TaskContainer from "../components/TaskContainer";
+import { useAuth } from "../context/auth.context";
+import { api } from "../libs/api";
+import { getDataProgress } from "../services/data-service";
+import type { DataProgressType, UserType } from "../types";
+import { calculateProgress } from "../utils/calculateProgress";
+import { timerFunction } from "../utils/timer";
 
-type SessionType = 'focus' | 'shortBreak' | 'longBreak'
+type SessionType = "focus" | "shortBreak" | "longBreak";
 
 type StartSessionResponse = {
-	id: string
-	userId: string
-	dailyProgressId: string
-	duration: number
-	type: string
-	startTime: string
-	endTime: string
-	sessionEndDate: string
-}
+	id: string;
+	userId: string;
+	dailyProgressId: string;
+	duration: number;
+	type: string;
+	startTime: string;
+	endTime: string;
+	sessionEndDate: string;
+};
 
 const PomodoroPage = () => {
-	const { user, isLoading: isAuthLoading } = useAuth()
+	const { user, isLoading: isAuthLoading } = useAuth();
 
 	const {
 		data: dataProgress,
 		isLoading: isProgressLoading,
 		refetch: refetchDataProgress,
 	} = useQuery({
-		queryKey: ['progressData'],
+		queryKey: ["progressData"],
 		queryFn: () => getDataProgress({ daysPrevious: 0 }),
 		refetchOnWindowFocus: false,
-	})
+	});
 
 	const savedSession = JSON.parse(
-		localStorage.getItem('currentSession') || '{}',
-	)
+		localStorage.getItem("currentSession") || "{}",
+	);
 
-	const [timeLeft, setTimeLeft] = useState<number>(savedSession?.timeLeft || 0)
+	const [timeLeft, setTimeLeft] = useState<number>(savedSession?.timeLeft || 0);
 	const [sessionDuration, setSessionDuration] = useState<number>(
 		savedSession?.timeDuration || 0,
-	)
+	);
 	const [currentMode, setCurrentMode] = useState<SessionType>(
-		savedSession?.type || 'focus',
-	)
-	const [isTimerRunning, setIsTimerRunning] = useState(false)
+		savedSession?.type || "focus",
+	);
+	const [isTimerRunning, setIsTimerRunning] = useState(false);
 
 	const { startTimer, stopTimer } = timerFunction({
 		duration: timeLeft,
 		onTick: handleTimerTick,
 		onComplete: (accumulatedTime) => handleSessionComplete(accumulatedTime),
-	})
+	});
+
+	async function toggleTimer() {
+		try {
+			if (isTimerRunning) {
+				stopTimer();
+				setIsTimerRunning(false);
+				return;
+			}
+
+			const response = await api.post<StartSessionResponse>("start-session", {
+				type: currentMode,
+			});
+
+			localStorage.setItem("sessionId", response.data.id);
+			setIsTimerRunning(true);
+			startTimer();
+
+			refetchDataProgress();
+		} catch (error) {
+			console.error("Error starting session:", error);
+		}
+	}
 
 	function handleTimerTick(remainingTime: number) {
-		setTimeLeft(remainingTime)
+		setTimeLeft(remainingTime);
 		if (remainingTime > 0) {
-			setSessionDuration((prev) => prev + 1)
+			setSessionDuration((prev) => prev + 1);
 		}
 	}
 
 	async function handleSessionComplete(accumulatedTime: number) {
-		setIsTimerRunning(false)
-		stopTimer()
+		setIsTimerRunning(false);
+		stopTimer();
 
 		try {
-			const sessionId = localStorage.getItem('sessionId')
-			console.log("Session Duration:", sessionDuration)
+			const sessionId = localStorage.getItem("sessionId");
 			if (sessionId) {
-				await api.put('end-session', {
+				await api.put("end-session", {
 					sessionId,
 					duration: accumulatedTime,
-				})
+				});
 			}
 
-			refetchDataProgress()
-			localStorage.removeItem('sessionId')
+			refetchDataProgress();
+			localStorage.removeItem("sessionId");
 
-			if (currentMode === 'focus') {
-				return handleFocusSessionComplete()
+			if (currentMode === "focus") {
+				return handleFocusSessionComplete();
 			}
 
-			resetSession('focus')
+			resetSession("focus");
 		} catch (error) {
-			console.error('Error finalizing session:', error)
+			console.error("Error finalizing session:", error);
 		}
 	}
 
 	function handleFocusSessionComplete() {
 		const completedFocusSessions =
-			Number(localStorage.getItem('completedFocusSessions')) || 0
+			Number(localStorage.getItem("completedFocusSessions")) || 0;
 
 		if (completedFocusSessions === 2) {
-			resetSession('longBreak')
-			localStorage.setItem('completedFocusSessions', JSON.stringify(0))
+			resetSession("longBreak");
+			localStorage.setItem("completedFocusSessions", JSON.stringify(0));
 		} else {
-			resetSession('shortBreak')
+			resetSession("shortBreak");
 			localStorage.setItem(
-				'completedFocusSessions',
+				"completedFocusSessions",
 				JSON.stringify(completedFocusSessions + 1),
-			)
+			);
 		}
-	}
-
-	async function toggleTimer() {
-		if (isTimerRunning) {
-			stopTimer()
-			setIsTimerRunning(false)
-			return
-		}
-
-		const response = await api.post<StartSessionResponse>('start-session', {
-			type: currentMode,
-		})
-
-		localStorage.setItem('sessionId', response.data.id)
-		setIsTimerRunning(true)
-		startTimer()
 	}
 
 	function resetSession(mode: SessionType) {
-		setCurrentMode(mode)
-		updateTimeLeft(mode)
-		setSessionDuration(0)
+		setCurrentMode(mode);
+		updateTimeLeft(mode);
+		setSessionDuration(0);
 	}
 
 	function handleModeChange(selectedMode: string) {
-		const mode = selectedMode as SessionType
-		resetSession(mode)
+		const mode = selectedMode as SessionType;
+		resetSession(mode);
 	}
 
 	function handleResetClick() {
-		stopTimer()
-		resetSession(currentMode)
-		setIsTimerRunning(false)
+		stopTimer();
+		resetSession(currentMode);
+		setIsTimerRunning(false);
 	}
 
 	const updateTimeLeft = useCallback(
 		(mode: SessionType) => {
-			if (!user) return
+			if (!user) return;
 
 			const durations = {
 				focus: user.focusSessionDuration,
 				shortBreak: user.shortBreakSessionDuration,
 				longBreak: user.longBreakSessionDuration,
-			}
+			};
 
-			setTimeLeft(durations[mode])
+			setTimeLeft(durations[mode]);
 		},
 		[user],
-	)
+	);
 
 	const saveCurrentSession = useCallback(() => {
 		localStorage.setItem(
-			'currentSession',
+			"currentSession",
 			JSON.stringify({
 				timeLeft,
 				sessionDuration,
 				type: currentMode,
 			}),
-		)
-	}, [timeLeft, sessionDuration, currentMode])
+		);
+	}, [timeLeft, sessionDuration, currentMode]);
 
 	useEffect(() => {
-		saveCurrentSession()
-	}, [saveCurrentSession])
-
+		saveCurrentSession();
+	}, [saveCurrentSession]);
 
 	useEffect(() => {
 		if (timeLeft === 0 && !isTimerRunning) {
-			updateTimeLeft(currentMode)
+			updateTimeLeft(currentMode);
 		}
-	}, [timeLeft, isTimerRunning, currentMode, updateTimeLeft])
-
-	console.log(sessionDuration)
+	}, [timeLeft, isTimerRunning, currentMode, updateTimeLeft]);
 
 	return (
 		<>
@@ -204,7 +206,7 @@ const PomodoroPage = () => {
 								) : (
 									<FaPlay className="text-xl" />
 								)}
-								{isTimerRunning ? 'Pausar' : 'Iniciar'}
+								{isTimerRunning ? "Pausar" : "Iniciar"}
 							</Button>
 
 							<Button
@@ -220,8 +222,8 @@ const PomodoroPage = () => {
 						</div>
 
 						<ButtonGroup
-							keys={['focus', 'shortBreak', 'longBreak']}
-							values={['Pomodoro', 'Pausa Curta', 'Pausa Longa']}
+							keys={["focus", "shortBreak", "longBreak"]}
+							values={["Pomodoro", "Pausa Curta", "Pausa Longa"]}
 							selectedValue={currentMode}
 							onValueSelect={handleModeChange}
 							disableDeselection={isTimerRunning}
@@ -238,24 +240,24 @@ const PomodoroPage = () => {
 				</main>
 			)}
 		</>
-	)
-}
+	);
+};
 
 function SessionHeader({
 	mode,
 	timeLeft,
 }: { mode: SessionType; timeLeft: number }) {
 	const modeTitles = {
-		focus: 'Sessão de Foco',
-		shortBreak: 'Pausa Curta',
-		longBreak: 'Pausa Longa',
-	}
+		focus: "Sessão de Foco",
+		shortBreak: "Pausa Curta",
+		longBreak: "Pausa Longa",
+	};
 
 	const modeDescriptions = {
-		focus: 'Mantenha o foco, você está progredindo a cada minuto',
-		shortBreak: 'Aproveite para fazer um lanche ou tomar uma água',
-		longBreak: 'Aproveite para descansar e relaxar',
-	}
+		focus: "Mantenha o foco, você está progredindo a cada minuto",
+		shortBreak: "Aproveite para fazer um lanche ou tomar uma água",
+		longBreak: "Aproveite para descansar e relaxar",
+	};
 
 	return (
 		<>
@@ -264,10 +266,10 @@ function SessionHeader({
 				{modeDescriptions[mode]}
 			</span>
 			<span className="font-bold text-8xl text-primary">
-				{`${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? '0' : ''}${timeLeft % 60}`}
+				{`${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? "0" : ""}${timeLeft % 60}`}
 			</span>
 		</>
-	)
+	);
 }
 
 function renderProgressData(
@@ -280,10 +282,10 @@ function renderProgressData(
 			<div className="flex flex-col gap-4">
 				<span className="font-bold text-2xl">Você não tem dados ainda</span>
 				<span className="font-medium text-lg text-gray-500">
-					Complete uma sessão para começar a acompanhar seu progresso
+					Comece uma sessão para começar a acompanhar seu progresso
 				</span>
 			</div>
-		)
+		);
 	}
 
 	return (
@@ -307,14 +309,15 @@ function renderProgressData(
 			<MenuData
 				isLoading={isLoading}
 				title="Streak"
-				textMain={`${dataProgress?.[0]?.streak ?? 0} ${dataProgress?.[0]?.streak === 1 ? 'dia' : 'dias'
-					}`}
+				textMain={`${dataProgress?.[0]?.streak ?? 0} ${
+					dataProgress?.[0]?.streak === 1 ? "dia" : "dias"
+				}`}
 				description="Consecutivos"
 			>
 				<FaFireAlt className="text-primary text-4xl" />
 			</MenuData>
 		</>
-	)
+	);
 }
 
-export default PomodoroPage
+export default PomodoroPage;

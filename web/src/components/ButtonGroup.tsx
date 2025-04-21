@@ -1,13 +1,13 @@
-import type { FC } from 'react'
-import ButtonPill from './ButtonPill'
+import type { FC } from "react";
+import ButtonPill from "./ButtonPill";
 
 type ButtonGroupProps = {
-	values: string[]
-	keys: string[]
-	disableDeselection?: boolean
-	onValueSelect?: (value: string) => void
-	selectedValue?: string
-}
+	values: string[];
+	keys: string[];
+	disableDeselection?: boolean;
+	onValueSelect?: (value: string) => void;
+	selectedValue?: string;
+};
 
 const ButtonGroup: FC<ButtonGroupProps> = ({
 	keys,
@@ -23,16 +23,16 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					key={index}
 					onClick={() => {
-						onValueSelect?.(key)
+						onValueSelect?.(key);
 					}}
-					theme={selectedValue === key ? 'primary' : 'secondary'}
+					theme={selectedValue === key ? "primary" : "secondary"}
 					isDisabled={disableDeselection && selectedValue !== key}
 				>
 					{values[index]}
 				</ButtonPill>
 			))}
 		</div>
-	)
-}
+	);
+};
 
-export default ButtonGroup
+export default ButtonGroup;

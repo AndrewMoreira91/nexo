@@ -6,7 +6,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	plugins: [
 		react(),
-		tailwindcss()
+		tailwindcss(),
 	],
 	preview: {
 		port: 8080,
