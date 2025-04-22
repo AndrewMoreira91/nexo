@@ -7,6 +7,7 @@ import {
 	timestamp,
 	uuid,
 } from 'drizzle-orm/pg-core'
+import { timestamps } from '../helpers'
 import { dailyProgress } from './daily-progress-schema'
 import { users } from './user-schema'
 
@@ -16,9 +17,10 @@ export const sessions = pgTable('sessions', {
 	dailyProgressId: uuid('daily_progress_id').notNull(),
 	duration: integer('duration').notNull().default(0),
 	type: text({ enum: ['focus', 'shortBreak', 'longBreak'] }).notNull(),
-	startTime: timestamp('start_time').notNull(),
+	startTime: timestamp('start_time').notNull().defaultNow(),
 	endTime: timestamp('end_time'),
 	sessionEndDate: date('session_end_date'),
+	...timestamps,
 })
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({

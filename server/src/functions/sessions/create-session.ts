@@ -2,7 +2,7 @@ import { and, eq, isNull } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { sessions } from '../../drizzle/schemas/session-schema'
 import { users } from '../../drizzle/schemas/user-schema'
-import { dateToday } from '../../helpers/getDate'
+import { dateNow } from '../../helpers/getDate'
 import { createDailyProgress } from '../daily-progress/create-daily-progress'
 
 interface CreateSessionProps {
@@ -23,7 +23,7 @@ export const createSession = async ({ type, userId }: CreateSessionProps) => {
 					eq(sessions.userId, userId),
 					eq(sessions.type, type),
 					isNull(sessions.endTime),
-					eq(sessions.startTime, dateToday),
+					eq(sessions.startTime, dateNow),
 				),
 			)
 		if (isSessionActive.length > 0) {
@@ -40,7 +40,7 @@ export const createSession = async ({ type, userId }: CreateSessionProps) => {
 				type,
 				userId,
 				dailyProgressId: dailyProgress.id,
-				startTime: dateToday,
+				startTime: dateNow,
 			})
 			.returning()
 

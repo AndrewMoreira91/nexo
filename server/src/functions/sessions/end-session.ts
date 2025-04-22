@@ -1,8 +1,9 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { sessions } from '../../drizzle/schemas/session-schema'
+import { tasks } from '../../drizzle/schemas/tasks-schema'
 import { users } from '../../drizzle/schemas/user-schema'
-import { dateToday } from '../../helpers/getDate'
+import { dateNow } from '../../helpers/getDate'
 import { updateDailyProgress } from '../daily-progress/update-daily-progress'
 import { getUser } from '../user/get-user'
 
@@ -10,12 +11,14 @@ interface EndSessionProps {
 	duration: number
 	sessionId: string
 	userId: string
+	completedTasksIds?: string[]
 }
 
 export const endSession = async ({
 	duration,
 	sessionId,
 	userId,
+	completedTasksIds,
 }: EndSessionProps) => {
 	try {
 		const activeSession = await db
@@ -28,9 +31,10 @@ export const endSession = async ({
 		const session = await db
 			.update(sessions)
 			.set({
-				endTime: dateToday,
-				sessionEndDate: dateToday.toUTCString(),
+				endTime: dateNow,
+				sessionEndDate: dateNow.toUTCString(),
 				duration,
+				updated_at: dateNow,
 			})
 			.where(eq(sessions.id, sessionId))
 			.returning()
@@ -45,7 +49,7 @@ export const endSession = async ({
 				and(
 					eq(sessions.userId, userId),
 					eq(sessions.type, 'focus'),
-					eq(sessions.sessionEndDate, dateToday.toUTCString()),
+					eq(sessions.sessionEndDate, dateNow.toUTCString()),
 				),
 			)
 
@@ -63,9 +67,22 @@ export const endSession = async ({
 			totalSessionFocusDuration,
 		})
 
-		await db.update(users).set({
-			streak: dailyProgress.streak,
-		}).where(eq(users.id, userId))
+		for (const taskId of completedTasksIds || []) {
+			await db
+				.update(tasks)
+				.set({
+					dailyProgressId: dailyProgress.id,
+					isCompleted: true,
+				})
+				.where(eq(tasks.id, taskId))
+		}
+
+		await db
+			.update(users)
+			.set({
+				streak: dailyProgress.streak,
+			})
+			.where(eq(users.id, userId))
 
 		return {
 			session: session[0],

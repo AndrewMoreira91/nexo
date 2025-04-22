@@ -1,5 +1,6 @@
 import { db } from '../../drizzle'
 import { tasks } from '../../drizzle/schemas/tasks-schema'
+import { createDailyProgress } from '../daily-progress/create-daily-progress'
 
 interface CreateTaskProps {
 	title: string
@@ -8,11 +9,14 @@ interface CreateTaskProps {
 
 export const createTask = async ({ title, userId }: CreateTaskProps) => {
 	try {
+		const { dailyProgress } = await createDailyProgress(userId)
+
 		const task = await db
 			.insert(tasks)
 			.values({
 				title,
 				userId,
+				dailyProgressId: dailyProgress.id,
 			})
 			.returning()
 

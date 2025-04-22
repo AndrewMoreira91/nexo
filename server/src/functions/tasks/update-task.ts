@@ -39,6 +39,7 @@ export const updateTask = async ({
 			title,
 			isCompleted,
 			dailyProgressId: dailyProgress ? dailyProgress.id : undefined,
+			updated_at: new Date(),
 		})
 		.where(eq(tasks.id, id))
 		.returning()

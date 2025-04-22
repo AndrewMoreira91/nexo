@@ -2,12 +2,12 @@ import { eq, sql } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
 import { users } from '../../drizzle/schemas/user-schema'
-import { dateToday } from '../../helpers/getDate'
+import { dateNow } from '../../helpers/getDate'
 
 import { format } from 'date-fns'
 
 export const dailyDataUpdate = async () => {
-	const formattedDateToday = format(dateToday, 'yyyy-MM-dd')
+	const formattedDateToday = format(dateNow, 'yyyy-MM-dd')
 
 	const usersData = await db
 		.select({
@@ -32,6 +32,7 @@ export const dailyDataUpdate = async () => {
 				.update(users)
 				.set({
 					streak: 0,
+					updated_at: dateNow,
 				})
 				.where(eq(users.id, user.id))
 
@@ -44,6 +45,7 @@ export const dailyDataUpdate = async () => {
 				.set({
 					streak: sql`streak + 1`,
 					longestStreak: sql`GREATEST(longest_streak, streak + 1)`,
+					updated_at: dateNow,
 				})
 				.where(eq(users.id, user.id))
 		}

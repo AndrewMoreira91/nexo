@@ -4,7 +4,7 @@ import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
 import { tasks } from '../../drizzle/schemas/tasks-schema'
 import { users } from '../../drizzle/schemas/user-schema'
-import { dateToday } from '../../helpers/getDate'
+import { dateNow } from '../../helpers/getDate'
 
 type QueryProps = {
 	daysPrevious?: number
@@ -42,24 +42,21 @@ export const getStatisticDatas = async (
 	userId: string,
 	{ daysPrevious = 0 }: QueryProps,
 ) => {
-	const formattedDateToday = format(dateToday, 'yyyy-MM-dd')
+	const formattedDateToday = format(dateNow, 'yyyy-MM-dd')
 
-	const [user] = await db.
-		select({
+	const [user] = await db
+		.select({
 			streak: users.streak,
 			longestStreak: users.longestStreak,
 		})
 		.from(users)
-		.where(
-			and(
-				eq(users.id, userId),
-			),
-		).limit(1)
+		.where(and(eq(users.id, userId)))
+		.limit(1)
 
 	if (!user) throw new Error('User not found')
 
 	const previousDateFromDays = format(
-		subDays(dateToday, daysPrevious),
+		subDays(dateNow, daysPrevious),
 		'yyyy-MM-dd',
 	)
 

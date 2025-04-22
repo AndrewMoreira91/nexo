@@ -3,7 +3,7 @@ import { eachDayOfInterval } from 'date-fns/fp'
 import { and, asc, eq, gt } from 'drizzle-orm'
 import { db } from '../../drizzle'
 import { dailyProgress } from '../../drizzle/schemas/daily-progress-schema'
-import { dateToday } from '../../helpers/getDate'
+import { dateNow } from '../../helpers/getDate'
 
 type ResultType = {
 	[key: string]: {
@@ -24,10 +24,10 @@ export const getDatasProgress = async (
 	{ daysPrevious = 0 }: queryType,
 ) => {
 	try {
-		const formattedDateToday = format(dateToday, 'yyyy-MM-dd')
+		const formattedDateToday = format(dateNow, 'yyyy-MM-dd')
 
 		const previousDateFromDays = format(
-			subDays(dateToday, daysPrevious),
+			subDays(dateNow, daysPrevious),
 			'yyyy-MM-dd',
 		)
 

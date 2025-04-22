@@ -1,5 +1,5 @@
 import { env } from '../env'
 import { dateTodayTest } from '../tests/configs'
 
-export const dateToday =
+export const dateNow =
 	env.ENVIRONMENT === 'development' ? dateTodayTest : new Date()

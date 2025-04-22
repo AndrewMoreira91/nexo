@@ -1,5 +1,5 @@
 {
-	"id": "1377a2e1-4795-4c5c-802c-19f7433bc894",
+	"id": "bb65fb6d-5a44-4e39-b61b-68d508e18da7",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"version": "7",
 	"dialect": "postgresql",
@@ -54,6 +54,25 @@
 					"primaryKey": false,
 					"notNull": true,
 					"default": 0
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"deleted_at": {
+					"name": "deleted_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
 				}
 			},
 			"indexes": {},
@@ -104,7 +123,8 @@
 					"name": "start_time",
 					"type": "timestamp",
 					"primaryKey": false,
-					"notNull": true
+					"notNull": true,
+					"default": "now()"
 				},
 				"end_time": {
 					"name": "end_time",
@@ -115,6 +135,25 @@
 				"session_end_date": {
 					"name": "session_end_date",
 					"type": "date",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"deleted_at": {
+					"name": "deleted_at",
+					"type": "timestamp",
 					"primaryKey": false,
 					"notNull": false
 				}
@@ -148,7 +187,7 @@
 					"name": "daily_progress_id",
 					"type": "uuid",
 					"primaryKey": false,
-					"notNull": false
+					"notNull": true
 				},
 				"title": {
 					"name": "title",
@@ -162,6 +201,25 @@
 					"primaryKey": false,
 					"notNull": true,
 					"default": false
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"deleted_at": {
+					"name": "deleted_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
 				}
 			},
 			"indexes": {},
@@ -206,14 +264,28 @@
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
-					"default": 0
+					"default": 2
 				},
-				"sessions_duration": {
-					"name": "sessions_duration",
+				"focus_session_duration": {
+					"name": "focus_session_duration",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
-					"default": 0
+					"default": 1500
+				},
+				"short_break_session_duration": {
+					"name": "short_break_session_duration",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"default": 300
+				},
+				"long_break_session_duration": {
+					"name": "long_break_session_duration",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"default": 900
 				},
 				"streak": {
 					"name": "streak",
@@ -228,6 +300,25 @@
 					"primaryKey": false,
 					"notNull": true,
 					"default": 0
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"deleted_at": {
+					"name": "deleted_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
 				}
 			},
 			"indexes": {},

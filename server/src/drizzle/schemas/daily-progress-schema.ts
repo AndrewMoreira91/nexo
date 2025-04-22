@@ -1,5 +1,6 @@
 import { relations } from 'drizzle-orm'
 import { boolean, date, integer, pgTable, uuid } from 'drizzle-orm/pg-core'
+import { timestamps } from '../helpers'
 import { sessions } from './session-schema'
 import { tasks } from './tasks-schema'
 import { users } from './user-schema'
@@ -14,6 +15,7 @@ export const dailyProgress = pgTable('daily_progress', {
 		.notNull()
 		.default(0),
 	streak: integer('streak').notNull().default(0),
+	...timestamps,
 })
 
 export const dailyProgressRelations = relations(

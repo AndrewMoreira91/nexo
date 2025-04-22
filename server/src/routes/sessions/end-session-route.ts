@@ -14,6 +14,7 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 					body: z.object({
 						duration: z.number(),
 						sessionId: z.string(),
+						completedTasksIds: z.array(z.string()).optional(),
 					}),
 					security: [
 						{
@@ -44,7 +45,7 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 				preHandler: verifyToken,
 			},
 			async (req, reply) => {
-				const { duration, sessionId } = req.body
+				const { duration, sessionId, completedTasksIds } = req.body
 				const { id: userId } = req.user
 				const {
 					session,
@@ -52,7 +53,7 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 					sessionsCompleted,
 					totalSessionFocusDuration,
 					streak,
-				} = await endSession({ duration, sessionId, userId })
+				} = await endSession({ duration, sessionId, userId, completedTasksIds })
 
 				reply.code(201).send({
 					session,
