@@ -10,6 +10,7 @@ import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
+import { useFetchTasks } from "../hooks/task-hooks";
 import { useTimer } from "../hooks/useTimer";
 import { api } from "../libs/api";
 import { getDataProgress } from "../services/data-service";
@@ -45,6 +46,10 @@ const PomodoroPage = () => {
 	const savedSession = JSON.parse(
 		localStorage.getItem("currentSession") || "{}",
 	);
+
+	const [tasksSelected, setTasksSelected] = useState<string[]>([]);
+
+	const { refetch: refetchTasks } = useFetchTasks();
 
 	const [timeLeft, setTimeLeft] = useState<number>(savedSession?.timeLeft || 0);
 	const [sessionDuration, setSessionDuration] = useState<number>(
@@ -100,10 +105,12 @@ const PomodoroPage = () => {
 				await api.put("end-session", {
 					sessionId,
 					duration: accumulatedTime,
+					completedTasksIds: tasksSelected,
 				});
 			}
 
 			refetchDataProgress();
+			refetchTasks();
 			localStorage.removeItem("sessionId");
 
 			if (currentMode === "focus") {
@@ -190,7 +197,9 @@ const PomodoroPage = () => {
 			{isAuthLoading ? (
 				<Loader />
 			) : (
-				<main className={`flex flex-col px-6 sm:px-16 gap-12 ${currentMode}`}>
+				<main
+					className={`flex flex-col px-6 sm:px-16 gap-12 my-12 ${currentMode}`}
+				>
 					<section className="w-full p-4 flex flex-col gap-5 items-center bg-primary-bg py-6 rounded-lg">
 						<SessionHeader mode={currentMode} timeLeft={timeLeft} />
 
@@ -235,7 +244,15 @@ const PomodoroPage = () => {
 					</Container>
 
 					<Container className="flex flex-col gap-4">
-						<TaskContainer />
+						<TaskContainer
+							onTaskSelected={(taskId) => {
+								if (tasksSelected.includes(taskId)) {
+									setTasksSelected(tasksSelected.filter((id) => id !== taskId));
+								} else {
+									setTasksSelected([...tasksSelected, taskId]);
+								}
+							}}
+						/>
 					</Container>
 				</main>
 			)}
@@ -309,8 +326,9 @@ function renderProgressData(
 			<MenuData
 				isLoading={isLoading}
 				title="Streak"
-				textMain={`${dataProgress?.[0]?.streak ?? 0} ${dataProgress?.[0]?.streak === 1 ? "dia" : "dias"
-					}`}
+				textMain={`${dataProgress?.[0]?.streak ?? 0} ${
+					dataProgress?.[0]?.streak === 1 ? "dia" : "dias"
+				}`}
 				description="Consecutivos"
 			>
 				<FaFireAlt className="text-primary text-4xl" />

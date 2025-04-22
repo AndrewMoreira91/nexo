@@ -25,6 +25,8 @@ type TaskItemProps = {
 	isCompleted?: boolean;
 	onEdit?: (newTitle: string) => void;
 	onDelete?: () => void;
+	onSelect?: () => void;
+	withCheckbox?: boolean;
 };
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -34,12 +36,19 @@ const TaskItem: React.FC<TaskItemProps> = ({
 	isCompleted,
 	onDelete,
 	onEdit,
+	onSelect,
+	withCheckbox = true,
 }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 
 	const [titleValue, setTitleValue] = useState(title);
 
 	const [isSelected, setIsSelected] = useState(false);
+
+	const handleSelect = () => {
+		setIsSelected((prev) => !prev);
+		onSelect?.();
+	};
 
 	const deleteTask = useDeleteTask();
 	const updateTask = useUpdateTask();
@@ -90,14 +99,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
 			<div
 				className={`
 				flex flex-row gap- items-center justify-between px-4 py-6 w-full rounded-l-lg border 
-				${isSelected ? "border-primary" : "border-gray-200"}
+				${isSelected && !isCompleted ? "border-primary" : "border-gray-200"}
 				${isCompleted ? "bg-primary-success-bg" : "bg-white"}
 		`}
 			>
 				<div className="flex flex-row gap-3 items-center">
-					{!isCompleted && (
-						<Checkbox onChange={() => setIsSelected(!isSelected)} />
-					)}
+					{!isCompleted && withCheckbox && <Checkbox onChange={handleSelect} />}
 					<div>
 						<Skeleton
 							loading={updateTask.isPending}
@@ -137,36 +144,38 @@ const TaskItem: React.FC<TaskItemProps> = ({
 						<IoMdMore size={25} />
 					</button>
 
-					<div
-						ref={dropDownMenuRef}
-						className="
+					{!isCompleted && (
+						<div
+							ref={dropDownMenuRef}
+							className="
 					right-15 top-3/5  rounded-2xl
 					hidden sm:flex
 					flex-col sm:flex-row gap-2 absolute sm:static bg-primary-bg sm:bg-transparent p-4 sm:p-0 
 					"
-					>
-						<Tooltip title="Editar tarefa">
-							<ButtonPill
-								size="small"
-								onClick={() => {
-									setModalOpen(true);
-								}}
-							>
-								<FaEdit className="text-white" size={20} />
-								<span className="block sm:hidden">Editar</span>
-							</ButtonPill>
-						</Tooltip>
-						<Tooltip title="Deletar tarefa">
-							<ButtonPill
-								size="small"
-								theme="danger"
-								onClick={handleDeleteTask}
-							>
-								<FaRegTrashAlt className="text-primary-danger" size={20} />
-								<span className="block sm:hidden">Remover</span>
-							</ButtonPill>
-						</Tooltip>
-					</div>
+						>
+							<Tooltip title="Editar tarefa">
+								<ButtonPill
+									size="small"
+									onClick={() => {
+										setModalOpen(true);
+									}}
+								>
+									<FaEdit className="text-white" size={20} />
+									<span className="block sm:hidden">Editar</span>
+								</ButtonPill>
+							</Tooltip>
+							<Tooltip title="Deletar tarefa">
+								<ButtonPill
+									size="small"
+									theme="danger"
+									onClick={handleDeleteTask}
+								>
+									<FaRegTrashAlt className="text-primary-danger" size={20} />
+									<span className="block sm:hidden">Remover</span>
+								</ButtonPill>
+							</Tooltip>
+						</div>
+					)}
 				</div>
 			</div>
 			<Modal open={modalOpen} onClose={() => setModalOpen(false)}>

@@ -111,7 +111,7 @@ const DashboardPage = () => {
 						</Container>
 
 						<Container className="flex flex-col gap-4 relative">
-							<TaskContainer />
+							<TaskContainer withCheckbox={false} />
 						</Container>
 
 						<Container className="flex-col md:flex-row justify-between gap-8">

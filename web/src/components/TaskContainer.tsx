@@ -16,7 +16,15 @@ import { useFetchTasks, usePostTask } from "../hooks/task-hooks";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
 
-const TaskContainer: FC = () => {
+type TaskContainerProps = {
+	onTaskSelected?: (taskId: string) => void;
+	withCheckbox?: boolean;
+};
+
+const TaskContainer: FC<TaskContainerProps> = ({
+	onTaskSelected,
+	withCheckbox,
+}) => {
 	const [modalOpen, setModalOpen] = useState(false);
 
 	const fetchTasks = useFetchTasks();
@@ -38,7 +46,16 @@ const TaskContainer: FC = () => {
 	return (
 		<>
 			<div className="flex flex-row justify-between w-full relative">
-				<h5 className="font-bold text-xl">Tarefas</h5>
+				<div className="flex flex-row items-center gap-6">
+					<h5 className="font-bold text-xl">Tarefas</h5>
+					{/* <button
+						type="button"
+						className="text-primary font-semibold cursor-pointer hover:text-primary-hover"
+						onClick={handleDeleteTaskCompleted}
+					>
+						<span>Limpar tarefas completas</span>
+					</button> */}
+				</div>
 				<Button
 					isLoading={postTask.isPending || fetchTasks.isLoading}
 					onClick={() => setModalOpen(true)}
@@ -93,6 +110,8 @@ const TaskContainer: FC = () => {
 						title={task.title}
 						description={task.description}
 						isCompleted={task.isCompleted}
+						onSelect={() => onTaskSelected?.(task.id)}
+						withCheckbox={withCheckbox}
 					/>
 				))}
 			</div>

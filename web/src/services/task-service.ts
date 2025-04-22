@@ -2,8 +2,8 @@ import { api } from "../libs/api";
 import type { TaskEditType, TaskType } from "../types";
 
 export const fetchTasks = async (): Promise<TaskType[]> => {
-	const response = await api.get("/task");
-	return response.data;
+	const { data } = await api.get<TaskType[]>("/task");
+	return data.sort((a, b) => Number(b.isCompleted) - Number(a.isCompleted));
 };
 
 export const postTask = async (title: string): Promise<TaskType> => {
