@@ -8,3 +8,21 @@ services:
       - POSTGRESQL_USERNAME=nexo
       - POSTGRESQL_PASSWORD=nexo
       - POSTGRESQL_DATABASE=nexo
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgres://nexo:nexo@bd:5432/nexo
+        JWT_SECRET: secret
+    container_name: nexo-api
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://nexo:nexo@bd:5432/nexo
+      - ENVIRONMENT=production
+      - JWT_SECRET=secret
+    depends_on:
+      - bd
+    command: >
+      sh -c "npx drizzle-kit migrate && npm run build && npm start"

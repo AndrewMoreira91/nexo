@@ -1,18 +1,18 @@
-import { Navigate, Outlet } from "react-router";
-import Loader from "../components/Loader";
-import { useAuth } from "../context/auth.context";
+import { Navigate, Outlet } from 'react-router'
+import Loader from '../components/Loader'
+import { useAuth } from '../context/auth.context'
 
 const ProtectRouteLayout = () => {
-	const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth()
 
-	if (isLoading) {
-		return <Loader />;
-	}
+  if (isLoading) {
+    return <Loader />
+  }
 
-	if (!isAuthenticated) {
-		return <Navigate to="/login" replace />;
-	}
-	return <Outlet />;
-};
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+  return <Outlet />
+}
 
-export default ProtectRouteLayout;
+export default ProtectRouteLayout

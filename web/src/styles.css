@@ -2,34 +2,34 @@
 @import "@fontsource/inter";
 
 @theme inline {
-	--color-primary: var(--primary);
-	--color-primary-bg: var(--primary-bg);
-	--color-primary-hover: var(--primary-hover);
-	--color-background: #f9fafb;
-	--color-primary-success: #21725e;
-	--color-primary-success-bg: #e7faf5;
-	--color-primary-border: #b5d0c9;
-	--color-primary-danger: #a82525;
-	--color-primary-danger-bg: #ffe8e8;
-	--color-primary-danger-hover: #8c1f1f;
+  --color-primary: var(--primary);
+  --color-primary-bg: var(--primary-bg);
+  --color-primary-hover: var(--primary-hover);
+  --color-background: #f9fafb;
+  --color-primary-success: #21725e;
+  --color-primary-success-bg: #e7faf5;
+  --color-primary-border: #b5d0c9;
+  --color-primary-danger: #a82525;
+  --color-primary-danger-bg: #ffe8e8;
+  --color-primary-danger-hover: #8c1f1f;
 }
 
 @layer base {
-	:root {
-		--primary: #3471ff;
-		--primary-bg: #eaf1ff;
-		--primary-hover: #2659d2;
-	}
+  :root {
+    --primary: #3471ff;
+    --primary-bg: #eaf1ff;
+    --primary-hover: #2659d2;
+  }
 
-	.shortBreak {
-		--primary: #2cbaea;
-		--primary-bg: #edfaff;
-		--primary-hover: #169cc9;
-	}
+  .shortBreak {
+    --primary: #2cbaea;
+    --primary-bg: #edfaff;
+    --primary-hover: #169cc9;
+  }
 
-	.longBreak {
-		--primary: #4f3cda;
-		--primary-bg: #e1def9;
-		--primary-hover: #2815b2;
-	}
+  .longBreak {
+    --primary: #4f3cda;
+    --primary-bg: #e1def9;
+    --primary-hover: #2815b2;
+  }
 }

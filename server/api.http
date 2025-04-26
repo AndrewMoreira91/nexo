@@ -1,5 +1,5 @@
 ### Create user
-POST http://localhost:3333/user
+POST http://localhost:3000/user
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Login Route
-POST http://localhost:3333/login
+POST http://localhost:3000/login
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Start Session Route
-POST http://localhost:3333/start-session
+POST http://localhost:3000/start-session
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3N
 
 
 ### End Session Route
-PUT http://localhost:3333/end-session
+PUT http://localhost:3000/end-session
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
@@ -38,17 +38,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3N
 }
 
 ### Get Sessions Data Progress Route
-GET http://localhost:3333/get-data-progress
+GET http://localhost:3000/get-data-progress
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
 ### Get Sessions Data Statistics Route
-GET http://localhost:3333/get-data-statistic?daysPrevious=7
+GET http://localhost:3000/get-data-statistic?daysPrevious=7
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
 
 ### Teste Route
-POST http://localhost:3333/teste
+POST http://localhost:3000/teste
 Content-Type: application/json
 
 {

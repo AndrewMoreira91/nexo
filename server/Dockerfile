@@ -8,10 +8,16 @@ ENV PORT=3000
 
 ARG PORT=${PORT}
 
+ARG DATABASE_URL
+
+ARG JWT_SECRET
+
+ENV DATABASE_URL=$DATABASE_URL
+
+ENV JWT_SECRET=$JWT_SECRET
+
 EXPOSE ${PORT}
 
 RUN npm ci --only=production
-
-RUN npx drizzle-kit migrate && npm run build
 
 CMD ["npm", "start"]

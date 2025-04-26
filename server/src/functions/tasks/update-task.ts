@@ -4,45 +4,45 @@ import { tasks } from '../../drizzle/schemas/tasks-schema'
 import { createDailyProgress } from '../daily-progress/create-daily-progress'
 
 interface UpdateTaskInput {
-	id: string
-	userId: string
-	title?: string
-	isCompleted?: boolean
+  id: string
+  userId: string
+  title?: string
+  isCompleted?: boolean
 }
 
 interface DailyProgressType {
-	id: string
-	userId: string
-	date: string
-	isGoalComplete: boolean
-	sessionsCompleted: number
-	totalSessionFocusDuration: number
-	streak: number
+  id: string
+  userId: string
+  date: string
+  isGoalComplete: boolean
+  sessionsCompleted: number
+  totalSessionFocusDuration: number
+  streak: number
 }
 
 export const updateTask = async ({
-	id,
-	isCompleted,
-	title,
-	userId,
+  id,
+  isCompleted,
+  title,
+  userId,
 }: UpdateTaskInput) => {
-	let dailyProgress: DailyProgressType | null = null
+  let dailyProgress: DailyProgressType | null = null
 
-	if (isCompleted) {
-		const { dailyProgress: dp } = await createDailyProgress(userId)
-		dailyProgress = dp
-	}
+  if (isCompleted) {
+    const { dailyProgress: dp } = await createDailyProgress(userId)
+    dailyProgress = dp
+  }
 
-	const task = await db
-		.update(tasks)
-		.set({
-			title,
-			isCompleted,
-			dailyProgressId: dailyProgress ? dailyProgress.id : undefined,
-			updated_at: new Date(),
-		})
-		.where(eq(tasks.id, id))
-		.returning()
+  const task = await db
+    .update(tasks)
+    .set({
+      title,
+      isCompleted,
+      dailyProgressId: dailyProgress ? dailyProgress.id : undefined,
+      updated_at: new Date(),
+    })
+    .where(eq(tasks.id, id))
+    .returning()
 
-	return { task: task[0] }
+  return { task: task[0] }
 }

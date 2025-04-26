@@ -11,17 +11,17 @@ import { updateTaskRoute } from './tasks/update-task-route'
 import { createUserRoute } from './user/create-user-route'
 
 export const routes = (app: FastifyInstance) => {
-	app.register(loginRoute)
-	app.register(createUserRoute)
+  app.register(loginRoute)
+  app.register(createUserRoute)
 
-	app.register(endSessionRoute)
-	app.register(createSessionRoute)
+  app.register(endSessionRoute)
+  app.register(createSessionRoute)
 
-	app.register(getTasksRoute)
-	app.register(createTaskRoute)
-	app.register(updateTaskRoute)
-	app.register(deleteTaskRoute)
+  app.register(getTasksRoute)
+  app.register(createTaskRoute)
+  app.register(updateTaskRoute)
+  app.register(deleteTaskRoute)
 
-	app.register(getDataProgressRoute)
-	app.register(getDataStatisticRoute)
+  app.register(getDataProgressRoute)
+  app.register(getDataStatisticRoute)
 }
