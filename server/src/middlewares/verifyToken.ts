@@ -1,24 +1,31 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
-import jwt from 'jsonwebtoken'
-import { env } from '../env'
-import { getUser } from '../functions/user/get-user'
+import { eq } from "drizzle-orm";
+import type { FastifyReply, FastifyRequest } from "fastify";
+import jwt from "jsonwebtoken";
+import { db } from "../drizzle";
+import { users } from "../drizzle/schemas/user-schema";
+import { env } from "../env";
 
 export const verifyToken = async (
-  req: FastifyRequest,
-  reply: FastifyReply,
-  done: () => void
+	req: FastifyRequest,
+	reply: FastifyReply,
+	done: () => void,
 ) => {
-  const token = req.headers.authorization?.replace('Bearer ', '')
-  if (!token) {
-    return reply.code(401).send({ message: 'Unauthorized: missing token' })
-  }
+	const token = req.headers.authorization?.replace("Bearer ", "");
+	if (!token) {
+		return reply.code(401).send({ message: "Não autorizado: Token ausente" });
+	}
 
-  const { userId } = jwt.verify(token, env.JWT_SECRET) as { userId: string }
+	const { userId } = jwt.verify(token, env.JWT_SECRET) as { userId: string };
 
-  const user = await getUser(userId)
-  if (!user) {
-    return reply.code(401).send({ message: 'Unauthorized: Token invalid' })
-  }
+	const user = await db
+		.select()
+		.from(users)
+		.where(eq(users.id, userId))
+		.limit(1);
 
-  req.user = user
-}
+	if (user.length === 0) {
+		return reply.code(401).send({ message: "Não autorizado: Token inválido" });
+	}
+
+	req.user = user[0];
+};

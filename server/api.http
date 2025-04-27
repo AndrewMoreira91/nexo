@@ -1,57 +1,57 @@
 ### Create user
-POST http://localhost:3000/user
+POST http://localhost:3333/user
 Content-Type: application/json
 
 {
 	"name": "Andrew Moreira",
-	"email": "andrew@gmail.com",
+	"email": "andrewmoreira@gmail.com",
 	"password": "123456"
 }
 
 ### Login Route
-POST http://localhost:3000/login
+POST http://localhost:3333/login
 Content-Type: application/json
 
 {
-	"email": "andrew@gmail.com",
+	"email": "andrewmoreira@gmail.com",
 	"password": "123456"
 }
 
 ### Start Session Route
-POST http://localhost:3000/start-session
+POST http://localhost:3333/start-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
 
 {
-	"type": "focus"
+	"type": "shortBreak"
 }
 
 
 ### End Session Route
-PUT http://localhost:3000/end-session
+PUT http://localhost:3333/end-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
 
 {
 	"duration": 1547,
-	"sessionId": "b8164b3e-a7e3-42fe-89d3-940201148977"
+	"sessionId": "eabaf8e0-4142-474e-9925-017a63ea1dc6"
 }
 
 ### Get Sessions Data Progress Route
-GET http://localhost:3000/get-data-progress
+GET http://localhost:3333/get-data-progress
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
 
 ### Get Sessions Data Statistics Route
-GET http://localhost:3000/get-data-statistic?daysPrevious=7
+GET http://localhost:3333/get-data-statistic?daysPrevious=7
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzc3NWVlNi1mOTdlLTQyZjMtOTgwNy0yMGQ0MzA4NjU4NTQiLCJpYXQiOjE3NDUyNzIyODEsImV4cCI6MTc0Nzg2NDI4MX0.FXOhNFdVy0inlC4wGodS6BuV_eFZvMOL2-kSHVhMtQY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV
 
-### Teste Route
-POST http://localhost:3000/teste
+### Create Task Route
+POST http://localhost:3333/task
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
 
 {
-	"duration": 1547,
-	"sessionId": "15ad7976-414f-4cf8-9db2-5c64317438e1"
+	"title": "Create a new task",
 }
