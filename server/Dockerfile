@@ -1,23 +1,9 @@
-FROM node:22-alpine
-
-WORKDIR /app
-
+FROM bitnami/node:22
+WORKDIR /code
 COPY . .
-
-ENV PORT=3000
-
+ENV PORT=3333
 ARG PORT=${PORT}
-
-ARG DATABASE_URL
-
-ARG JWT_SECRET
-
-ENV DATABASE_URL=$DATABASE_URL
-
-ENV JWT_SECRET=$JWT_SECRET
-
 EXPOSE ${PORT}
-
-RUN npm ci --only=production
-
-CMD ["npm", "start"]
+RUN npm install
+RUN npm run build
+CMD ["npm", "run", "start"]
