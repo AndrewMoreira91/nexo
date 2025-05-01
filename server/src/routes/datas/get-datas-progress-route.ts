@@ -4,52 +4,48 @@ import { getDatasProgress } from "../../functions/daily-progress/get-datas-progr
 import { verifyToken } from "../../middlewares/verifyToken";
 
 export const getDataProgressRoute: FastifyPluginAsyncZod = async (app) => {
-	try {
-		app.get(
-			"/get-data-progress",
-			{
-				schema: {
-					summary: "Get all progress data",
-					tags: ["datas"],
-					security: [
-						{
-							bearerAuth: [],
-						},
-					],
-					querystring: z.object({
-						previousDaysCount: z.string().optional(),
-					}),
-					response: {
-						201: z.array(
-							z.object({
-								date: z.string(),
-								isGoalComplete: z.boolean(),
-								sessionsCompleted: z.number(),
-								totalSessionFocusDuration: z.number(),
-								streak: z.number(),
-							}),
-						),
-						401: z.object({
-							message: z.string(),
-						}),
+	app.get(
+		"/get-data-progress",
+		{
+			schema: {
+				summary: "Get all progress data",
+				tags: ["datas"],
+				security: [
+					{
+						bearerAuth: [],
 					},
+				],
+				querystring: z.object({
+					previousDaysCount: z.string().optional(),
+				}),
+				response: {
+					201: z.array(
+						z.object({
+							date: z.string(),
+							isGoalComplete: z.boolean(),
+							sessionsCompleted: z.number(),
+							totalSessionFocusDuration: z.number(),
+							streak: z.number(),
+						}),
+					),
+					401: z.object({
+						message: z.string(),
+					}),
 				},
-				preHandler: verifyToken,
 			},
-			async (req, reply) => {
-				const { id: userId } = req.user;
-				const { previousDaysCount } = req.query;
+			preHandler: verifyToken,
+		},
+		async (req, reply) => {
+			const { id: userId } = req.user;
+			const { previousDaysCount } = req.query;
 
-				const query = {
-					previousDaysCount: previousDaysCount ? Number(previousDaysCount) : 0,
-				};
+			const query = {
+				previousDaysCount: previousDaysCount ? Number(previousDaysCount) : 0,
+			};
 
-				const { result } = await getDatasProgress(userId, query);
+			const { result } = await getDatasProgress(userId, query);
 
-				reply.status(200).send(result);
-			},
-		);
-	} catch (error) {
-		console.error(error);
-	}
+			reply.status(200).send(result);
+		},
+	);
 };

@@ -5,38 +5,34 @@ import { verifyToken } from "../../middlewares/verifyToken";
 import { SessionSchema } from "../../zod/schemas";
 
 export const createSessionRoute: FastifyPluginAsyncZod = async (app) => {
-	try {
-		app.post(
-			"/start-session",
-			{
-				schema: {
-					summary: "Create a new session",
-					tags: ["sessions"],
-					body: z.object({
-						type: z.enum(["focus", "shortBreak", "longBreak"], {
-							message: "Tipo de sessão inválido",
-						}),
+	app.post(
+		"/start-session",
+		{
+			schema: {
+				summary: "Create a new session",
+				tags: ["sessions"],
+				body: z.object({
+					type: z.enum(["focus", "shortBreak", "longBreak"], {
+						message: "Tipo de sessão inválido",
 					}),
-					security: [{ bearerAuth: [] }],
-					response: {
-						201: SessionSchema,
-						401: z.object({
-							message: z.string(),
-						}),
-					},
+				}),
+				security: [{ bearerAuth: [] }],
+				response: {
+					201: SessionSchema,
+					401: z.object({
+						message: z.string(),
+					}),
 				},
-				preHandler: verifyToken,
 			},
-			async (req, reply) => {
-				const { type } = req.body;
-				const { id: userId } = req.user;
+			preHandler: verifyToken,
+		},
+		async (req, reply) => {
+			const { type } = req.body;
+			const { id: userId } = req.user;
 
-				const { session } = await createSession({ type, userId });
+			const { session } = await createSession({ type, userId });
 
-				reply.code(201).send(session);
-			},
-		);
-	} catch (error) {
-		console.error(error);
-	}
+			reply.code(201).send(session);
+		},
+	);
 };

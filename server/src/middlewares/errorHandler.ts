@@ -8,13 +8,15 @@ export const errorHandler = (
 	reply: FastifyReply,
 ) => {
 	if (error.validation) {
-		for (const validationError of error.validation) {
-			reply.status(400).send({
-				statusCode: 400,
-				error: "Bad Request",
-				message: validationError.message,
-			});
-		}
+		const errors = error.validation.map((validationError) => {
+			return validationError.params.issue;
+		});
+		reply.status(422).send({
+			statusCode: 422,
+			error: "Unprocessable Entity",
+			message: "Validation Error",
+			errors,
+		});
 	} else if (error instanceof CustomError) {
 		reply.status(error.statusCode).send({
 			statusCode: error.statusCode,

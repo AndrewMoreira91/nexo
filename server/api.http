@@ -13,8 +13,8 @@ POST http://localhost:3333/login
 Content-Type: application/json
 
 {
-	"email": "andrewmoreira@gmail.com",
-	"password": "123456"
+	"email": "andrewmoreira@gmai",
+	"password": "1234"
 }
 
 ### Start Session Route

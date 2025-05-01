@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { login } from "../../functions/auth/login";
 import { UserSchema } from "../../zod/schemas";
+import { emailValidation, passwordValidation } from "../../zod/validations";
 
 export const loginRoute: FastifyPluginAsyncZod = async (app) => {
 	app.post(
@@ -12,8 +13,8 @@ export const loginRoute: FastifyPluginAsyncZod = async (app) => {
 				description: "Login in the application and get a token",
 				tags: ["auth"],
 				body: z.object({
-					email: z.string().email("Email inválido"),
-					password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+					email: emailValidation,
+					password: passwordValidation,
 				}),
 				response: {
 					200: z.object({

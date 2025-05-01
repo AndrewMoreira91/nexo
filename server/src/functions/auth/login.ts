@@ -13,7 +13,6 @@ interface LoginProps {
 export const login = async ({ email, password }: LoginProps) => {
 	try {
 		const user = await db.select().from(users).where(eq(users.email, email));
-		console.log(user);
 		if (!user[0])
 			throw new CustomError("Email ou senha inválidos", 401, "AuthError");
 		if (user[0].deleted_at)
@@ -43,9 +42,7 @@ export const login = async ({ email, password }: LoginProps) => {
 			accessToken,
 		};
 	} catch (error) {
-		console.error(error);
 		if (error instanceof CustomError) throw error;
-		console.error(error);
 		throw new CustomError("Erro ao fazer login", 500);
 	}
 };
