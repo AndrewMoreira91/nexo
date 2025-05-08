@@ -12,6 +12,7 @@ import cron from "node-cron";
 import { env } from "./env";
 import { dailyDataUpdate } from "./functions/dailyUpdate/daily-data-update";
 import { errorHandler } from "./middlewares/errorHandler";
+import { routes } from "./routes";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -60,6 +61,8 @@ app.register(fastifySwagger, {
 app.register(fastifySwaggerUi, {
 	routePrefix: "/docs",
 });
+
+routes(app);
 
 cron.schedule("0 0 * * *", dailyDataUpdate);
 

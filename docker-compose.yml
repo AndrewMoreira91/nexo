@@ -1,7 +1,7 @@
 services:
   bd:
     image: bitnami/postgresql
-    container_name: postgres-nexo
+    container_name: nexo-bd
     ports:
       - "5432:5432"
     environment:
@@ -12,16 +12,13 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-      args:
-        DATABASE_URL: postgres://nexo:nexo@bd:5432/nexo
-        JWT_SECRET: secret
+    environment:
+      - DATABASE_URL=postgres://nexo:nexo@nexo-bd:5432/nexo
+      - JWT_SECRET=secret
+      - PORT=3333
     container_name: nexo-api
     ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgres://nexo:nexo@bd:5432/nexo
-      - ENVIRONMENT=production
-      - JWT_SECRET=secret
+      - "3333:3333"
     depends_on:
       - bd
     command: >
