@@ -108,7 +108,6 @@ const TaskContainer: FC<TaskContainerProps> = ({
             key={task.id}
             id={task.id}
             title={task.title}
-            description={task.description}
             isCompleted={task.isCompleted}
             onSelect={() => onTaskSelected?.(task.id)}
             withCheckbox={withCheckbox}
