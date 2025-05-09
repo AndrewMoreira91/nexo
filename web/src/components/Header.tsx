@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/joy";
+import { Avatar, Dropdown } from "@mui/joy";
 import { useRef } from "react";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
@@ -20,30 +20,6 @@ const Header = () => {
 		}
 	}
 
-	avatarRef.current?.addEventListener("mouseenter", () => {
-		if (dropdownRef.current) {
-			dropdownRef.current.classList.remove("hidden");
-		}
-	});
-
-	avatarRef.current?.addEventListener("mouseleave", () => {
-		if (dropdownRef.current) {
-			dropdownRef.current.classList.add("hidden");
-		}
-	});
-
-	dropdownRef.current?.addEventListener("mouseenter", () => {
-		if (dropdownRef.current) {
-			dropdownRef.current.classList.remove("hidden");
-		}
-	});
-
-	dropdownRef.current?.addEventListener("mouseleave", () => {
-		if (dropdownRef.current) {
-			dropdownRef.current.classList.add("hidden");
-		}
-	});
-
 	return (
 		<div className="relative">
 			<header className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200">
@@ -61,7 +37,9 @@ const Header = () => {
 					ref={avatarRef}
 					className="cursor-pointer"
 				>
-					<Avatar src="" size="lg" color="primary" alt={user?.name} />
+					<Dropdown>
+						<Avatar src="" size="lg" color="primary" alt={user?.name} />
+					</Dropdown>
 				</button>
 			</header>
 			{isAuthenticated && (

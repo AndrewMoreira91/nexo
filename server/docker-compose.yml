@@ -10,7 +10,7 @@ services:
       - POSTGRESQL_DATABASE=nexo
   api:
     build:
-      context: ./server
+      context: ./
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgres://nexo:nexo@nexo-bd:5432/nexo

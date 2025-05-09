@@ -16,8 +16,9 @@ const LoginPage = () => {
 	});
 
 	const navigate = useNavigate();
-
 	const { login, isAuthenticated } = useAuth();
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	const validateForm = () => {
 		const errors = { email: "", password: "" };
@@ -47,12 +48,14 @@ const LoginPage = () => {
 	};
 
 	const handleSubmit = async (event: React.FormEvent) => {
+		setIsLoading(true);
 		event.preventDefault();
 
 		if (!validateForm()) return;
 
 		const isLoginSuccessful = await handleLogin();
 		if (isLoginSuccessful) navigate("/dashboard");
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
@@ -123,7 +126,7 @@ const LoginPage = () => {
 									<TextError text={formsErrors.password} />
 								)}
 							</div>
-							<Button type="submit" size="small">
+							<Button type="submit" size="small" isLoading={isLoading}>
 								Entrar
 							</Button>
 						</div>

@@ -26,6 +26,8 @@ const RegisterPage = () => {
 		formState: { errors },
 	} = useForm<Inputs>();
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	const [formData, setFormData] = useState({
 		username: "",
 		email: "",
@@ -48,9 +50,8 @@ const RegisterPage = () => {
 		}));
 	};
 
-	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		console.log("Form data:", data);
-
+	const onSubmit: SubmitHandler<Inputs> = async () => {
+		setIsLoading(true);
 		const { isError, registerError } = await register({
 			name: formData.username,
 			email: formData.email,
@@ -63,10 +64,12 @@ const RegisterPage = () => {
 					...prev,
 					email: registerError.message,
 				}));
+			setIsLoading(false);
 			return;
 		}
 
 		navigate("/dashboard");
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
@@ -236,7 +239,7 @@ const RegisterPage = () => {
 									}
 								/>
 							</div>
-							<Button type="submit" size="small">
+							<Button type="submit" size="small" isLoading={isLoading}>
 								Criar conta
 							</Button>
 						</div>
