@@ -36,6 +36,14 @@ app.register(fastifySwagger, {
 				url: `http://localhost:${env.PORT}`,
 				description: "Development server",
 			},
+			...(env.ENVIRONMENT === "production" && env.PRODUCTION_URL
+				? [
+						{
+							url: env.PRODUCTION_URL,
+							description: "Production server",
+						},
+					]
+				: []),
 		],
 		tags: [
 			{ name: "auth", description: "Auth endpoints" },
@@ -58,9 +66,10 @@ app.register(fastifySwagger, {
 	transform: jsonSchemaTransform,
 });
 
-app.register(fastifySwaggerUi, {
-	routePrefix: "/docs",
-});
+env.ENVIRONMENT === "development" &&
+	app.register(fastifySwaggerUi, {
+		routePrefix: "/docs",
+	});
 
 routes(app);
 

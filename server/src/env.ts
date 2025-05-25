@@ -5,6 +5,7 @@ const envSchema = z.object({
 	DATABASE_URL: z.string().url(),
 	JWT_SECRET: z.string(),
 	ENVIRONMENT: z.enum(["development", "production"]).default("development"),
+	PRODUCTION_URL: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

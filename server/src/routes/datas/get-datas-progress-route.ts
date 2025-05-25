@@ -10,11 +10,7 @@ export const getDataProgressRoute: FastifyPluginAsyncZod = async (app) => {
 			schema: {
 				summary: "Get all progress data",
 				tags: ["datas"],
-				security: [
-					{
-						bearerAuth: [],
-					},
-				],
+				security: [{ bearerAuth: [] }],
 				querystring: z.object({
 					previousDaysCount: z.string().optional(),
 				}),
@@ -28,9 +24,6 @@ export const getDataProgressRoute: FastifyPluginAsyncZod = async (app) => {
 							streak: z.number(),
 						}),
 					),
-					401: z.object({
-						message: z.string(),
-					}),
 				},
 			},
 			preHandler: verifyToken,

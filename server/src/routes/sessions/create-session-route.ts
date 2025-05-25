@@ -19,9 +19,6 @@ export const createSessionRoute: FastifyPluginAsyncZod = async (app) => {
 				security: [{ bearerAuth: [] }],
 				response: {
 					201: SessionSchema,
-					401: z.object({
-						message: z.string(),
-					}),
 				},
 			},
 			preHandler: verifyToken,

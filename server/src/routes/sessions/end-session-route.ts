@@ -29,9 +29,6 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 						totalSessionFocusDuration: z.number(),
 						streak: z.number(),
 					}),
-					401: z.object({
-						message: z.string(),
-					}),
 				},
 			},
 			preHandler: verifyToken,

@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { updateUser } from "../../functions/user/update-user";
+import { verifyToken } from "../../middlewares/verifyToken";
 import { UserSchema } from "../../zod/schemas";
 import {
 	emailValidation,
@@ -28,6 +29,7 @@ export const updateUserRoute: FastifyPluginAsyncZod = async (app) => {
 					201: UserSchema,
 				},
 			},
+			preHandler: verifyToken,
 		},
 		async (request, reply) => {
 			const query = request.body;

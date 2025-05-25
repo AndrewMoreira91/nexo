@@ -26,7 +26,7 @@ export const errorHandler = (
 	} else if (error instanceof jwt.JsonWebTokenError) {
 		reply.status(401).send({
 			statusCode: 401,
-			error: "Unauthorized",
+			error: error.name,
 			message: "Token inválido ou expirado",
 		});
 	} else {

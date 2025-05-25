@@ -46,9 +46,6 @@ export const getDataStatisticRoute: FastifyPluginAsyncZod = async (app) => {
 							isTargetCompleted: z.boolean(),
 						}),
 					}),
-					401: z.object({
-						message: z.string(),
-					}),
 				},
 			},
 			preHandler: verifyToken,
