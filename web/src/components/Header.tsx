@@ -31,16 +31,34 @@ const Header = () => {
 					<LogoNexoIcon />
 					<span className="font-bold text-3xl text-primary">NEXO</span>
 				</button>
-				<button
-					type="button"
-					onClick={() => dropdownRef.current?.classList.toggle("hidden")}
-					ref={avatarRef}
-					className="cursor-pointer"
-				>
-					<Dropdown>
-						<Avatar src="" size="lg" color="primary" alt={user?.name} />
-					</Dropdown>
-				</button>
+				{isAuthenticated && (
+					<div className="flex flex-row gap-4 items-center font-bold text-primary">
+						<button
+							className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
+							type="button"
+							onClick={() => navigate("/dashboard")}
+						>
+							<span>Dashboard</span>
+						</button>
+						<button
+							className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
+							type="button"
+							onClick={() => navigate("/pomodoro")}
+						>
+							<span>Pomodoro</span>
+						</button>
+						<button
+							type="button"
+							onClick={() => dropdownRef.current?.classList.toggle("hidden")}
+							ref={avatarRef}
+							className="cursor-pointer"
+						>
+							<Dropdown>
+								<Avatar src="" size="lg" color="primary" alt={user?.name} />
+							</Dropdown>
+						</button>
+					</div>
+				)}
 			</header>
 			{isAuthenticated && (
 				<div

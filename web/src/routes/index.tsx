@@ -31,12 +31,12 @@ export const router = createBrowserRouter([
 				element: <ProtectRouteLayout />,
 				children: [
 					{
-						path: "/pomodoro",
-						element: <PomodoroPage />,
+						path: "/dashboard",
+						element: <DashboardPage />,
 					},
 					{
-						path: "dashboard",
-						element: <DashboardPage />,
+						path: "/pomodoro",
+						element: <PomodoroPage />,
 					},
 				],
 			},
