@@ -5,7 +5,7 @@ export const api = axios.create({
 	headers: {
 		"Content-Type": "application/json",
 	},
-	timeout: 2000, // 8 seconds timeout
+	timeout: 8000, // 8 seconds timeout
 });
 
 export const setAuthToken = (token: string | null) => {
