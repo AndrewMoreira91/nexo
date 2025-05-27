@@ -24,6 +24,7 @@ api.interceptors.response.use(
 		if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
 			console.error("API request timed out:", error);
 			window.dispatchEvent(new CustomEvent("apiTimeout", { detail: error }));
+			return undefined;
 		}
 		if (error.response.data.error === "TokenExpiredError") {
 			localStorage.removeItem("accessToken");
