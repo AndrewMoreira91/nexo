@@ -17,6 +17,8 @@
 @layer base {
   :root {
     --primary: #3471ff;
+    --joy-palette-primary-500: #3471ff;
+    --joy-palette-primary-600: #2659d2;
     --primary-bg: #eaf1ff;
     --primary-hover: #2659d2;
   }

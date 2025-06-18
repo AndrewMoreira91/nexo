@@ -8,6 +8,7 @@ export type UserType = {
 	longBreakSessionDuration: number;
 	streak: number;
 	longestStreak: number;
+	completedOnboarding: boolean;
 };
 
 export type TaskType = {
