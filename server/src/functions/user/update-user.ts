@@ -15,6 +15,8 @@ interface UpdateUserProps {
 	focusSessionDuration?: number;
 	shortBreakSessionDuration?: number;
 	longBreakSessionDuration?: number;
+	completedOnboarding?: boolean;
+	selectedDaysOfWeek?: number[];
 }
 
 export const updateUser = async (query: UpdateUserProps) => {
@@ -23,7 +25,10 @@ export const updateUser = async (query: UpdateUserProps) => {
 
 		const userUpdate = await db
 			.update(users)
-			.set(query)
+			.set({
+				...query,
+				updated_at: new Date(),
+			})
 			.where(eq(users.id, query.userId))
 			.returning(userDataResponse);
 

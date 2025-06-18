@@ -35,6 +35,8 @@ export const login = async ({ email, password }: LoginProps) => {
 				longBreakSessionDuration: user[0].longBreakSessionDuration,
 				streak: user[0].streak,
 				longestStreak: user[0].longestStreak,
+				completedOnboarding: user[0].completedOnboarding,
+				selectedDaysOfWeek: user[0].selectedDaysOfWeek,
 				updated_at: user[0].updated_at,
 				created_at: user[0].created_at,
 				deleted_at: user[0].deleted_at,

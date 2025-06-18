@@ -1,5 +1,5 @@
 {
-  "id": "bb65fb6d-5a44-4e39-b61b-68d508e18da7",
+  "id": "4dd31960-2893-4d6a-a155-b982ddf2e261",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -301,6 +301,20 @@
           "notNull": true,
           "default": 0
         },
+        "selected_days_of_week": {
+          "name": "selected_days_of_week",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "completed_onboarding": {
+          "name": "completed_onboarding",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
@@ -328,7 +342,9 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},

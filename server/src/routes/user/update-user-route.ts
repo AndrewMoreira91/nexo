@@ -24,6 +24,10 @@ export const updateUserRoute: FastifyPluginAsyncZod = async (app) => {
 					focusSessionDuration: z.number().optional(),
 					shortBreakSessionDuration: z.number().optional(),
 					longBreakSessionDuration: z.number().optional(),
+					completedOnboarding: z.boolean().optional(),
+					selectedDaysOfWeek: z
+						.array(z.number().int().min(0).max(6))
+						.optional(),
 				}),
 				response: {
 					201: UserSchema,

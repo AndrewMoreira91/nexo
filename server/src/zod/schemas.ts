@@ -35,6 +35,8 @@ export const UserSchema = z.object({
 	longBreakSessionDuration: z.number(),
 	streak: z.number(),
 	longestStreak: z.number(),
+	selectedDaysOfWeek: z.array(z.number()).optional(),
+	completedOnboarding: z.boolean(),
 	updated_at: z.date().nullable(),
 	created_at: z.date(),
 	deleted_at: z.date().nullable(),

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core'
+import { boolean, integer, pgTable, text, uuid, } from 'drizzle-orm/pg-core'
 import { timestamps } from '../helpers'
 import { dailyProgress } from './daily-progress-schema'
 import { sessions } from './session-schema'
@@ -22,6 +22,8 @@ export const users = pgTable('users', {
     .default(900),
   streak: integer('streak').notNull().default(0),
   longestStreak: integer('longest_streak').notNull().default(0),
+  selectedDaysOfWeek: integer('selected_days_of_week').array().notNull().default([]),
+  completedOnboarding: boolean('completed_onboarding').notNull().default(false),
   ...timestamps,
 })
 

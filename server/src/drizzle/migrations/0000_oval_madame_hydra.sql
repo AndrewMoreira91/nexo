@@ -47,6 +47,8 @@ CREATE TABLE "users" (
 	"long_break_session_duration" integer DEFAULT 900 NOT NULL,
 	"streak" integer DEFAULT 0 NOT NULL,
 	"longest_streak" integer DEFAULT 0 NOT NULL,
+	"selected_days_of_week" integer[] DEFAULT '{}' NOT NULL,
+	"completed_onboarding" boolean DEFAULT false NOT NULL,
 	"updated_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
