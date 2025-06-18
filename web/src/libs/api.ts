@@ -5,7 +5,7 @@ export const api = axios.create({
 	headers: {
 		"Content-Type": "application/json",
 	},
-	timeout: 8000, // 8 seconds timeout
+	timeout: 11000, // 11 seconds timeout
 });
 
 export const setAuthToken = (token: string | null) => {
@@ -24,6 +24,7 @@ api.interceptors.response.use(
 		if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
 			console.error("API request timed out:", error);
 			window.dispatchEvent(new CustomEvent("apiTimeout", { detail: error }));
+			return undefined;
 		}
 		if (error.response.data.error === "TokenExpiredError") {
 			localStorage.removeItem("accessToken");
