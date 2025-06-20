@@ -40,7 +40,6 @@ const StepOne: FC<StepOneProps> = ({
           marks
           variant="solid"
           color="primary"
-          defaultValue={sessionsPerDay}
           min={2}
           max={10}
           step={1}

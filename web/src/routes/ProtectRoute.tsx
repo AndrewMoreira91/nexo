@@ -3,17 +3,17 @@ import Loader from "../components/Loader";
 import { useAuth } from "../context/auth.context";
 
 const ProtectRouteLayout = () => {
-  const { user, isLoading } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   if (isLoading) {
     return <Loader />;
   }
 
-  if (!user) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.completedOnboarding === false) {
+  if (user && user.completedOnboarding === false) {
     return <Navigate to="/steps" replace />;
   }
 

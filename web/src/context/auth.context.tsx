@@ -41,163 +41,166 @@ type ErrorResponse = {
 type AuthContextType = {
   login: (
     data: LoginData
-  ) => Promise<{ loginError: ErrorResponse; isError: boolean }>;
+  ) => Promise<{ error: ErrorResponse | null; isError: boolean }>;
   register: (
     data: RegisterData
-  ) => Promise<{ registerError: ErrorResponse; isError: boolean }>;
+  ) => Promise<{ error: ErrorResponse | null; isError: boolean }>;
   logout: () => void;
-  updateUser: (data: Partial<UserType>) => Promise<void>;
+  updateUser: (data?: Partial<UserType>) => Promise<void>;
   user: UserType | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 };
 
-const authContext = createContext({} as AuthContextType);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 type UserResponse = {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    dailySessionTarget: number;
-    focusSessionDuration: number;
-    shortBreakSessionDuration: number;
-    longBreakSessionDuration: number;
-    streak: number;
-    longestStreak: number;
-    completedOnboarding: boolean;
-  };
+  user: UserType;
   accessToken: string;
 };
 
+const getStoredToken = (): string | null => localStorage.getItem("accessToken");
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const userLocalStorage = localStorage.getItem("user");
-    const accessTokenLocalStorage = localStorage.getItem("accessToken");
-    if (userLocalStorage && accessTokenLocalStorage) {
-      const userParsed = JSON.parse(userLocalStorage);
-      setUser(userParsed);
-      const accessTokenParsed = accessTokenLocalStorage;
-      api.defaults.headers.common.Authorization = `Bearer ${accessTokenParsed}`;
+  const getUser = async () => {
+    try {
+      const response = await api.get<UserType>("/user");
+      setUser(response.data);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      setUser(null);
     }
-    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const storedToken = getStoredToken();
+
+      if (storedToken) {
+        api.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
+        await getUser();
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+        delete api.defaults.headers.common.Authorization;
+      }
+
+      setIsLoading(false);
+    };
+
+    initializeAuth();
   }, []);
+
+  const handleAuthSuccess = (user: UserType, accessToken: string) => {
+    setUser(user);
+    setIsAuthenticated(true);
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    localStorage.setItem("accessToken", accessToken);
+  };
+
+  const handleAuthError = (
+    error: unknown,
+    defaultMsg: string
+  ): ErrorResponse => {
+    if (error instanceof AxiosError && error.response) {
+      const { status, data } = error.response;
+      return {
+        statusCode: status || 500,
+        error: error.message,
+        message: data?.message || defaultMsg,
+        errors: data?.errors || [],
+      };
+    }
+    return {
+      statusCode: 500,
+      error: "Unknown Error",
+      message: defaultMsg,
+      errors: [],
+    };
+  };
 
   const login = async ({ email, password }: LoginData) => {
     setIsLoading(true);
     try {
-      const response = await api.post<UserResponse>("login", {
+      const { data } = await api.post<UserResponse>("login", {
         email,
         password,
       });
-
-      setUser(response.data.user);
-      api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
-
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-
-      setIsLoading(false);
-      return {
-        isError: false,
-        loginError: { statusCode: 200, error: "", message: "", errors: [] },
-      };
-    } catch (error) {
-      setIsLoading(false);
-      if (error instanceof AxiosError) {
-        return {
-          isError: true,
-          loginError: {
-            statusCode: error.response?.status || 500,
-            error: error.message,
-            message: error.response?.data.message || "Erro ao fazer login",
-            errors: error.response?.data.errors || [],
-          },
-        };
-      }
+      handleAuthSuccess(data.user, data.accessToken);
+      return { isError: false, error: null };
+    } catch (err) {
       return {
         isError: true,
-        loginError: {
-          statusCode: 500,
-          error: "Unknown Error",
-          message: "Erro ao fazer login",
-          errors: [],
-        },
+        error: handleAuthError(err, "Erro ao fazer login"),
       };
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const register = async ({ name, email, password }: RegisterData) => {
     setIsLoading(true);
     try {
-      const response = await api.post("/user", {
+      const { data } = await api.post<UserResponse>("/user", {
         name,
         email,
         password,
       });
-
-      setUser(response.data.user);
-      api.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
-
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-
+      handleAuthSuccess(data.user, data.accessToken);
+      return { isError: false, error: null };
+    } catch (err) {
+      return {
+        isError: true,
+        error: handleAuthError(err, "Erro ao registrar"),
+      };
+    } finally {
       setIsLoading(false);
-      return { isError: false, registerError: {} };
-    } catch (error) {
-      console.error("Register error:", error);
-      setIsLoading(false);
-      if (error instanceof AxiosError) {
-        return {
-          isError: true,
-          registerError: error.response?.data,
-        };
-      }
-      return { isError: true, registerError: {} };
     }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    setIsAuthenticated(false);
     localStorage.removeItem("accessToken");
+    delete api.defaults.headers.common.Authorization;
   };
 
   const updateUser = async () => {
     setIsLoading(true);
     try {
-      const user = await api.get<UserType>("/user");
-      setUser(user.data);
-      localStorage.setItem("user", JSON.stringify(user.data));
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Update user error:", error);
+      const { data } = await api.get<UserType>("/user");
+      setUser(data);
+    } catch (err) {
+      handleAuthError(err, "Erro ao atualizar usuário");
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <authContext.Provider
+    <AuthContext.Provider
       value={{
         login,
-        user,
-        isAuthenticated: !!user,
         register,
         logout,
-        isLoading,
         updateUser,
+        user,
+        isAuthenticated,
+        isLoading,
       }}
     >
       {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(authContext);
+  const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }

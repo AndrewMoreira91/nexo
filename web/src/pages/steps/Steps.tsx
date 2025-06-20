@@ -1,7 +1,7 @@
 import { Step, StepIndicator, Stepper } from "@mui/joy";
 import { useState } from "react";
 import { BiCheck } from "react-icons/bi";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { DEFAULT_DURATIONS } from "../../config/pomodoro-configs";
 import { useAuth } from "../../context/auth.context";
 import { api } from "../../libs/api";
@@ -16,9 +16,9 @@ const StepsPage = () => {
 
   const navigate = useNavigate();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   const [activeStep, setActiveStep] = useState(0);
 
