@@ -21,7 +21,6 @@ import Container from "../components/Container";
 import DaySelectorButton from "../components/DaySelectorButton";
 import Loader from "../components/Loader";
 import ProfileAvatar from "../components/ProfileAvatar";
-import TextError from "../components/TextError";
 import { DURATION_LIMITS, DURATION_STEP } from "../config/pomodoro-configs";
 import { useAuth } from "../context/auth.context";
 import { formattedTime } from "../utils/formatted-time";
@@ -81,12 +80,7 @@ const SettingsPage: FC = () => {
     user.longBreakSessionDuration || 15 * 60
   );
 
-  const {
-    register: formUpdate,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register: formUpdate } = useForm<Inputs>();
 
   const [formData, setFormData] = useState({
     username: user.name,
@@ -94,14 +88,6 @@ const SettingsPage: FC = () => {
     password: "",
     confirmPassword: "",
     sessionPerDay: user.dailySessionTarget,
-  });
-
-  const [formErrors, setFormErrors] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    sessionPerDay: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,9 +179,6 @@ const SettingsPage: FC = () => {
                   placeholder="Digite seu nome"
                   value={formData.username}
                 />
-                <TextError
-                  text={errors.username?.message || formErrors.username}
-                />
               </div>
 
               <div>
@@ -221,11 +204,7 @@ const SettingsPage: FC = () => {
                   required
                   placeholder="Digite seu email"
                   autoComplete="email"
-                  color={
-                    errors.email || formErrors.email ? "danger" : "neutral"
-                  }
                 />
-                <TextError text={errors.email?.message || formErrors.email} />
               </div>
 
               <div>
@@ -323,11 +302,6 @@ const SettingsPage: FC = () => {
                   autoComplete="off"
                   onChange={handleChange}
                   value={formData.sessionPerDay}
-                />
-                <TextError
-                  text={
-                    errors.sessionPerDay?.message || formErrors.sessionPerDay
-                  }
                 />
               </div>
             </form>
