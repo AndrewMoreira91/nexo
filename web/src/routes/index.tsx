@@ -5,6 +5,7 @@ import BaseLayout from "../pages/BaseLayout";
 import DashboardPage from "../pages/Dashboard";
 import Error404Page from "../pages/Error404";
 import PomodoroPage from "../pages/Pomodoro";
+import SettingsPage from "../pages/Settings";
 import StepsPage from "../pages/steps/Steps";
 import WelcomePage from "../pages/WelcomePage";
 import ProtectRouteLayout from "./ProtectRoute";
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
           {
             path: "/pomodoro",
             element: <PomodoroPage />,
+          },
+          {
+            path: "/settings",
+            element: <SettingsPage />,
           },
         ],
       },

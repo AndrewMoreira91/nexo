@@ -9,6 +9,7 @@ export type UserType = {
 	streak: number;
 	longestStreak: number;
 	completedOnboarding: boolean;
+	selectedDaysOfWeek: number[];
 };
 
 export type TaskType = {

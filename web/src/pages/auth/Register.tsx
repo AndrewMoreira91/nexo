@@ -52,14 +52,14 @@ const RegisterPage = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async () => {
     setIsLoading(true);
-    const { isError, registerError } = await register({
+    const { isError, error: registerError } = await register({
       name: formData.username,
       email: formData.email,
       password: formData.password,
     });
 
     if (isError) {
-      if (registerError.statusCode === 409)
+      if (registerError && registerError.statusCode === 409)
         setFormErrors((prev) => ({
           ...prev,
           email: registerError.message,

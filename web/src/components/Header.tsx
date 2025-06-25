@@ -1,9 +1,9 @@
-import { Avatar } from "@mui/joy";
 import { useState } from "react";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
 import LogoNexoIcon from "../assets/LogoNexoIcon";
 import { useAuth } from "../context/auth.context";
+import ProfileAvatar from "./ProfileAvatar";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const Header = () => {
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
-              <Avatar src="" size="lg" color="primary" alt={user?.name} />
+              <ProfileAvatar size="lg" color="primary" />
             </button>
           </div>
         )}
@@ -68,13 +68,7 @@ const Header = () => {
           >
             <div className="flex flex-col">
               <div className="flex flex-row gap-3">
-                <Avatar
-                  src=""
-                  size="md"
-                  color="primary"
-                  variant="outlined"
-                  alt={user?.name}
-                />
+                <ProfileAvatar size="md" color="primary" variant="outlined" />
                 <h3 className="font-semibold text-2xl">{user?.name}</h3>
               </div>
               <div className="w-full h-[1px] bg-gray-300 mt-2" />
@@ -84,6 +78,7 @@ const Header = () => {
               <button
                 type="button"
                 className="cursor-pointer hover:bg-gray-100 px-4 py-2 rounded-2xl"
+                onClick={() => navigate("/settings")}
               >
                 <li className="flex flex-row gap-3 items-center">
                   <div className="bg-primary-bg p-2 rounded-full">

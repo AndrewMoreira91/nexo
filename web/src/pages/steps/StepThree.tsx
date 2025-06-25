@@ -16,7 +16,7 @@ type DayOption = {
   value: number;
 };
 
-const WEEK_DAYS: DayOption[] = [
+export const WEEK_DAYS: DayOption[] = [
   { label: "Dom", value: 0 },
   { label: "Seg", value: 1 },
   { label: "Ter", value: 2 },
