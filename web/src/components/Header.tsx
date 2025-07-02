@@ -21,14 +21,16 @@ const Header = () => {
 
   return (
     <div className="relative">
-      <header className="flex bg-white items-center justify-between px-7 sm:px-16 py-4 border-b border-gray-200">
+      <header className="flex bg-white items-center justify-between px-6 sm:px-16 py-4 border-b border-gray-200">
         <button
           type="button"
           className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
           onClick={handleClickOnLogo}
         >
           <LogoNexoIcon />
-          <span className="font-bold text-3xl text-primary">NEXO</span>
+          <span className="hidden sm:block font-bold text-3xl text-primary">
+            NEXO
+          </span>
         </button>
         {isAuthenticated && user?.completedOnboarding && (
           <div className="flex flex-row gap-4 items-center font-bold text-primary">

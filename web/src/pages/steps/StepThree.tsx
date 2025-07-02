@@ -68,8 +68,8 @@ const StepThree: FC<StepThreeProps> = ({
         suas metas.
       </span>
 
-      <Container className="flex flex-col px-8 gap-4">
-        <div className="flex flex-row justify-between">
+      <Container className="flex flex-col gap-4">
+        <div className="flex flex-wrap gap-1 justify-between">
           {WEEK_DAYS.map(({ label, value }) => (
             <DaySelectorButton
               key={value}

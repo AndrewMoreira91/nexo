@@ -1,15 +1,19 @@
 import { FC, useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Button from "../../components/Button";
-import ButtonPill from "../../components/ButtonPill";
 import Container from "../../components/Container";
+import { DurationControl } from "../../components/DurationControl";
 import {
   DEFAULT_DURATIONS,
-  DURATION_LIMITS,
   DURATION_STEP,
   FOCUS_OPTIONS,
   type FocusOption,
 } from "../../config/pomodoro-configs";
+import {
+  clampFocusDuration,
+  clampLongBreakDuration,
+  clampShortBreakDuration,
+} from "../../utils/duration-utils";
 import { formattedTime } from "../../utils/formatted-time";
 
 type StepTwoProps = {
@@ -38,40 +42,16 @@ const StepTwo: FC<StepTwoProps> = ({
     sessionsPerDay * focusDuration
   );
 
-  const roundToStep = (value: number) =>
-    Math.round(value / DURATION_STEP) * DURATION_STEP;
-
-  const clamp = (value: number, min: number, max: number) =>
-    Math.max(min, Math.min(max, value));
-
   const handleFocusDurationChange = (value: number) => {
-    setFocusDuration(
-      clamp(
-        roundToStep(value),
-        DURATION_LIMITS.focus.min,
-        DURATION_LIMITS.focus.max
-      )
-    );
+    setFocusDuration(clampFocusDuration(value));
   };
 
   const handleShortBreakDurationChange = (value: number) => {
-    setShortBreakDuration(
-      clamp(
-        roundToStep(value),
-        DURATION_LIMITS.shortBreak.min,
-        DURATION_LIMITS.shortBreak.max
-      )
-    );
+    setShortBreakDuration(clampShortBreakDuration(value));
   };
 
   const handleLongBreakDurationChange = (value: number) => {
-    setLongBreakDuration(
-      clamp(
-        roundToStep(value),
-        DURATION_LIMITS.longBreak.min,
-        DURATION_LIMITS.longBreak.max
-      )
-    );
+    setLongBreakDuration(clampLongBreakDuration(value));
   };
 
   const handleOptionChange = (optionId: string) => {
@@ -242,34 +222,5 @@ const FocusOptionCard: FC<FocusOptionCardProps> = ({
     </label>
   );
 };
-
-type DurationControlProps = {
-  label: string;
-  duration: number;
-  onDecrease: () => void;
-  onIncrease: () => void;
-};
-
-const DurationControl: FC<DurationControlProps> = ({
-  label,
-  duration,
-  onDecrease,
-  onIncrease,
-}) => (
-  <div className="flex flex-row justify-between items-center w-full">
-    <span className="font-semibold text-gray-800 text-2xl">{label}</span>
-    <div className="flex flex-row gap-4">
-      <ButtonPill onClick={onDecrease}>
-        <FaChevronDown />
-      </ButtonPill>
-      <span className="bg-gray-100 p-2 rounded-2xl text-primary font-bold text-2xl">
-        {formattedTime(duration)}
-      </span>
-      <ButtonPill onClick={onIncrease}>
-        <FaChevronUp />
-      </ButtonPill>
-    </div>
-  </div>
-);
 
 export default StepTwo;

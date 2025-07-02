@@ -57,7 +57,12 @@ const StepsPage = () => {
 
   return (
     <>
-      <main className="bg-background flex flex-col gap-6 w-1/2 mx-auto my-10 text-center">
+      <main
+        className={`
+        bg-background flex flex-col gap-6 my-10 text-center
+          px-6 sm:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto max-w-4xl
+        `}
+      >
         <Stepper sx={{ width: "100%" }}>
           {steps.map((step, index) => (
             <Step
