@@ -45,21 +45,13 @@ const PomodoroPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const savedSession = JSON.parse(
-    localStorage.getItem("currentSession") || "{}"
-  );
-
   const [tasksSelected, setTasksSelected] = useState<string[]>([]);
 
   const { refetch: refetchTasks } = useFetchTasks();
 
-  const [timeLeft, setTimeLeft] = useState<number>(savedSession?.timeLeft || 0);
-  const [sessionDuration, setSessionDuration] = useState<number>(
-    savedSession?.timeDuration || 0
-  );
-  const [currentMode, setCurrentMode] = useState<SessionType>(
-    savedSession?.type || "focus"
-  );
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+
+  const [currentMode, setCurrentMode] = useState<SessionType>("focus");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const [snakbarOpen, setSnackbarOpen] = useState(false);
@@ -95,9 +87,6 @@ const PomodoroPage = () => {
 
   function handleTimerTick(remainingTime: number) {
     setTimeLeft(remainingTime);
-    if (remainingTime > 0) {
-      setSessionDuration((prev) => prev + 1);
-    }
   }
 
   async function handleSessionComplete(accumulatedTime: number) {
@@ -160,7 +149,6 @@ const PomodoroPage = () => {
   function resetSession(mode: SessionType) {
     setCurrentMode(mode);
     updateTimeLeft(mode);
-    setSessionDuration(0);
   }
 
   function handleModeChange(selectedMode: string) {
@@ -188,21 +176,6 @@ const PomodoroPage = () => {
     },
     [user]
   );
-
-  const saveCurrentSession = useCallback(() => {
-    localStorage.setItem(
-      "currentSession",
-      JSON.stringify({
-        timeLeft,
-        sessionDuration,
-        type: currentMode,
-      })
-    );
-  }, [timeLeft, sessionDuration, currentMode]);
-
-  useEffect(() => {
-    saveCurrentSession();
-  }, [saveCurrentSession]);
 
   useEffect(() => {
     if (timeLeft === 0 && !isTimerRunning) {
