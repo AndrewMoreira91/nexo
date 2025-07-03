@@ -13,6 +13,7 @@ export const getUserRoute: FastifyPluginAsyncZod = async (app) => {
 				response: {
 					201: UserSchema,
 				},
+				security: [{ bearerAuth: [] }],
 			},
 			preHandler: verifyToken
 		},
