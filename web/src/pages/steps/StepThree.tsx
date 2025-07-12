@@ -3,6 +3,7 @@ import Button from "../../components/Button";
 import ButtonPill from "../../components/ButtonPill";
 import Container from "../../components/Container";
 import DaySelectorButton from "../../components/DaySelectorButton";
+import { MINIMUM_SELECTED_SESSIONS } from "../../config/session-configs";
 
 type StepThreeProps = {
   setActiveStep: (step: number) => void;
@@ -57,6 +58,9 @@ const StepThree: FC<StepThreeProps> = ({
     setSelectedDays(allDaysSelected ? [] : selectAllDays());
   }
 
+  const isLessThanTwoDaysSelected =
+    selectedDays.length < MINIMUM_SELECTED_SESSIONS;
+
   return (
     <div className="flex flex-col gap-4">
       <h2 className="font-bold text-3xl">
@@ -90,6 +94,11 @@ const StepThree: FC<StepThreeProps> = ({
             ? "Remover todos os dias"
             : "Selecionar todos os dias"}
         </ButtonPill>
+        {isLessThanTwoDaysSelected && (
+          <span className="text-red-500 text-sm text-start">
+            Por favor, selecione pelo menos dois dias da semana.
+          </span>
+        )}
       </Container>
 
       <div className="flex justify-between mt-4">
@@ -98,7 +107,7 @@ const StepThree: FC<StepThreeProps> = ({
         </Button>
         <Button
           onClick={handleNext}
-          theme={selectedDays.length === 0 ? "disabled" : "primary"}
+          theme={isLessThanTwoDaysSelected ? "disabled" : "primary"}
           size="large"
         >
           Começar a produzir!

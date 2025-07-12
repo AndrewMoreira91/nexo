@@ -4,6 +4,7 @@ import {
   Modal,
   ModalClose,
   ModalDialog,
+  Slider,
   Stack,
 } from "@mui/joy";
 import { FC, useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import { DurationControl } from "../components/DurationControl";
 import Loader from "../components/Loader";
 import ProfileAvatar from "../components/ProfileAvatar";
 import { DURATION_STEP } from "../config/pomodoro-configs";
+import { MINIMUM_SELECTED_SESSIONS } from "../config/session-configs";
 import { useAuth } from "../context/auth.context";
 import { api } from "../libs/api";
 import { UpdateUserProps } from "../types/requests";
@@ -85,7 +87,8 @@ const SettingsPage: FC = () => {
     longBreakDuration !== (user.longBreakSessionDuration || 15 * 60) ||
     JSON.stringify(selectedDays) !== JSON.stringify(user.selectedDaysOfWeek);
 
-  const isLessThanTwoDaysSelected = selectedDays.length < 2;
+  const isLessThanTwoDaysSelected =
+    selectedDays.length < MINIMUM_SELECTED_SESSIONS;
 
   useEffect(() => {
     if (isLessThanTwoDaysSelected || !isFormChanged) {
@@ -139,24 +142,8 @@ const SettingsPage: FC = () => {
     setSelectedDays(allDaysSelected ? [] : selectAllDays());
   }
 
-  const sessionPerDayValidation = (value: string) => {
-    const numericValue = parseInt(value, 10);
-    if (isNaN(numericValue) || numericValue < 1) {
-      setData({ sessionPerDay: 1 });
-    } else if (numericValue > 20) {
-      setData({ sessionPerDay: 20 });
-    } else {
-      setData({ sessionPerDay: numericValue });
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (name === "sessionPerDay") {
-      sessionPerDayValidation(value);
-      return;
-    }
 
     setData({
       [name]: value,
@@ -300,27 +287,33 @@ const SettingsPage: FC = () => {
               <LuTarget className="text-primary text-2xl" />
               <h5 className="font-semibold text-lg mt-2">Metas Diárias</h5>
             </div>
-            <form>
-              <div>
-                <label
-                  id="sessionPerDay"
-                  htmlFor="sessionPerDay"
-                  className="font-medium text-gray-700"
-                >
-                  Sessão por dia
-                </label>
-                <Input
-                  type="number"
-                  id="sessionPerDay"
-                  name="sessionPerDay"
-                  placeholder="Digite a meta de sessões por dia"
-                  autoComplete="off"
-                  onChange={handleChange}
-                  value={formData.sessionPerDay}
-                  error={formData.sessionPerDay < 1}
-                />
+            <div className="flex flex-col gap-0">
+              <div className="flex flex-row items-center">
+                <span className="font-medium text-gray-700">
+                  Sessão por dia:{" "}
+                  <span className="font-semibold text-xl text-primary">
+                    {formData.sessionPerDay}
+                  </span>
+                </span>
               </div>
-            </form>
+              <Slider
+                marks
+                variant="solid"
+                color="primary"
+                min={2}
+                max={10}
+                step={1}
+                valueLabelDisplay="auto"
+                defaultValue={formData.sessionPerDay}
+                onChange={(_, value) =>
+                  setData({ sessionPerDay: value as number })
+                }
+              />
+              <div className="flex flex-row justify-between">
+                <span className="text-gray-500 font-medium">2 sessões</span>
+                <span className="text-gray-500 font-medium">10 sessões</span>
+              </div>
+            </div>
 
             <div className="w-full flex flex-wrap">
               {WEEK_DAYS.map(({ label, value }) => (

@@ -66,14 +66,22 @@ export const getStatisticDatas = async (
 			.where(
 				and(
 					eq(dailyProgress.userId, userId),
-					previousDaysCount < 0
-						? undefined
-						: previousDateFromDays !== formattedDateToday
-							? gt(dailyProgress.date, previousDateFromDays)
-							: eq(dailyProgress.date, formattedDateToday),
+					getDateFilterCondition(previousDaysCount, previousDateFromDays, formattedDateToday)
 				),
 			)
 			.orderBy(asc(dailyProgress.date));
+
+		function getDateFilterCondition(
+			previousDaysCount: number,
+			previousDateFromDays: string,
+			formattedDateToday: string
+		) {
+			if (previousDaysCount < 0) return undefined;
+			if (previousDateFromDays !== formattedDateToday) {
+				return gt(dailyProgress.date, previousDateFromDays);
+			}
+			return eq(dailyProgress.date, formattedDateToday);
+		}
 
 		const result: ResultType = {
 			totalSessionFocusDuration: 0,

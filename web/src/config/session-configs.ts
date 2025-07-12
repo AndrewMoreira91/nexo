@@ -1,0 +1,2 @@
+export const MINIMUM_SELECTED_SESSIONS = 2;
+export const MINIMUM_SESSIONS_PER_DAY = 2;

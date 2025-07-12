@@ -82,8 +82,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (storedToken) {
         api.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
-        await getUser();
         setIsAuthenticated(true);
+        await getUser();
       } else {
         setUser(null);
         setIsAuthenticated(false);

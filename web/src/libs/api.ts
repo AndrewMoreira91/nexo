@@ -5,7 +5,6 @@ export const api = axios.create({
 	headers: {
 		"Content-Type": "application/json",
 	},
-	timeout: 11000, // 11 seconds timeout
 });
 
 export const setAuthToken = (token: string | null) => {
@@ -16,16 +15,24 @@ export const setAuthToken = (token: string | null) => {
 	}
 };
 
+const TIME_OUT = 10000; // 10 seconds
+
+api.interceptors.request.use((config) => {
+	const timer = setTimeout(() => {
+		console.warn(`API request to ${config.url} timed out after ${TIME_OUT}ms`);
+		window.dispatchEvent(new CustomEvent("apiSlow", { detail: { url: config.url } }));
+	}, TIME_OUT);
+	(config as any).metadata = { timer };
+	return config;
+});
+
 api.interceptors.response.use(
 	(response) => {
+		const metadata = (response.config as any).metadata;
+		if (metadata?.timer) clearTimeout(metadata.timer);
 		return response;
 	},
 	(error) => {
-		if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
-			console.error("API request timed out:", error);
-			window.dispatchEvent(new CustomEvent("apiTimeout", { detail: error }));
-			return Promise.reject(new Error("API request timed out"));
-		}
 		if (error.response.data.error === "TokenExpiredError") {
 			localStorage.removeItem("accessToken");
 			localStorage.removeItem("user");

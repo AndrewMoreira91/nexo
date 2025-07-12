@@ -13,7 +13,7 @@ const BaseLayout = () => {
   };
 
   useEffect(() => {
-    window.addEventListener("apiTimeout", () => {
+    window.addEventListener("apiSlow", () => {
       setSnackbarOpen(true);
     });
   }, []);
@@ -26,13 +26,14 @@ const BaseLayout = () => {
         color="primary"
         size="lg"
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 max-w-96">
           <span className="font-semibold text-2xl">
             Esta demorando um pouco né?
           </span>
-          <span className="font-medium text">
-            Grana curta = servidor gratuito😞. Mas relaxa, ele funciona! Se a
-            ansiedade apertar, um F5 pode apressar o coitado😅.
+          <span className="font-medium text-center text-gray-100">
+            Nosso servidor gratuito pode demorar um pouco para responder às
+            vezes 😅. Mas fique tranquilo, logo tudo volta ao normal! Se
+            preferir, tente recarregar a página 😉.
           </span>
           <Button
             className="rounded-lg"
@@ -41,7 +42,7 @@ const BaseLayout = () => {
             size="small"
             onClick={handleSnackbarClose}
           >
-            Ok, entendi!
+            Ok, eu te entendo!
           </Button>
         </div>
       </Snackbar>
