@@ -20,6 +20,11 @@ export function useTimer({
   const workerRef = useRef<Worker | null>(null)
 
   useEffect(() => {
+    if (!workerRef.current) {
+      workerRef.current = new Worker(
+        new URL('../works/timer-work.ts', import.meta.url)
+      )
+    }
     return () => {
       if (workerRef.current) {
         workerRef.current.terminate()
@@ -54,8 +59,6 @@ export function useTimer({
   const stopTimer = () => {
     if (workerRef.current) {
       workerRef.current.postMessage({ type: 'stop' })
-      workerRef.current.terminate()
-      workerRef.current = null
     }
   }
 

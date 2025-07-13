@@ -71,13 +71,14 @@ const PomodoroPage = () => {
       }
       playAudio();
 
+      startTimer();
+      setIsTimerRunning(true);
+
       const response = await api.post<StartSessionResponse>("start-session", {
         type: currentMode,
       });
 
       localStorage.setItem("sessionId", response.data.id);
-      setIsTimerRunning(true);
-      startTimer();
 
       refetchDataProgress();
     } catch (error) {

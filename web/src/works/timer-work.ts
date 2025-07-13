@@ -19,13 +19,11 @@ self.onmessage = event => {
           type: 'complete',
           accumulatedTime: Math.abs(remainingTime),
         })
-        self.close()
       }
     }, 1000) as unknown as number
   } else if (event.data.type === 'stop') {
     if (interval) {
       clearInterval(interval)
     }
-    self.close()
   }
 }
