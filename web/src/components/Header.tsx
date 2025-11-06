@@ -1,3 +1,4 @@
+import { Divider, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { useState } from "react";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
@@ -48,62 +49,64 @@ const Header = () => {
             >
               <span>Pomodoro</span>
             </button>
-            <button
-              type="button"
-              className="cursor-pointer"
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
-            >
-              <ProfileAvatar size="lg" color="primary" />
-            </button>
-          </div>
-        )}
-        {isAuthenticated && (
-          <div
-            className={`
-            ${
-              dropdownOpen ? "flex" : "hidden"
-            } flex-col gap-6 bg-white shadow-2xl p-6 rounded-2xl absolute left-0 sm:left-auto right-0 mx-6 sm:mx-16 top-[60px]
-            `}
-            onMouseEnter={() => setDropdownOpen(true)}
-            onMouseLeave={() => setDropdownOpen(false)}
-          >
-            <div className="flex flex-col">
-              <div className="flex flex-row gap-3">
-                <ProfileAvatar size="md" color="primary" variant="outlined" />
-                <h3 className="font-semibold text-2xl">{user?.name}</h3>
-              </div>
-              <div className="w-full h-[1px] bg-gray-300 mt-2" />
-            </div>
+            <Dropdown>
+              <MenuButton variant="plain">
+                <ProfileAvatar size="lg" color="primary" />
+              </MenuButton>
 
-            <ul className="flex flex-col gap-6">
-              <button
-                type="button"
-                className="cursor-pointer hover:bg-gray-100 px-4 py-2 rounded-2xl"
-                onClick={() => navigate("/settings")}
-              >
-                <li className="flex flex-row gap-3 items-center">
-                  <div className="bg-primary-bg p-2 rounded-full">
-                    <IoMdSettings size={25} className="text-primary" />
+              <Menu>
+                <div>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row gap-3 items-center px-2">
+                      <ProfileAvatar
+                        size="md"
+                        color="primary"
+                        variant="outlined"
+                      />
+                      <h3 className="font-semibold text-2xl">{user?.name}</h3>
+                    </div>
+                    <Divider sx={{ marginY: 1 }} />
                   </div>
-                  <span className="font-medium text-xl">
-                    Perfil e definições
-                  </span>
-                </li>
-              </button>
-              <button
-                type="button"
-                className="cursor-pointer hover:bg-gray-100 px-4 py-2 rounded-2xl"
-                onClick={logout}
-              >
-                <li className="flex flex-row gap-3 items-center">
-                  <div className="bg-primary-bg p-2 rounded-full">
-                    <IoMdExit size={25} className="text-primary" />
-                  </div>
-                  <span className="font-medium text-xl">Sair da conta</span>
-                </li>
-              </button>
-            </ul>
+
+                  <MenuItem>
+                    <button
+                      type="button"
+                      className="p-2 cursor-pointer"
+                      onClick={() => {
+                        navigate("/settings");
+                        setDropdownOpen(false);
+                      }}
+                    >
+                      <li className="flex flex-row gap-3 items-center">
+                        <div className="bg-primary-bg p-2 rounded-full">
+                          <IoMdSettings size={20} className="text-primary" />
+                        </div>
+                        <span className="font-medium text-lg">
+                          Perfil e definições
+                        </span>
+                      </li>
+                    </button>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <button
+                      type="button"
+                      className="p-2 cursor-pointer"
+                      onClick={logout}
+                    >
+                      <li className="flex flex-row gap-3 items-center">
+                        <div className="bg-primary-bg p-2 rounded-full">
+                          <IoMdExit size={20} className="text-primary" />
+                        </div>
+                        <span className="font-medium text-lg">
+                          Sair da conta
+                        </span>
+                      </li>
+                    </button>
+                  </MenuItem>
+                </div>
+              </Menu>
+            </Dropdown>
           </div>
         )}
       </header>
