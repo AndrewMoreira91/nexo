@@ -1,5 +1,4 @@
 import { Divider, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
-import { useState } from "react";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
 import LogoNexoIcon from "../assets/LogoNexoIcon";
@@ -9,8 +8,6 @@ import ProfileAvatar from "./ProfileAvatar";
 const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   function handleClickOnLogo() {
     if (isAuthenticated) {
@@ -49,12 +46,12 @@ const Header = () => {
             >
               <span>Pomodoro</span>
             </button>
-            <Dropdown>
+            <Dropdown defaultOpen={false}>
               <MenuButton variant="plain">
                 <ProfileAvatar size="lg" color="primary" />
               </MenuButton>
 
-              <Menu>
+              <Menu placement="bottom-end">
                 <div>
                   <div className="flex flex-col">
                     <div className="flex flex-row gap-3 items-center px-2">
@@ -74,7 +71,6 @@ const Header = () => {
                       className="p-2 cursor-pointer"
                       onClick={() => {
                         navigate("/settings");
-                        setDropdownOpen(false);
                       }}
                     >
                       <li className="flex flex-row gap-3 items-center">

@@ -10,3 +10,10 @@ export const db = drizzle({
   client: pg,
   logger: env.ENVIRONMENT === 'development',
 })
+
+db.$client.connect().then(() => {
+  console.log('Connected to the database')
+}).catch((err) => {
+  throw new Error(`Failed to connect to the database`)
+})
+
