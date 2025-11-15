@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { db } from "../../drizzle";
 import { users } from "../../drizzle/schemas/user-schema";
@@ -23,6 +24,10 @@ interface UpdateUserProps {
 export const updateUser = async (query: UpdateUserProps) => {
 	try {
 		await findUserById(query.userId);
+
+		if (query.password) {
+			query.password = await bcrypt.hash(query.password, 10);
+		}
 
 		const userUpdate = await db
 			.update(users)

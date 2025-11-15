@@ -85,6 +85,7 @@ const SettingsPage: FC = () => {
     focusDuration !== (user.focusSessionDuration || 25 * 60) ||
     shortBreakDuration !== (user.shortBreakSessionDuration || 5 * 60) ||
     longBreakDuration !== (user.longBreakSessionDuration || 15 * 60) ||
+    formData.password.length > 0 ||
     JSON.stringify(selectedDays) !== JSON.stringify(user.selectedDaysOfWeek);
 
   const isLessThanTwoDaysSelected =
@@ -161,9 +162,23 @@ const SettingsPage: FC = () => {
     setLongBreakDuration(clampLongBreakDuration(value));
   };
 
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function handleSubmitUpdatePassword(e: React.FormEvent) {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("As senhas não coincidem");
+      return;
+    }
+    handleSubmit();
+    setModalOpen(false);
+  }
+
+  console.log(isLoading);
+
   return (
     <>
-      <main className="w-ful max-w-7xl mx-auto px-6 md:px-12 lg-px-16 my-10 flex flex-col gap-8">
+      <main className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 my-10 flex flex-col gap-8">
         <Container className="flex flex-row items-center gap-4">
           <ProfileAvatar color="primary" variant="solid" size="lg" />
           <div>
@@ -362,7 +377,7 @@ const SettingsPage: FC = () => {
         <ModalDialog>
           <ModalClose />
           <DialogTitle>Crie uma nova senha</DialogTitle>
-          <form>
+          <form onSubmit={handleSubmitUpdatePassword}>
             <Stack spacing={2}>
               <Input
                 autoComplete="new-password"
@@ -375,6 +390,7 @@ const SettingsPage: FC = () => {
                 onChange={handleChange}
               />
               <Input
+                color={errorMessage ? "danger" : "neutral"}
                 autoComplete="new-password"
                 required
                 type="password"
@@ -383,7 +399,10 @@ const SettingsPage: FC = () => {
                 id="confirmPassword"
                 onChange={handleChange}
               />
-              <Button type="submit">Confirmafr</Button>
+              {errorMessage && (
+                <span className="text-red-500 text-sm">{errorMessage}</span>
+              )}
+              <Button type="submit">Confirmar</Button>
             </Stack>
           </form>
         </ModalDialog>
