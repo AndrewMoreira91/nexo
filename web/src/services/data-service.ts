@@ -7,7 +7,7 @@ type QueryOptions = {
 
 export const getDataProgress = async ({ daysPrevious = 0 }: QueryOptions) => {
   const response = await api.get<DataProgressType[]>(
-    `/get-data-progress?daysPrevious=${daysPrevious}`
+    `/get-data-progress?previousDaysCount=${daysPrevious}`
   )
   if (response.data.length === 0) {
     return null
@@ -17,7 +17,7 @@ export const getDataProgress = async ({ daysPrevious = 0 }: QueryOptions) => {
 
 export const getDataStatistics = async ({ daysPrevious = 0 }: QueryOptions) => {
   const response = await api.get<DataStatisticsType>(
-    `/get-data-statistic?daysPrevious=${daysPrevious}`
+    `/get-data-statistic?previousDaysCount=${daysPrevious}`
   )
   return response.data
 }

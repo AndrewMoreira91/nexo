@@ -4,5 +4,7 @@ export function calculateProgress(completionTime: number, target: number) {
   if (progress > 100) {
     return 100
   }
-  return progress
+  const clampedProgress = Math.min(progress, 100)
+
+  return Number(clampedProgress.toFixed(1))
 }

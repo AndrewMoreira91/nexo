@@ -99,7 +99,6 @@ const SettingsPage: FC = () => {
   }, [isFormChanged, selectedDays]);
 
   const handleSubmit = async () => {
-    console.log("Submitting form with data:", formData);
     setIsLoading(true);
     if (!isFormChanged) {
       return;

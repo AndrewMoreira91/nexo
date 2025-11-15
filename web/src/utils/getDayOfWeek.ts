@@ -14,5 +14,6 @@ export const getDayOfWeek = (index: number | Date | string): string => {
   }
 
   const indexDate = new Date(index).getDay()
+
   return daysOfWeek[indexDate + 1]
 }

@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { dateTodayTest } from "../../../server/src/tests/configs";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import Loader from "../components/Loader";
@@ -24,9 +25,13 @@ const DashboardPage = () => {
     refetchOnWindowFocus: false,
   });
 
+  const dateToday =
+    import.meta.env.VITE_ENV === "development" ? dateTodayTest : new Date();
+
   const { data: dataStatistics } = useQuery({
     queryKey: ["dataStatistics"],
-    queryFn: () => getDataStatistics({ daysPrevious: 7 }),
+    queryFn: () =>
+      getDataStatistics({ daysPrevious: dateToday.getUTCDay() + 1 }),
     refetchOnWindowFocus: false,
   });
 
@@ -115,31 +120,41 @@ const DashboardPage = () => {
             </Container>
 
             <Container className="flex-col md:flex-row justify-between gap-8">
-              <MenuData
-                title="Tempo total"
-                textMain={`${formattedTime(
-                  dataStatistics?.totalSessionFocusDuration ?? 0
-                )}`}
-                description="Está semana"
-              >
-                <FaClock className="text-primary text-4xl" />
-              </MenuData>
-              <MenuData
-                title="Tarefas concluídas"
-                textMain={`${dataStatistics?.numTasksCompleted ?? 0}`}
-                description="Está semana"
-              >
-                <FaCheck className="text-primary text-4xl" />
-              </MenuData>
-              <MenuData
-                title="Melhor dia"
-                textMain={getDayOfWeek(dataStatistics?.bestDay.date ?? 0)}
-                description={formattedTime(
-                  dataStatistics?.bestDay.timeCompleted ?? 0
-                )}
-              >
-                <FaTrophy className="text-primary text-4xl" />
-              </MenuData>
+              {(dataStatistics?.sessionsFocusCompleted ?? 0) > 0 ? (
+                <>
+                  <MenuData
+                    title="Tempo total"
+                    textMain={`${formattedTime(
+                      dataStatistics?.totalSessionFocusDuration ?? 0
+                    )}`}
+                    description="Está semana"
+                  >
+                    <FaClock className="text-primary text-4xl" />
+                  </MenuData>
+                  <MenuData
+                    title="Tarefas concluídas"
+                    textMain={`${dataStatistics?.numTasksCompleted ?? 0}`}
+                    description="Está semana"
+                  >
+                    <FaCheck className="text-primary text-4xl" />
+                  </MenuData>
+                  <MenuData
+                    title="Melhor dia"
+                    textMain={getDayOfWeek(dataStatistics?.bestDay.date ?? 0)}
+                    description={formattedTime(
+                      dataStatistics?.bestDay.timeCompleted ?? 0
+                    )}
+                  >
+                    <FaTrophy className="text-primary text-4xl" />
+                  </MenuData>
+                </>
+              ) : (
+                <div>
+                  <span>
+                    Complete sessões essa semana para ver estatísticas
+                  </span>
+                </div>
+              )}
             </Container>
           </div>
         </main>
