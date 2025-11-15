@@ -13,15 +13,14 @@ POST http://localhost:3333/login
 Content-Type: application/json
 
 {
-	"email": "andrewmoreira@gmai",
-	"password": "1234"
+	"email": "andrew@gmail.com",
+	"password": "123456"
 }
 
 ### Start Session Route
 POST http://localhost:3333/start-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YTMwN2M3ZC0wMmRlLTQ4M2ItYmVlMS01Y2QxMGQzYjdlODAiLCJpYXQiOjE3NjI5MTAzMjIsImV4cCI6MTc2Mjk5NjcyMn0.ESqrnbsz3xF24kM7KT4TLKYD6mBhlyDOI_7cItuKpRc
 {
 	"type": "shortBreak"
 }
@@ -30,8 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M
 ### End Session Route
 PUT http://localhost:3333/end-session
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YTMwN2M3ZC0wMmRlLTQ4M2ItYmVlMS01Y2QxMGQzYjdlODAiLCJpYXQiOjE3NjI5MTAzMjIsImV4cCI6MTc2Mjk5NjcyMn0.ESqrnbsz3xF24kM7KT4TLKYD6mBhlyDOI_7cItuKpRc
 {
 	"duration": 1547,
 	"sessionId": "eabaf8e0-4142-474e-9925-017a63ea1dc6"
@@ -40,7 +38,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M
 ### Get Sessions Data Progress Route
 GET http://localhost:3333/get-data-progress
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YTMwN2M3ZC0wMmRlLTQ4M2ItYmVlMS01Y2QxMGQzYjdlODAiLCJpYXQiOjE3NjI5MTAzMjIsImV4cCI6MTc2Mjk5NjcyMn0.ESqrnbsz3xF24kM7KT4TLKYD6mBhlyDOI_7cItuKpRc
 
 ### Get Sessions Data Statistics Route
 GET http://localhost:3333/get-data-statistic?daysPrevious=7
@@ -50,8 +48,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M
 ### Create Task Route
 POST http://localhost:3333/task
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNDg0M2RmNC02ZmM4LTQ4MTktOWViOS05M2FiYTQxNzJjMTIiLCJpYXQiOjE3NDU3OTY0NDUsImV4cCI6MTc0ODM4ODQ0NX0.qEknbKnkS0S63PXJb76iMSkOSDKqIrUHBeD6g1s5oV0
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YTMwN2M3ZC0wMmRlLTQ4M2ItYmVlMS01Y2QxMGQzYjdlODAiLCJpYXQiOjE3NjI5MTAzMjIsImV4cCI6MTc2Mjk5NjcyMn0.ESqrnbsz3xF24kM7KT4TLKYD6mBhlyDOI_7cItuKpRc
 {
 	"title": "Create a new task",
 }

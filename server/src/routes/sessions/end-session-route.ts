@@ -12,9 +12,9 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 				summary: "End a session",
 				tags: ["sessions"],
 				body: z.object({
-					duration: z.number(),
-					sessionId: z.string(),
-					completedTasksIds: z.array(z.string()).optional(),
+					duration: z.number().int().nonnegative(),
+					sessionId: z.string().uuid(),
+					completedTasksIds: z.array(z.string().uuid()).optional(),
 				}),
 				security: [
 					{

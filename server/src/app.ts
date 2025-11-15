@@ -8,9 +8,7 @@ import {
 	serializerCompiler,
 	validatorCompiler,
 } from "fastify-type-provider-zod";
-import cron from "node-cron";
 import { env } from "./env";
-import { dailyDataUpdate } from "./functions/dailyUpdate/daily-data-update";
 import { errorHandler } from "./middlewares/errorHandler";
 import { routes } from "./routes";
 
@@ -38,11 +36,11 @@ app.register(fastifySwagger, {
 			},
 			...(env.ENVIRONMENT === "production" && env.PRODUCTION_URL
 				? [
-						{
-							url: env.PRODUCTION_URL,
-							description: "Production server",
-						},
-					]
+					{
+						url: env.PRODUCTION_URL,
+						description: "Production server",
+					},
+				]
 				: []),
 		],
 		tags: [
@@ -72,7 +70,5 @@ env.ENVIRONMENT === "development" &&
 	});
 
 routes(app);
-
-cron.schedule("0 0 * * *", dailyDataUpdate);
 
 export default app;

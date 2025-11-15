@@ -71,6 +71,7 @@ export const endSession = async ({
 		});
 
 		for (const taskId of completedTasksIds || []) {
+
 			await db
 				.update(tasks)
 				.set({
@@ -80,7 +81,12 @@ export const endSession = async ({
 				.where(eq(tasks.id, taskId));
 		}
 
-		await updateUser({ userId, streak: dailyProgress.streak });
+		const longestStreak =
+			dailyProgress.streak > user.longestStreak
+				? dailyProgress.streak
+				: user.longestStreak;
+
+		await updateUser({ userId, streak: dailyProgress.streak, longestStreak });
 
 		return {
 			session: session[0],
@@ -90,6 +96,7 @@ export const endSession = async ({
 			streak: dailyProgress.streak,
 		};
 	} catch (error) {
+		console.error("Error in endSession:", error);
 		if (error instanceof CustomError) throw error;
 		throw new CustomError("Erro ao encerrar sessão", 500);
 	}

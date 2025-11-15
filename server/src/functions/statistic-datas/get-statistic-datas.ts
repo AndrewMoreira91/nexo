@@ -6,6 +6,7 @@ import { tasks } from "../../drizzle/schemas/tasks-schema";
 import { CustomError } from "../../errors/CustomError";
 import { dateNow } from "../../helpers/getDate";
 import { findUserById } from "../user/get-user";
+import { updateUser } from "../user/update-user";
 
 type QueryProps = {
 	previousDaysCount?: number;
@@ -18,7 +19,7 @@ type TaskType = {
 	isCompleted: boolean;
 };
 
-type ResultType = {
+type UserSessionStatistics = {
 	streak: number;
 	longestStreak: number;
 	totalSessionFocusDuration: number;
@@ -83,7 +84,7 @@ export const getStatisticDatas = async (
 			return eq(dailyProgress.date, formattedDateToday);
 		}
 
-		const result: ResultType = {
+		const result: UserSessionStatistics = {
 			totalSessionFocusDuration: 0,
 			sessionsFocusCompleted: 0,
 			numTasksCompleted: 0,
@@ -137,10 +138,12 @@ export const getStatisticDatas = async (
 			result.dailyMediaDuration =
 				result.totalSessionFocusDuration / dailyProgressData.length;
 
+			result.streak = dailyProgress.streak;
+
 			if (
 				result.bestDay.timeCompleted < dailyProgress.totalSessionFocusDuration
 			) {
-				result.bestDay.date = format(dailyProgress.date, "yyyy-MM-dd");
+				result.bestDay.date = dailyProgress.date;
 				result.bestDay.timeCompleted = dailyProgress.totalSessionFocusDuration;
 				result.bestDay.isTargetCompleted = dailyProgress.isGoalComplete;
 			}
@@ -148,7 +151,7 @@ export const getStatisticDatas = async (
 			if (
 				result.bestDay.timeCompleted > dailyProgress.totalSessionFocusDuration
 			) {
-				result.worstDay.date = format(dailyProgress.date, "yyyy-MM-dd");
+				result.worstDay.date = dailyProgress.date;
 				result.worstDay.timeCompleted = dailyProgress.totalSessionFocusDuration;
 				result.worstDay.isTargetCompleted = dailyProgress.isGoalComplete;
 			}
@@ -167,8 +170,11 @@ export const getStatisticDatas = async (
 			}
 		}
 		result.weeklyTrend = weeklyTrend;
-		result.streak = user.streak;
-		result.longestStreak = user.longestStreak;
+		result.longestStreak = dailyProgressData.reduce((max, curr) => Math.max(max, curr.streak), 0);
+
+		if (user.streak !== result.streak) {
+			updateUser({ userId: user.id, streak: result.streak });
+		}
 
 		return { result };
 	} catch (error) {

@@ -11,6 +11,7 @@ interface UpdateUserProps {
 	email?: string;
 	password?: string;
 	streak?: number;
+	longestStreak?: number;
 	dailySessionTarget?: number;
 	focusSessionDuration?: number;
 	shortBreakSessionDuration?: number;

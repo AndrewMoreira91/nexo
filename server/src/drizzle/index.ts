@@ -8,7 +8,7 @@ export const pg = new postgres.Pool({
 
 export const db = drizzle({
   client: pg,
-  logger: env.ENVIRONMENT === 'development',
+  // logger: env.ENVIRONMENT === 'development',
 })
 
 db.$client.connect().then(() => {
