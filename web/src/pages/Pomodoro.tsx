@@ -43,8 +43,6 @@ const PomodoroPage = () => {
 
   // Timer State
   const [currentMode, setCurrentMode] = useState<SessionType>("focus");
-  const [timeLeft, setTimeLeft] = useState<number>(0);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const {
     data: dataProgress,
@@ -56,9 +54,8 @@ const PomodoroPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { startTimer, stopTimer } = useTimer({
-    duration: timeLeft,
-    onTick: setTimeLeft,
+  const { startTimer, stopTimer, isTimerRunning, timeLeft } = useTimer({
+    duration: user?.focusSessionDuration || 1500,
     onComplete: () => handleSessionComplete(),
   });
 
@@ -67,13 +64,11 @@ const PomodoroPage = () => {
     try {
       if (isTimerRunning) {
         stopTimer();
-        setIsTimerRunning(false);
         return;
       }
       playAudio();
 
       startTimer();
-      setIsTimerRunning(true);
 
       const response = await api.post<StartSessionResponse>("start-session", {
         type: currentMode,
@@ -88,7 +83,6 @@ const PomodoroPage = () => {
   }
 
   async function handleSessionComplete() {
-    setIsTimerRunning(false);
     stopTimer();
     try {
       handlePlayAudioEnd();
@@ -156,7 +150,6 @@ const PomodoroPage = () => {
   function handleResetClick() {
     stopTimer();
     resetSession(currentMode);
-    setIsTimerRunning(false);
   }
 
   const updateTimeLeft = useCallback(
@@ -173,12 +166,6 @@ const PomodoroPage = () => {
     },
     [user]
   );
-
-  useEffect(() => {
-    if (timeLeft === 0 && !isTimerRunning) {
-      updateTimeLeft(currentMode);
-    }
-  }, [timeLeft, isTimerRunning, currentMode, updateTimeLeft]);
 
   const audioPlayRef = useRef<HTMLAudioElement>(null);
   const audioEndRef = useRef<HTMLAudioElement>(null);
@@ -212,6 +199,12 @@ const PomodoroPage = () => {
   };
 
   useEffect(() => {
+    if (timeLeft === 0 && !isTimerRunning) {
+      updateTimeLeft(currentMode);
+    }
+  }, [timeLeft, isTimerRunning, currentMode, updateTimeLeft]);
+
+  useEffect(() => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
       } else if (permission === "denied") {
@@ -222,6 +215,7 @@ const PomodoroPage = () => {
     });
   }, []);
 
+  console.log("Time Left:", timeLeft);
   return (
     <>
       {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}

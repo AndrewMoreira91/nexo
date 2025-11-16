@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
+import { timerService } from '../services/timer-service'
 
 type TimerConfig = {
   duration: number
@@ -9,6 +10,8 @@ type TimerConfig = {
 type UseTimerResponse = {
   startTimer: () => void
   stopTimer: () => void
+  isTimerRunning: boolean
+  timeLeft: number
 }
 
 export function useTimer({
@@ -16,48 +19,45 @@ export function useTimer({
   onTick,
   onComplete,
 }: TimerConfig): UseTimerResponse {
-  const workerRef = useRef<Worker | null>(null)
+  const [isTimerRunning, setIsTimerRunning] = useState(() =>
+    timerService.getIsRunning()
+  )
+  const [timeLeft, setTimeLeft] = useState(duration)
 
+  // Update callbacks whenever they change
   useEffect(() => {
-    if (!workerRef.current) {
-      workerRef.current = new Worker(
-        new URL('../works/timer-work.ts', import.meta.url)
-      )
-    }
-    return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate()
-        workerRef.current = null
-      }
-    }
+    timerService.setCallbacks({
+      onTick: (remaining: number) => {
+        setTimeLeft(remaining)
+        onTick?.(remaining)
+      },
+      onComplete: () => {
+        setIsTimerRunning(false)
+        onComplete?.()
+      },
+    })
+  }, [onTick, onComplete])
+
+  // Sync local state with timer service on mount
+  useEffect(() => {
+    setIsTimerRunning(timerService.getIsRunning())
   }, [])
 
   const startTimer = () => {
-    if (!workerRef.current) {
-      workerRef.current = new Worker(
-        new URL('../works/timer-work.ts', import.meta.url)
-      )
-    }
-
-    workerRef.current.onmessage = event => {
-      const { type, remaining } = event.data
-
-      if (type === 'tick') {
-        onTick?.(remaining)
-      } else if (type === 'complete') {
+    setIsTimerRunning(true)
+    timerService.start(duration, {
+      onTick,
+      onComplete: () => {
+        setIsTimerRunning(false)
         onComplete?.()
-        stopTimer()
-      }
-    }
-
-    workerRef.current.postMessage({ duration, type: 'start' })
+      },
+    })
   }
 
   const stopTimer = () => {
-    if (workerRef.current) {
-      workerRef.current.postMessage({ type: 'stop' })
-    }
+    setIsTimerRunning(false)
+    timerService.stop()
   }
 
-  return { startTimer, stopTimer }
+  return { startTimer, stopTimer, isTimerRunning, timeLeft }
 }

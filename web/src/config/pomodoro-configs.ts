@@ -1,6 +1,6 @@
 export const DURATION_LIMITS = {
-	focus: { min: 60, max: 10800 },
-	shortBreak: { min: 3, max: 3600 },
+	focus: { min: 300, max: 10800 },
+	shortBreak: { min: 60, max: 3600 },
 	longBreak: { min: 120, max: 5400 },
 };
 
