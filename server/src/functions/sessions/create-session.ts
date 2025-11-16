@@ -42,6 +42,11 @@ export const createSession = async ({ type, userId }: CreateSessionProps) => {
 				userId,
 				dailyProgressId: dailyProgress.id,
 				startTime: dateNow,
+				duration: type === "focus"
+					? user[0].focusSessionDuration
+					: type === "shortBreak"
+						? user[0].shortBreakSessionDuration
+						: user[0].longBreakSessionDuration
 			})
 			.returning();
 

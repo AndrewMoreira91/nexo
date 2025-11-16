@@ -12,7 +12,6 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 				summary: "End a session",
 				tags: ["sessions"],
 				body: z.object({
-					duration: z.number().int().nonnegative(),
 					sessionId: z.string().uuid(),
 					completedTasksIds: z.array(z.string().uuid()).optional(),
 				}),
@@ -35,7 +34,7 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 		},
 		async (req, reply) => {
 			const { id: userId } = req.user;
-			const { duration, sessionId, completedTasksIds } = req.body;
+			const { sessionId, completedTasksIds } = req.body;
 
 			const {
 				session,
@@ -44,7 +43,6 @@ export const endSessionRoute: FastifyPluginAsyncZod = async (app) => {
 				totalSessionFocusDuration,
 				streak,
 			} = await endSession({
-				duration,
 				sessionId,
 				userId,
 				completedTasksIds,

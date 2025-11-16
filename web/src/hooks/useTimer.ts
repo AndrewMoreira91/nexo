@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 type TimerConfig = {
   duration: number
-  onTick?: (remaining: number, accumulatedTime: number) => void
-  onComplete?: (accumulatedTime: number) => void
+  onTick?: (remaining: number) => void
+  onComplete?: () => void
 }
 
 type UseTimerResponse = {
@@ -16,7 +16,6 @@ export function useTimer({
   onTick,
   onComplete,
 }: TimerConfig): UseTimerResponse {
-  const [accumulatedTime, setAccumulatedTime] = useState(0)
   const workerRef = useRef<Worker | null>(null)
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export function useTimer({
   }, [])
 
   const startTimer = () => {
-    setAccumulatedTime(0)
     if (!workerRef.current) {
       workerRef.current = new Worker(
         new URL('../works/timer-work.ts', import.meta.url)
@@ -45,10 +43,9 @@ export function useTimer({
       const { type, remaining } = event.data
 
       if (type === 'tick') {
-        onTick?.(remaining, accumulatedTime)
-        setAccumulatedTime(prev => prev + 1)
+        onTick?.(remaining)
       } else if (type === 'complete') {
-        onComplete?.(accumulatedTime)
+        onComplete?.()
         stopTimer()
       }
     }

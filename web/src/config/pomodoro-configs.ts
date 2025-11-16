@@ -1,8 +1,6 @@
-export const DURATION_STEP = 300; // 5 minutes in seconds
-
 export const DURATION_LIMITS = {
-	focus: { min: 300, max: 10800 },
-	shortBreak: { min: 60, max: 3600 },
+	focus: { min: 60, max: 10800 },
+	shortBreak: { min: 3, max: 3600 },
 	longBreak: { min: 120, max: 5400 },
 };
 
@@ -10,6 +8,8 @@ export const DEFAULT_DURATIONS = {
 	default: { focus: 1500, shortBreak: 300, longBreak: 900 },
 	long: { focus: 3000, shortBreak: 600, longBreak: 1500 },
 };
+
+export const DURATION_STEP = 300; // 5 minutes in seconds
 
 export type FocusOption = {
 	id: string;

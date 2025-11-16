@@ -9,14 +9,12 @@ import { findUserById } from "../user/get-user";
 import { updateUser } from "../user/update-user";
 
 interface EndSessionProps {
-	duration: number;
 	sessionId: string;
 	userId: string;
 	completedTasksIds?: string[];
 }
 
 export const endSession = async ({
-	duration,
 	sessionId,
 	userId,
 	completedTasksIds,
@@ -37,7 +35,6 @@ export const endSession = async ({
 			.set({
 				endTime: dateNow,
 				sessionEndDate: dateNow.toUTCString(),
-				duration,
 				updated_at: dateNow,
 			})
 			.where(eq(sessions.id, sessionId))

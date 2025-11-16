@@ -35,9 +35,20 @@ type StartSessionResponse = {
 const PomodoroPage = () => {
   const { user, isLoading: isAuthLoading } = useAuth();
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  // Tasks State
+  const [tasksSelected, setTasksSelected] = useState<string[]>([]);
+  const { refetch: refetchTasks } = useFetchTasks();
+
+  // Timer State
+  const [currentMode, setCurrentMode] = useState<SessionType>("focus");
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+
   const {
     data: dataProgress,
-    isLoading: isProgressLoading,
+    isLoading: isLoadingProgressData,
     refetch: refetchDataProgress,
   } = useQuery({
     queryKey: ["progressData"],
@@ -45,23 +56,13 @@ const PomodoroPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const [tasksSelected, setTasksSelected] = useState<string[]>([]);
-
-  const { refetch: refetchTasks } = useFetchTasks();
-
-  const [timeLeft, setTimeLeft] = useState<number>(0);
-
-  const [currentMode, setCurrentMode] = useState<SessionType>("focus");
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-
-  const [snakbarOpen, setSnackbarOpen] = useState(false);
-
   const { startTimer, stopTimer } = useTimer({
     duration: timeLeft,
-    onTick: handleTimerTick,
-    onComplete: (accumulatedTime) => handleSessionComplete(accumulatedTime),
+    onTick: setTimeLeft,
+    onComplete: () => handleSessionComplete(),
   });
 
+  // Timer Handlers
   async function toggleTimer() {
     try {
       if (isTimerRunning) {
@@ -86,27 +87,10 @@ const PomodoroPage = () => {
     }
   }
 
-  function handleTimerTick(remainingTime: number) {
-    setTimeLeft(remainingTime);
-  }
-
-  async function handleSessionComplete(accumulatedTime: number) {
+  async function handleSessionComplete() {
     setIsTimerRunning(false);
     stopTimer();
     try {
-      const sessionId = localStorage.getItem("sessionId");
-      if (sessionId) {
-        await api.put("end-session", {
-          sessionId,
-          duration: accumulatedTime,
-          completedTasksIds: tasksSelected,
-        });
-      }
-
-      refetchDataProgress();
-      refetchTasks();
-      localStorage.removeItem("sessionId");
-
       handlePlayAudioEnd();
 
       setSnackbarOpen(true);
@@ -124,6 +108,18 @@ const PomodoroPage = () => {
       if (currentMode === "focus") {
         return handleFocusSessionComplete();
       }
+
+      const sessionId = localStorage.getItem("sessionId");
+      if (sessionId) {
+        await api.put("end-session", {
+          sessionId,
+          completedTasksIds: tasksSelected,
+        });
+      }
+
+      refetchDataProgress();
+      refetchTasks();
+      localStorage.removeItem("sessionId");
 
       resetSession("focus");
     } catch (error) {
@@ -241,7 +237,7 @@ const PomodoroPage = () => {
         className="hidden"
       />
       <Snackbar
-        open={snakbarOpen}
+        open={snackbarOpen}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         variant="solid"
         color="primary"
@@ -310,7 +306,7 @@ const PomodoroPage = () => {
           </section>
 
           <Container className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-8">
-            {renderProgressData(dataProgress, isProgressLoading, user)}
+            {renderProgressData(dataProgress, isLoadingProgressData, user)}
           </Container>
 
           <Container className="flex flex-col gap-4">

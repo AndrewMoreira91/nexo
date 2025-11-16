@@ -174,8 +174,6 @@ const SettingsPage: FC = () => {
     setModalOpen(false);
   }
 
-  console.log(isLoading);
-
   return (
     <>
       <main className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 my-10 flex flex-col gap-8">
