@@ -21,8 +21,6 @@ class TimerService {
 			this.worker.onmessage = event => {
 				const { type, remaining } = event.data
 
-				console.log(remaining)
-
 				if (type === 'tick') {
 					this.callbacks.onTick?.(remaining)
 				} else if (type === 'complete') {

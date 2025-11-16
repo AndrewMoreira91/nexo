@@ -4,22 +4,26 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FaClock, FaFireAlt, FaPause, FaPlay } from "react-icons/fa";
 import { FiTarget } from "react-icons/fi";
 import { GrPowerReset } from "react-icons/gr";
+
 import Button from "../components/Button";
 import ButtonGroup from "../components/ButtonGroup";
 import Container from "../components/Container";
 import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
+
 import { useAuth } from "../context/auth.context";
 import { useFetchTasks } from "../hooks/task-hooks";
 import { useTimer } from "../hooks/useTimer";
+
+import { SessionType } from "../config/pomodoro-configs";
+import type { DataProgressType, UserType } from "../types";
+
 import { api } from "../libs/api";
 import { getDataProgress } from "../services/data-service";
-import type { DataProgressType, UserType } from "../types";
+
 import { calculateProgress } from "../utils/calculate-progress";
 import createNotification from "../utils/create-notification";
-
-type SessionType = "focus" | "shortBreak" | "longBreak";
 
 type StartSessionResponse = {
   id: string;
@@ -54,10 +58,10 @@ const PomodoroPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { startTimer, stopTimer, isTimerRunning, timeLeft } = useTimer({
-    duration: user?.focusSessionDuration || 1500,
-    onComplete: () => handleSessionComplete(),
-  });
+  const { startTimer, stopTimer, isTimerRunning, timeLeft, updateTimeLeft } =
+    useTimer({
+      onComplete: () => handleSessionComplete(),
+    });
 
   // Timer Handlers
   async function toggleTimer() {
@@ -152,21 +156,6 @@ const PomodoroPage = () => {
     resetSession(currentMode);
   }
 
-  const updateTimeLeft = useCallback(
-    (mode: SessionType) => {
-      if (!user) return;
-
-      const durations = {
-        focus: user.focusSessionDuration,
-        shortBreak: user.shortBreakSessionDuration,
-        longBreak: user.longBreakSessionDuration,
-      };
-
-      setTimeLeft(durations[mode]);
-    },
-    [user]
-  );
-
   const audioPlayRef = useRef<HTMLAudioElement>(null);
   const audioEndRef = useRef<HTMLAudioElement>(null);
 
@@ -199,12 +188,6 @@ const PomodoroPage = () => {
   };
 
   useEffect(() => {
-    if (timeLeft === 0 && !isTimerRunning) {
-      updateTimeLeft(currentMode);
-    }
-  }, [timeLeft, isTimerRunning, currentMode, updateTimeLeft]);
-
-  useEffect(() => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
       } else if (permission === "denied") {
@@ -215,7 +198,6 @@ const PomodoroPage = () => {
     });
   }, []);
 
-  console.log("Time Left:", timeLeft);
   return (
     <>
       {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}

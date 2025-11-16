@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { DEFAULT_DURATIONS, SessionType } from '../config/pomodoro-configs'
+import { useAuth } from '../context/auth.context'
 import { timerService } from '../services/timer-service'
 
 type TimerConfig = {
-  duration: number
   onTick?: (remaining: number) => void
   onComplete?: () => void
 }
@@ -12,17 +13,35 @@ type UseTimerResponse = {
   stopTimer: () => void
   isTimerRunning: boolean
   timeLeft: number
+  updateTimeLeft: (mode: SessionType) => void
 }
 
 export function useTimer({
-  duration,
   onTick,
   onComplete,
 }: TimerConfig): UseTimerResponse {
   const [isTimerRunning, setIsTimerRunning] = useState(() =>
     timerService.getIsRunning()
   )
-  const [timeLeft, setTimeLeft] = useState(duration)
+
+  const { user } = useAuth()
+
+  const [timeLeft, setTimeLeft] = useState(user?.focusSessionDuration || DEFAULT_DURATIONS.default.focus)
+
+  const updateTimeLeft = useCallback(
+    (mode: SessionType) => {
+      if (!user) return;
+
+      const durations = {
+        focus: user.focusSessionDuration,
+        shortBreak: user.shortBreakSessionDuration,
+        longBreak: user.longBreakSessionDuration,
+      };
+
+      setTimeLeft(durations[mode]);
+    },
+    [user]
+  );
 
   // Update callbacks whenever they change
   useEffect(() => {
@@ -45,7 +64,7 @@ export function useTimer({
 
   const startTimer = () => {
     setIsTimerRunning(true)
-    timerService.start(duration, {
+    timerService.start(timeLeft, {
       onTick,
       onComplete: () => {
         setIsTimerRunning(false)
@@ -59,5 +78,5 @@ export function useTimer({
     timerService.stop()
   }
 
-  return { startTimer, stopTimer, isTimerRunning, timeLeft }
+  return { startTimer, stopTimer, isTimerRunning, timeLeft, updateTimeLeft }
 }

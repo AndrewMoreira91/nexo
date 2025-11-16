@@ -1,3 +1,5 @@
+export type SessionType = "focus" | "shortBreak" | "longBreak";
+
 export const DURATION_LIMITS = {
 	focus: { min: 300, max: 10800 },
 	shortBreak: { min: 60, max: 3600 },
