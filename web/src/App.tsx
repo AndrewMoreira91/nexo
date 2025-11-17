@@ -1,17 +1,20 @@
-import { QueryClientProvider } from '@tanstack/react-query'
-import { RouterProvider } from 'react-router'
-import { AuthProvider } from './context/auth.context'
-import queryClient from './libs/query'
-import { router } from './routes'
+import { QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider } from "react-router";
+import { AuthProvider } from "./context/auth.context";
+import { PomodoroProvider } from "./context/pomodoro.context";
+import queryClient from "./libs/query";
+import { router } from "./routes";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <PomodoroProvider>
+          <RouterProvider router={router} />
+        </PomodoroProvider>
       </AuthProvider>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

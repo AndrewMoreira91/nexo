@@ -13,8 +13,8 @@ import MenuData from "../components/MenuData";
 import TaskContainer from "../components/TaskContainer";
 
 import { useAuth } from "../context/auth.context";
+import { usePomodoro } from "../context/pomodoro.context";
 import { useFetchTasks } from "../hooks/task-hooks";
-import { useTimer } from "../hooks/useTimer";
 
 import { SessionType } from "../config/pomodoro-configs";
 import type { DataProgressType, UserType } from "../types";
@@ -38,15 +38,21 @@ type StartSessionResponse = {
 
 const PomodoroPage = () => {
   const { user, isLoading: isAuthLoading } = useAuth();
+  const {
+    currentMode,
+    tasksSelected,
+    toggleTaskSelection,
+    resetSession,
+    isTimerRunning,
+    timeLeft,
+    startTimer,
+    stopTimer,
+  } = usePomodoro();
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   // Tasks State
-  const [tasksSelected, setTasksSelected] = useState<string[]>([]);
   const { refetch: refetchTasks } = useFetchTasks();
-
-  // Timer State
-  const [currentMode, setCurrentMode] = useState<SessionType>("focus");
 
   const {
     data: dataProgress,
@@ -58,11 +64,6 @@ const PomodoroPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { startTimer, stopTimer, isTimerRunning, timeLeft, updateTimeLeft } =
-    useTimer({
-      onComplete: () => handleSessionComplete(),
-    });
-
   // Timer Handlers
   async function toggleTimer() {
     try {
@@ -72,7 +73,7 @@ const PomodoroPage = () => {
       }
       playAudio();
 
-      startTimer();
+      startTimer(() => handleSessionComplete());
 
       const response = await api.post<StartSessionResponse>("start-session", {
         type: currentMode,
@@ -139,11 +140,6 @@ const PomodoroPage = () => {
         JSON.stringify(completedFocusSessions + 1)
       );
     }
-  }
-
-  function resetSession(mode: SessionType) {
-    setCurrentMode(mode);
-    updateTimeLeft(mode);
   }
 
   function handleModeChange(selectedMode: string) {
@@ -286,15 +282,7 @@ const PomodoroPage = () => {
           </Container>
 
           <Container className="flex flex-col gap-4">
-            <TaskContainer
-              onTaskSelected={(taskId) => {
-                if (tasksSelected.includes(taskId)) {
-                  setTasksSelected(tasksSelected.filter((id) => id !== taskId));
-                } else {
-                  setTasksSelected([...tasksSelected, taskId]);
-                }
-              }}
-            />
+            <TaskContainer onTaskSelected={toggleTaskSelection} />
           </Container>
         </main>
       )}
