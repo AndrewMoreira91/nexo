@@ -24,6 +24,7 @@ import { getDataProgress } from "../services/data-service";
 
 import { calculateProgress } from "../utils/calculate-progress";
 import createNotification from "../utils/create-notification";
+import formatSecondsToMinutes from "../utils/formatSecondsToMinutes";
 
 type StartSessionResponse = {
   id: string;
@@ -316,9 +317,7 @@ function SessionHeader({
         {modeDescriptions[mode]}
       </span>
       <span className="font-bold text-8xl text-primary">
-        {`${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? "0" : ""}${
-          timeLeft % 60
-        }`}
+        {formatSecondsToMinutes(timeLeft)}
       </span>
     </>
   );

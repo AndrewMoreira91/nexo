@@ -1,13 +1,28 @@
 import { Divider, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
+import { FaClock, FaPause, FaPlay } from "react-icons/fa";
+import { GrPowerReset } from "react-icons/gr";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
 import LogoNexoIcon from "../assets/LogoNexoIcon";
 import { useAuth } from "../context/auth.context";
+import { usePomodoro } from "../context/pomodoro.context";
+import formatSecondsToMinutes from "../utils/formatSecondsToMinutes";
+import Button from "./Button";
 import ProfileAvatar from "./ProfileAvatar";
 
 const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
+
+  const {
+    currentMode,
+    timeLeft,
+    isTimerPaused,
+    isTimerRunning,
+    startTimer,
+    stopTimer,
+    resetSession,
+  } = usePomodoro();
 
   function handleClickOnLogo() {
     if (isAuthenticated) {
@@ -15,6 +30,15 @@ const Header = () => {
     } else {
       navigate("/");
     }
+  }
+
+  function toggleTimer() {
+    if (isTimerRunning) {
+      stopTimer();
+      return;
+    }
+
+    startTimer();
   }
 
   return (
@@ -30,6 +54,46 @@ const Header = () => {
             NEXO
           </span>
         </button>
+
+        {isTimerPaused && (
+          <Dropdown>
+            <MenuButton variant="plain">
+              <div className="hidden sm:flex flex-row gap-2 justify-center items-center">
+                <span className="hidden font-medium text-gray-600 md:block">
+                  {currentMode === "focus" ? "Focando" : "Descansando"}
+                </span>
+                <span className="font-bold text-xl text-primary">
+                  {formatSecondsToMinutes(timeLeft)}
+                </span>
+                <FaClock size={24} className="text-primary animate-pulse" />
+              </div>
+            </MenuButton>
+
+            <Menu placement="bottom-end">
+              <div className="flex flex-row">
+                <MenuItem>
+                  <Button color="primary" onClick={toggleTimer} size="small">
+                    {isTimerRunning ? (
+                      <FaPause className="text-sm" />
+                    ) : (
+                      <FaPlay className="text-sm" />
+                    )}
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button
+                    theme="outline"
+                    onClick={() => resetSession(currentMode)}
+                    size="small"
+                  >
+                    <GrPowerReset className="text-sm" />
+                  </Button>
+                </MenuItem>
+              </div>
+            </Menu>
+          </Dropdown>
+        )}
+
         {isAuthenticated && user?.completedOnboarding && (
           <div className="flex flex-row gap-4 items-center font-bold text-primary">
             <button

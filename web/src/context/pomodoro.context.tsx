@@ -26,6 +26,7 @@ interface PomodoroContextType {
 
   // Timer State
   isTimerRunning: boolean;
+  isTimerPaused: boolean;
   timeLeft: number;
   startTimer: (onComplete?: () => void) => void;
   stopTimer: () => void;
@@ -52,6 +53,16 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
   const [timeLeft, setTimeLeft] = useState(
     user?.focusSessionDuration || DEFAULT_DURATIONS.default.focus
   );
+
+  // Calculate if timer is paused
+  const durations = {
+    focus: user?.focusSessionDuration || DEFAULT_DURATIONS.default.focus,
+    shortBreak:
+      user?.shortBreakSessionDuration || DEFAULT_DURATIONS.default.shortBreak,
+    longBreak:
+      user?.longBreakSessionDuration || DEFAULT_DURATIONS.default.longBreak,
+  };
+  const isTimerPaused = timeLeft < durations[currentMode];
 
   // Update time left when mode or user changes
   useEffect(() => {
@@ -143,6 +154,7 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
         setTasksSelected,
         toggleTaskSelection,
         isTimerRunning,
+        isTimerPaused,
         timeLeft,
         startTimer,
         stopTimer,
