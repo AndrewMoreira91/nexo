@@ -1,6 +1,5 @@
 import { Divider, Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { FaClock, FaPause, FaPlay } from "react-icons/fa";
-import { GrPowerReset } from "react-icons/gr";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { useNavigate } from "react-router";
 import LogoNexoIcon from "../assets/LogoNexoIcon";
@@ -58,38 +57,44 @@ const Header = () => {
         {isTimerPaused && (
           <Dropdown>
             <MenuButton variant="plain">
-              <div className="hidden sm:flex flex-row gap-2 justify-center items-center">
-                <span className="hidden font-medium text-gray-600 md:block">
+              <div
+                className={`hidden sm:flex flex-row gap-2 justify-center items-center ${currentMode}`}
+              >
+                <span className="hidden font-medium text-gray-500 md:block">
                   {currentMode === "focus" ? "Focando" : "Descansando"}
                 </span>
                 <span className="font-bold text-xl text-primary">
                   {formatSecondsToMinutes(timeLeft)}
                 </span>
-                <FaClock size={24} className="text-primary animate-pulse" />
+                <FaClock
+                  size={24}
+                  className={`text-primary ${
+                    isTimerRunning ? "animate-pulse" : ""
+                  }`}
+                />
               </div>
             </MenuButton>
 
             <Menu placement="bottom-end">
-              <div className="flex flex-row">
-                <MenuItem>
-                  <Button color="primary" onClick={toggleTimer} size="small">
-                    {isTimerRunning ? (
-                      <FaPause className="text-sm" />
-                    ) : (
-                      <FaPlay className="text-sm" />
-                    )}
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button
-                    theme="outline"
-                    onClick={() => resetSession(currentMode)}
-                    size="small"
-                  >
-                    <GrPowerReset className="text-sm" />
-                  </Button>
-                </MenuItem>
-              </div>
+              <MenuItem>
+                <Button onClick={toggleTimer} size="small" className="w-full">
+                  {isTimerRunning ? (
+                    <FaPause className="text-sm" />
+                  ) : (
+                    <FaPlay className="text-sm" />
+                  )}
+                </Button>
+              </MenuItem>
+              <MenuItem>
+                <Button
+                  theme="outline"
+                  onClick={() => navigate("/pomodoro")}
+                  size="small"
+                  className="text-sm"
+                >
+                  Visualizar
+                </Button>
+              </MenuItem>
             </Menu>
           </Dropdown>
         )}
