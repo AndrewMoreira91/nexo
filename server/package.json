@@ -7,9 +7,9 @@
     "dev": "tsx watch --env-file=.env-local src/server.ts",
     "migrate": "npx drizzle-kit migrate",
     "studio": "npx drizzle-kit studio",
-    "build": "tsup src/server.ts",
+    "build": "tsup",
     "lint": "npx @biomejs/biome check --write src",
-    "start": "node --env-file=.env dist/server.cjs"
+    "start": "node --env-file=.env dist/server.js"
   },
   "keywords": [],
   "author": {

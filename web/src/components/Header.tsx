@@ -73,53 +73,57 @@ const Header = () => {
           </span>
         </button>
 
-        {isTimerPaused && (
-          <Dropdown>
-            <MenuButton variant="plain">
-              <div
-                className={`flex flex-row gap-2 justify-center items-center ${currentMode}`}
-              >
-                <span className="font-medium text-gray-500">
-                  {currentMode === "focus" ? "Focando" : "Descansando"}
-                </span>
-                <span className="font-bold text-xl text-primary">
-                  {formatSecondsToMinutes(timeLeft)}
-                </span>
-                <FaClock
-                  size={24}
-                  className={`text-primary ${
-                    isTimerRunning ? "animate-pulse" : ""
-                  }`}
-                />
-              </div>
-            </MenuButton>
-
-            <Menu placement="bottom-end">
-              <MenuItem>
-                <Button onClick={toggleTimer} size="small" className="w-full">
-                  {isTimerRunning ? (
-                    <FaPause className="text-sm" />
-                  ) : (
-                    <FaPlay className="text-sm" />
-                  )}
-                </Button>
-              </MenuItem>
-              <MenuItem>
-                <Button
-                  theme="outline"
-                  onClick={() => navigate("/pomodoro")}
-                  size="small"
-                  className="text-sm"
-                >
-                  Visualizar
-                </Button>
-              </MenuItem>
-            </Menu>
-          </Dropdown>
-        )}
-
         {isAuthenticated && user?.completedOnboarding && (
           <>
+            {isTimerPaused && (
+              <Dropdown>
+                <MenuButton variant="plain">
+                  <div
+                    className={`flex flex-row gap-2 justify-center items-center ${currentMode}`}
+                  >
+                    <span className="font-medium text-gray-500">
+                      {currentMode === "focus" ? "Focando" : "Descansando"}
+                    </span>
+                    <span className="font-bold text-xl text-primary">
+                      {formatSecondsToMinutes(timeLeft)}
+                    </span>
+                    <FaClock
+                      size={24}
+                      className={`text-primary ${
+                        isTimerRunning ? "animate-pulse" : ""
+                      }`}
+                    />
+                  </div>
+                </MenuButton>
+
+                <Menu placement="bottom-end">
+                  <MenuItem>
+                    <Button
+                      onClick={toggleTimer}
+                      size="small"
+                      className="w-full"
+                    >
+                      {isTimerRunning ? (
+                        <FaPause className="text-sm" />
+                      ) : (
+                        <FaPlay className="text-sm" />
+                      )}
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      theme="outline"
+                      onClick={() => navigate("/pomodoro")}
+                      size="small"
+                      className="text-sm"
+                    >
+                      Visualizar
+                    </Button>
+                  </MenuItem>
+                </Menu>
+              </Dropdown>
+            )}
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex flex-row gap-4 items-center font-bold text-primary">
               <button
