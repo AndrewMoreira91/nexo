@@ -8,6 +8,7 @@
     "migrate": "npx drizzle-kit migrate",
     "studio": "npx drizzle-kit studio",
     "build": "tsup",
+    "vercel-build": "npm run build",
     "lint": "npx @biomejs/biome check --write src",
     "start": "node --env-file=.env dist/server.js"
   },
