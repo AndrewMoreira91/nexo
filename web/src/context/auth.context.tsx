@@ -8,62 +8,30 @@ import {
 } from "react";
 import { api } from "../libs/api";
 import type { UserType } from "../types";
-
-type LoginData = {
-  email: string;
-  password: string;
-};
-
-type RegisterData = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-type ValidationError = {
-  validation?: string;
-  code: string;
-  message: string;
-  path: string[];
-  minimum?: number;
-  type?: string;
-  inclusive?: boolean;
-  exact?: boolean;
-};
-
-type ErrorResponse = {
-  statusCode: number;
-  error: string;
-  message: string;
-  errors: ValidationError[];
-};
-
-type AuthContextType = {
-  login: (
-    data: LoginData
-  ) => Promise<{ error: ErrorResponse | null; isError: boolean }>;
-  register: (
-    data: RegisterData
-  ) => Promise<{ error: ErrorResponse | null; isError: boolean }>;
-  logout: () => void;
-  updateUser: (data?: Partial<UserType>) => Promise<void>;
-  user: UserType | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-};
+import {
+  AuthContextType,
+  ErrorResponse,
+  LoginData,
+  RegisterData,
+  UserResponse,
+} from "./auth.context.types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-type UserResponse = {
-  user: UserType;
-  accessToken: string;
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+    localStorage.setItem("accessToken", token);
+  } else {
+    delete api.defaults.headers.common.Authorization;
+    localStorage.removeItem("accessToken");
+  }
 };
 
 const getStoredToken = (): string | null => localStorage.getItem("accessToken");
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const getUser = async () => {
@@ -81,13 +49,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const storedToken = getStoredToken();
 
       if (storedToken) {
-        api.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
-        setIsAuthenticated(true);
+        setAuthToken(storedToken);
         await getUser();
       } else {
         setUser(null);
-        setIsAuthenticated(false);
-        delete api.defaults.headers.common.Authorization;
+        setAuthToken(null);
       }
 
       setIsLoading(false);
@@ -98,9 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleAuthSuccess = (user: UserType, accessToken: string) => {
     setUser(user);
-    setIsAuthenticated(true);
-    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-    localStorage.setItem("accessToken", accessToken);
+    setAuthToken(accessToken);
   };
 
   const handleAuthError = (
@@ -165,9 +129,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem("accessToken");
-    delete api.defaults.headers.common.Authorization;
+    setAuthToken(null);
   };
 
   const updateUser = async () => {
@@ -190,7 +152,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         logout,
         updateUser,
         user,
-        isAuthenticated,
+        isAuthenticated: !!user,
         isLoading,
       }}
     >

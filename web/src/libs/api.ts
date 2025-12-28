@@ -7,14 +7,6 @@ export const api = axios.create({
 	},
 });
 
-export const setAuthToken = (token: string | null) => {
-	if (token) {
-		api.defaults.headers.common.Authorization = `Bearer ${token}`;
-	} else {
-		api.defaults.headers.common.Authorization = undefined;
-	}
-};
-
 const TIME_OUT = 10000; // 10 seconds
 
 api.interceptors.request.use((config) => {
@@ -33,7 +25,7 @@ api.interceptors.response.use(
 		return response;
 	},
 	(error) => {
-		if (error.response.data.error === "TokenExpiredError") {
+		if (error.response.data.error === "TokenExpiredError" || error.response.status === 401) {
 			localStorage.removeItem("accessToken");
 			localStorage.removeItem("user");
 			window.location.href = "/login";
