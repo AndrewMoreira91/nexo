@@ -54,7 +54,7 @@ if not exist "server\.env-local" (
 echo.
 echo [2/4] Iniciando banco de dados PostgreSQL...
 cd server
-call docker-compose up db -d
+call docker-compose up -d
 if errorlevel 1 (
     echo [ERROR] Falha ao iniciar o banco de dados!
     cd ..
