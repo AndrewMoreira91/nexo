@@ -1,10 +1,10 @@
 {
-  "name": "nexo",
+  "name": "nekso-api",
   "version": "1.0.0",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file=.env-local src/server.ts",
+    "dev": "tsx watch --env-file=.env src/server.ts",
     "migrate": "npx drizzle-kit migrate",
     "studio": "npx drizzle-kit studio",
     "build": "tsup",

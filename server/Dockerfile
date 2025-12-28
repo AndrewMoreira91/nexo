@@ -1,10 +1,9 @@
-FROM bitnami/node:22
-WORKDIR /code
-COPY package*.json .
+FROM node:22-alpine
+WORKDIR /app
+COPY package*.json ./
 RUN npm ci
 COPY . .
 ENV PORT=3333
-ARG PORT=${PORT}
-EXPOSE ${PORT}
+EXPOSE 3333
 RUN npm run build
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]

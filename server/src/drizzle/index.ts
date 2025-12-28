@@ -14,6 +14,7 @@ export const db = drizzle({
 db.$client.connect().then(() => {
   console.log('Connected to the database')
 }).catch((err) => {
+  console.error(err)
   throw new Error(`Failed to connect to the database`)
 })
 

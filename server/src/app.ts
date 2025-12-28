@@ -26,7 +26,7 @@ app.setErrorHandler(errorHandler);
 app.register(fastifySwagger, {
 	openapi: {
 		info: {
-			title: "Nexo API",
+			title: "Nekso API",
 			version: "0.1.0",
 		},
 		servers: [
