@@ -4,9 +4,9 @@ export default function createNotification(title: string, message: string) {
 			body: message,
 			lang: "pt-BR",
 			requireInteraction: true,
-			icon: "/logo-icon-nexo.svg",
-			tag: "nexo-notification",
-			badge: "/logo-icon-nexo.svg",
+			icon: "/logo-icon-nekso.svg",
+			tag: "nekso-notification",
+			badge: "/logo-icon-nekso.svg",
 		});
 		return notification;
 	}

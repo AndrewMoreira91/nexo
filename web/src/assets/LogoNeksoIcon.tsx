@@ -1,4 +1,4 @@
-const LogoNexoIcon = () => {
+const LogoNeksoIcon = () => {
   return (
     <svg
       width="36"
@@ -7,10 +7,10 @@ const LogoNexoIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>Logo of Nexo</title>
+      <title>Logo of Nekso</title>
       <mask
         id="mask0_25_458"
-        style={{ maskType: 'luminance' }}
+        style={{ maskType: "luminance" }}
         maskUnits="userSpaceOnUse"
         x="0"
         y="0"
@@ -29,7 +29,7 @@ const LogoNexoIcon = () => {
         />
       </g>
     </svg>
-  )
-}
+  );
+};
 
-export default LogoNexoIcon
+export default LogoNeksoIcon;

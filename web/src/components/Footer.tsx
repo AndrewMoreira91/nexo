@@ -1,8 +1,8 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps } from "react";
 
 type FooterProps = {
-  className?: ComponentProps<'footer'>['className']
-}
+  className?: ComponentProps<"footer">["className"];
+};
 
 const Footer: React.FC<FooterProps> = ({ className }) => {
   return (
@@ -13,7 +13,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
 			`}
     >
       <p className="text-sm">
-        &copy; {new Date().getFullYear()} Nexo. Todos os direitos reservados.
+        &copy; {new Date().getFullYear()} Nekso. Todos os direitos reservados.
       </p>
       <div className="flex gap-2 text-sm text-gray-400">
         <a href="/privacy-policy" className=" hover:text-gray-500">
@@ -24,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
         </a>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

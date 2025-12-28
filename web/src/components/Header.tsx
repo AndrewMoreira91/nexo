@@ -11,7 +11,7 @@ import { FaClock, FaPause, FaPlay } from "react-icons/fa";
 import { IoMdExit, IoMdSettings } from "react-icons/io";
 import { RiMenu3Fill } from "react-icons/ri";
 import { useNavigate } from "react-router";
-import LogoNexoIcon from "../assets/LogoNexoIcon";
+import LogoNeksoIcon from "../assets/LogoNeksoIcon.tsx";
 import { useAuth } from "../context/auth.context";
 import { usePomodoro } from "../context/pomodoro.context";
 import formatSecondsToMinutes from "../utils/formatSecondsToMinutes";
@@ -67,9 +67,9 @@ const Header = () => {
           className="flex items-center cursor-pointer hover:opacity-80 transition-opacity duration-200"
           onClick={handleClickOnLogo}
         >
-          <LogoNexoIcon />
+          <LogoNeksoIcon />
           <span className="hidden sm:block font-bold text-3xl text-primary">
-            NEXO
+            NEKSO
           </span>
         </button>
 

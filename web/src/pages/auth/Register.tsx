@@ -249,7 +249,7 @@ const RegisterPage = () => {
         <section className="hidden flex-1 sm:flex flex-col gap-6 items-center justify-center p-8 mr-6 my-6 bg-[#000842] rounded-2xl">
           <div className="w-full">
             <h3 className="text-white text-start text-4xl font-bold w-full">
-              Crie sua conta no Nexo
+              Crie sua conta no Nekso
             </h3>
             <span className="text-white text-start w-full">
               E saiba o que é ter hábito de estudar
