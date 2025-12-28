@@ -1,0 +1,32 @@
+{
+	"name": "nekso-monorepo",
+	"version": "1.0.0",
+	"description": "Nekso - Aplicação completa (Frontend + Backend + Database)",
+	"scripts": {
+		"dev": "npm run dev:db && concurrently --names \"API,WEB\" --prefix-colors \"green,cyan\" --kill-others \"npm run dev:api\" \"npm run dev:web\"",
+		"dev:db": "cd server && docker-compose up bd -d",
+		"dev:api": "cd server && npm run dev",
+		"dev:web": "cd web && npm run dev",
+		"build": "npm run build:api && npm run build:web",
+		"build:api": "cd server && npm run build",
+		"build:web": "cd web && npm run build",
+		"start": "concurrently --names \"API,WEB\" --prefix-colors \"green,cyan\" \"npm run start:api\" \"npm run start:web\"",
+		"start:api": "cd server && npm start",
+		"start:web": "cd web && npm run preview",
+		"stop:db": "cd server && docker-compose down",
+		"clean": "npm run stop:db && cd server && rmdir /s /q node_modules dist && cd ../web && rmdir /s /q node_modules dist",
+		"install:all": "npm install && cd server && npm install && cd ../web && npm install",
+		"migrate": "cd server && npm run migrate",
+		"studio": "cd server && npm run studio"
+	},
+	"keywords": [
+		"nekso",
+		"pomodoro",
+		"productivity"
+	],
+	"author": "Andrew Moreira <andrewsantos9113@gmail.com>",
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	}
+}
