@@ -60,7 +60,7 @@ const Header = () => {
   }
 
   return (
-    <div className="relative">
+    <div className={`relative`}>
       <header className="flex bg-white items-center justify-between px-6 sm:px-16 py-4 border-b border-gray-200">
         <button
           type="button"
@@ -77,18 +77,31 @@ const Header = () => {
           <>
             {isTimerPaused && (
               <Dropdown>
-                <MenuButton variant="plain">
+                <MenuButton
+                  variant="plain"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                  }}
+                >
                   <div
-                    className={`flex flex-row gap-2 justify-center items-center ${currentMode}`}
+                    className={`flex flex-row gap-3 items-center px-4 py-1 rounded-xl transition-all duration-300 bg-primary-bg hover:bg-primary/10 ${
+                      isTimerRunning ? "shadow-lg" : "shadow-md"
+                    } ${currentMode}`}
                   >
-                    <span className="font-medium text-gray-500">
-                      {currentMode === "focus" ? "Focando" : "Descansando"}
-                    </span>
-                    <span className="font-bold text-xl text-primary">
-                      {formatSecondsToMinutes(timeLeft)}
-                    </span>
+                    <div className="flex flex-col items-start">
+                      <span className={`text-xs font-semibold text-primary`}>
+                        {currentMode === "focus"
+                          ? "🔥 Focando"
+                          : "☕ Descansando"}
+                      </span>
+                      <span className={`font-bold text-2xl text-primary`}>
+                        {formatSecondsToMinutes(timeLeft)}
+                      </span>
+                    </div>
                     <FaClock
-                      size={24}
+                      size={28}
                       className={`text-primary ${
                         isTimerRunning ? "animate-pulse" : ""
                       }`}
@@ -96,28 +109,43 @@ const Header = () => {
                   </div>
                 </MenuButton>
 
-                <Menu placement="bottom-end">
-                  <MenuItem>
+                <Menu
+                  placement="bottom-end"
+                  sx={{
+                    borderRadius: "12px",
+                    paddingY: "8px",
+                    paddingX: "16px",
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)",
+                  }}
+                >
+                  <MenuItem sx={{ padding: 0, marginBottom: "8px" }}>
                     <Button
                       onClick={toggleTimer}
                       size="small"
-                      className="w-full"
+                      className="w-full gap-3 text-base"
+                      theme={isTimerRunning ? "secondary" : "primary"}
                     >
                       {isTimerRunning ? (
-                        <FaPause className="text-sm" />
+                        <>
+                          <FaPause className="text-lg" />
+                          <span>Pausar</span>
+                        </>
                       ) : (
-                        <FaPlay className="text-sm" />
+                        <>
+                          <FaPlay className="text-lg" />
+                          <span>Iniciar</span>
+                        </>
                       )}
                     </Button>
                   </MenuItem>
-                  <MenuItem>
+                  <MenuItem sx={{ padding: 0 }}>
                     <Button
                       theme="outline"
                       onClick={() => navigate("/pomodoro")}
                       size="small"
-                      className="text-sm"
+                      className="w-full text-base"
                     >
-                      Visualizar
+                      📊 Ver Detalhes
                     </Button>
                   </MenuItem>
                 </Menu>
