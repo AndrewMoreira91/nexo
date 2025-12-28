@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { FaCheck, FaClock, FaFireAlt, FaPlay, FaTrophy } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import { dateTodayTest } from "../../../server/src/tests/configs";
 import Button from "../components/Button";
 import Container from "../components/Container";
 import Loader from "../components/Loader";
@@ -25,8 +24,7 @@ const DashboardPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const dateToday =
-    import.meta.env.VITE_ENV === "development" ? dateTodayTest : new Date();
+  const dateToday = new Date();
 
   const { data: dataStatistics } = useQuery({
     queryKey: ["dataStatistics"],
