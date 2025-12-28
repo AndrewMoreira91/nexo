@@ -4,7 +4,6 @@ node_modules
 .env-example
 *.log
 .DS_Store
-src
 tsconfig.json
 biome.json
 api.http
