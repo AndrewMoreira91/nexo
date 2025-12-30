@@ -10,7 +10,7 @@
     "build": "tsup src/server.ts",
     "vercel-build": "tsup src/server.ts",
     "lint": "npx @biomejs/biome check --write src",
-    "start": "node --env-file=.env dist/server.js"
+    "start": "node --env-file=.env dist/server.cjs"
   },
   "keywords": [],
   "author": {

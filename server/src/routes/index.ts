@@ -15,6 +15,7 @@ import { getUserRoute } from "./user/get-user-route";
 import { updateUserRoute } from "./user/update-user-route";
 
 export const routes = (app: FastifyInstance) => {
+	app.register(rootRoute);
 
 	app.register(loginRoute);
 
@@ -35,5 +36,4 @@ export const routes = (app: FastifyInstance) => {
 
 	app.register(getDateRoute);
 
-	app.register(rootRoute);
 };
