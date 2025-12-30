@@ -109,25 +109,25 @@ const PomodoroPage = () => {
         return handleFocusSessionComplete();
       }
 
-      const sessionId = localStorage.getItem("sessionId");
-      if (sessionId) {
-        await api.put("end-session", {
-          sessionId,
-          completedTasksIds: tasksSelected,
-        });
-      }
-
-      refetchDataProgress();
-      refetchTasks();
-      localStorage.removeItem("sessionId");
-
       resetSession("focus");
     } catch (error) {
       console.error("Error finalizing session:", error);
     }
   }
 
-  function handleFocusSessionComplete() {
+  async function handleFocusSessionComplete() {
+    const sessionId = localStorage.getItem("sessionId");
+    if (sessionId) {
+      await api.put("end-session", {
+        sessionId,
+        completedTasksIds: tasksSelected,
+      });
+    }
+
+    refetchDataProgress();
+    refetchTasks();
+    localStorage.removeItem("sessionId");
+
     const completedFocusSessions =
       Number(localStorage.getItem("completedFocusSessions")) || 0;
 
