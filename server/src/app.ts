@@ -16,7 +16,7 @@ import { isDevelopment, isProduction } from "./utils/chose-environment";
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
-	origin: true,
+	origin: isDevelopment() ? true : env.PRODUCTION_URL,
 	methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
@@ -49,6 +49,7 @@ app.register(fastifySwagger, {
 			{ name: "users", description: "Users endpoints" },
 			{ name: "sessions", description: "Sessions endpoints" },
 			{ name: "tasks", description: "Tasks endpoints" },
+			{ name: "tests", description: "Tests endpoints" },
 		],
 		components: {
 			securitySchemes: {
@@ -65,10 +66,9 @@ app.register(fastifySwagger, {
 	transform: jsonSchemaTransform,
 });
 
-isDevelopment() &&
-	app.register(fastifySwaggerUi, {
-		routePrefix: "/docs",
-	});
+app.register(fastifySwaggerUi, {
+	routePrefix: "/docs",
+});
 
 routes(app);
 

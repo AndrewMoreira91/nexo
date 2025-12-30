@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { loginRoute } from "./auth/login-route";
 import { getDataProgressRoute } from "./datas/get-datas-progress-route";
 import { getDataStatisticRoute } from "./datas/get-datas-statistic-route";
+import { rootRoute } from "./root-route";
 import { createSessionRoute } from "./sessions/create-session-route";
 import { endSessionRoute } from "./sessions/end-session-route";
 import { createTaskRoute } from "./tasks/create-task-route";
@@ -14,6 +15,7 @@ import { getUserRoute } from "./user/get-user-route";
 import { updateUserRoute } from "./user/update-user-route";
 
 export const routes = (app: FastifyInstance) => {
+
 	app.register(loginRoute);
 
 	app.register(getUserRoute);
@@ -32,4 +34,6 @@ export const routes = (app: FastifyInstance) => {
 	app.register(getDataStatisticRoute);
 
 	app.register(getDateRoute);
+
+	app.register(rootRoute);
 };
