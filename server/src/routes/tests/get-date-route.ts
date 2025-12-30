@@ -9,7 +9,7 @@ export const getDateRoute: FastifyPluginAsyncZod = async (app) => {
 		{
 			schema: {
 				summary: "Get Date for test in frontend",
-				tags: ["users"],
+				tags: ["tests"],
 				response: {
 					201: z.object({
 						date: z.date()

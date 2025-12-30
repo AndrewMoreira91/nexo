@@ -11,12 +11,12 @@ import {
 import { env } from "./env";
 import { errorHandler } from "./middlewares/errorHandler";
 import { routes } from "./routes";
-import { isDevelopment, isProduction } from "./utils/chose-environment";
+import { isDevelopment } from "./utils/chose-environment";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
-	origin: isDevelopment() ? true : env.PRODUCTION_URL,
+	origin: isDevelopment() ? true : env.PRODUCTION_API_URL,
 	methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
@@ -35,10 +35,10 @@ app.register(fastifySwagger, {
 				url: `http://localhost:${env.PORT}`,
 				description: "Development server",
 			},
-			...(isProduction() && env.PRODUCTION_URL
+			...(env.PRODUCTION_API_URL
 				? [
 					{
-						url: env.PRODUCTION_URL,
+						url: env.PRODUCTION_API_URL,
 						description: "Production server",
 					},
 				]
