@@ -11,6 +11,7 @@ import {
 import { env } from "./env";
 import { errorHandler } from "./middlewares/errorHandler";
 import { routes } from "./routes";
+import { isDevelopment, isProduction } from "./utils/chose-environment";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -34,7 +35,7 @@ app.register(fastifySwagger, {
 				url: `http://localhost:${env.PORT}`,
 				description: "Development server",
 			},
-			...(env.ENVIRONMENT === "production" && env.PRODUCTION_URL
+			...(isProduction() && env.PRODUCTION_URL
 				? [
 					{
 						url: env.PRODUCTION_URL,
@@ -64,7 +65,7 @@ app.register(fastifySwagger, {
 	transform: jsonSchemaTransform,
 });
 
-env.ENVIRONMENT === "development" &&
+isDevelopment() &&
 	app.register(fastifySwaggerUi, {
 		routePrefix: "/docs",
 	});

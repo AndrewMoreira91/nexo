@@ -1,12 +1,15 @@
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 import { CustomError } from "../errors/CustomError";
+import { isDevelopment } from "../utils/chose-environment";
+
 
 export const errorHandler = (
 	error: FastifyError,
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) => {
+	isDevelopment() && console.error("Error:", error);
 	if (error.validation) {
 		const errors = error.validation.map((validationError) => {
 			return validationError.params.issue;
@@ -30,7 +33,6 @@ export const errorHandler = (
 			message: "Token inválido ou expirado",
 		});
 	} else {
-		console.error("Internal Server Error:", error);
 		reply.status(500).send({
 			statusCode: 500,
 			error: "Internal Server Error",

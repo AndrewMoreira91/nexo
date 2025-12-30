@@ -1,6 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import postgres from 'pg'
 import { env } from '../env'
+import { isDevelopment } from '../utils/chose-environment'
 
 export const pg = new postgres.Pool({
   connectionString: env.DATABASE_URL,
@@ -8,7 +9,7 @@ export const pg = new postgres.Pool({
 
 export const db = drizzle({
   client: pg,
-  // logger: env.ENVIRONMENT === 'development',
+  logger: isDevelopment(),
 })
 
 db.$client.connect().then(() => {

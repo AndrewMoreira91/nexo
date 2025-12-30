@@ -1,5 +1,5 @@
-import { env } from '../env'
 import { dateTodayTest } from '../tests/configs'
+import { isDevelopment } from '../utils/chose-environment'
 
 export const dateNow =
-  env.ENVIRONMENT === 'development' ? dateTodayTest : new Date()
+  isDevelopment() ? dateTodayTest : new Date()

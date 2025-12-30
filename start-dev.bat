@@ -13,7 +13,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [1/4] Verificando dependencias...
+echo [1/3] Verificando dependencias...
 if not exist "node_modules" (
     echo Instalando dependencias da raiz...
     call npm install
@@ -52,9 +52,28 @@ if not exist "server\.env-local" (
 )
 
 echo.
-echo [2/4] Iniciando banco de dados PostgreSQL...
+echo [2/3] Iniciando banco de dados PostgreSQL...
 cd server
-call docker-compose up -d
+call docker compose -f docker-compose.yml up -d --build bd
+if errorlevel 1 (
+    echo [ERROR] Falha ao iniciar o banco de dados!
+    cd ..
+    pause
+    exit /b 1
+)
+
+docker exec -e PGPASSWORD=nekso nekso-bd psql -U nekso -d nekso -c "\dt" >nul 2>&1
+if errorlevel 1 (
+    echo.
+    echo [INFO] Primeira execucao detectada. Executando migrations...
+    timeout /t 4 /nobreak
+    call npm run migrate
+    if errorlevel 1 (
+        echo [WARNING] Falha ao executar migrations!
+    ) else (
+        echo [SUCCESS] Migrations executadas com sucesso!
+    )
+)
 if errorlevel 1 (
     echo [ERROR] Falha ao iniciar o banco de dados!
     cd ..
@@ -64,12 +83,7 @@ if errorlevel 1 (
 cd ..
 
 echo.
-echo [3/4] Aguardando banco de dados inicializar...
-echo Aguarde 5 segundos...
-timeout /t 5 /nobreak
-
-echo.
-echo [4/4] Iniciando servidor e frontend...
+echo [3/3] Iniciando servidor e frontend...
 echo.
 echo ====================================
 echo   Servicos iniciados com sucesso!
