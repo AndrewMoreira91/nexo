@@ -10,6 +10,7 @@ import MenuData from "../components/MenuData";
 import Progressbar from "../components/Progressbar";
 import TaskContainer from "../components/TaskContainer";
 import { useAuth } from "../context/auth.context";
+import { api } from "../libs/api";
 import { getDataProgress, getDataStatistics } from "../services/data-service";
 import { calculateProgress } from "../utils/calculate-progress";
 import { formattedTime } from "../utils/formatted-time";
@@ -24,7 +25,21 @@ const DashboardPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const dateToday = new Date();
+  const { data: apiDate } = useQuery({
+    queryKey: ["dateApi"],
+    queryFn: async () => {
+      const response = await api<{ date: Date }>("/date");
+      return response.data;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const dateToday =
+    import.meta.env.VITE_ENV === "development" && apiDate?.date
+      ? apiDate.date
+      : new Date();
+
+  console.log("Date:", dateToday);
 
   const { data: dataStatistics } = useQuery({
     queryKey: ["dataStatistics"],

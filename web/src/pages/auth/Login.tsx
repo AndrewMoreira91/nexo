@@ -60,7 +60,7 @@ const LoginPage = () => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <>

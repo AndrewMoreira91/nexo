@@ -8,6 +8,7 @@ import { createTaskRoute } from "./tasks/create-task-route";
 import { deleteTaskRoute } from "./tasks/delete-task-route";
 import { getTasksRoute } from "./tasks/get-tasks-route ";
 import { updateTaskRoute } from "./tasks/update-task-route";
+import { getDateRoute } from "./tests/get-date-route";
 import { createUserRoute } from "./user/create-user-route";
 import { getUserRoute } from "./user/get-user-route";
 import { updateUserRoute } from "./user/update-user-route";
@@ -29,4 +30,6 @@ export const routes = (app: FastifyInstance) => {
 
 	app.register(getDataProgressRoute);
 	app.register(getDataStatisticRoute);
+
+	app.register(getDateRoute);
 };
