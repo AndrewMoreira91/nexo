@@ -37,7 +37,6 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     const { isError, error: loginError } = await login({ email, password });
-
     if (isError) {
       const errorMessage = loginError?.message || "Erro ao fazer login";
       setFormErrors({ email: errorMessage, password: errorMessage });
@@ -48,10 +47,9 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    setIsLoading(true);
     event.preventDefault();
-
     if (!validateForm()) return;
+    setIsLoading(true);
 
     const isLoginSuccessful = await handleLogin();
     if (isLoginSuccessful) navigate("/dashboard");
@@ -61,9 +59,8 @@ const LoginPage = () => {
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
-      return;
     }
-  }, [isAuthenticated, navigate]);
+  }, []);
 
   return (
     <>

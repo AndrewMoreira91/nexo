@@ -25,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
+      type={props.type || "button"}
       onClick={onClick}
       className={`
 			${size === "large" ? "text-lg px-6 py-4" : "px-4 py-2"}

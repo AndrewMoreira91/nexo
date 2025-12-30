@@ -75,6 +75,7 @@ const Header = () => {
 
         {isAuthenticated && user?.completedOnboarding && (
           <>
+            {/* Timer Controls */}
             {isTimerPaused && (
               <Dropdown>
                 <MenuButton
@@ -235,87 +236,80 @@ const Header = () => {
             >
               <RiMenu3Fill size={28} className="text-primary" />
             </button>
-
-            {/* Mobile Drawer */}
-            <Drawer
-              anchor="right"
-              open={isDrawerOpen}
-              onClose={() => setIsDrawerOpen(false)}
-            >
-              <div className="w-72 p-6 flex flex-col gap-4">
-                {/* User Profile Section */}
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-row gap-3 items-center">
-                    <ProfileAvatar
-                      size="lg"
-                      color="primary"
-                      variant="outlined"
-                    />
-                    <h3 className="font-semibold text-xl">{user?.name}</h3>
-                  </div>
-                  <Divider />
-                </div>
-
-                {/* Navigation Links */}
-                <div className="flex flex-col gap-2">
-                  <button
-                    className="w-full text-left p-4 rounded-lg hover:bg-primary-bg transition-colors duration-200"
-                    type="button"
-                    onClick={() => handleNavigate("/dashboard")}
-                  >
-                    <span className="font-semibold text-lg text-primary">
-                      Dashboard
-                    </span>
-                  </button>
-
-                  <button
-                    className="w-full text-left p-4 rounded-lg hover:bg-primary-bg transition-colors duration-200"
-                    type="button"
-                    onClick={() => handleNavigate("/pomodoro")}
-                  >
-                    <span className="font-semibold text-lg text-primary">
-                      Pomodoro
-                    </span>
-                  </button>
-                </div>
-
-                <Divider />
-
-                {/* Menu Options */}
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    className="w-full p-3 rounded-lg hover:bg-primary-bg transition-colors duration-200 cursor-pointer"
-                    onClick={() => handleNavigate("/settings")}
-                  >
-                    <div className="flex flex-row gap-3 items-center">
-                      <div className="bg-primary-bg p-2 rounded-full">
-                        <IoMdSettings size={20} className="text-primary" />
-                      </div>
-                      <span className="font-medium text-lg">
-                        Perfil e definições
-                      </span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="w-full p-3 rounded-lg hover:bg-primary-bg transition-colors duration-200 cursor-pointer"
-                    onClick={handleLogout}
-                  >
-                    <div className="flex flex-row gap-3 items-center">
-                      <div className="bg-primary-bg p-2 rounded-full">
-                        <IoMdExit size={20} className="text-primary" />
-                      </div>
-                      <span className="font-medium text-lg">Sair da conta</span>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </Drawer>
           </>
         )}
       </header>
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        <div className="w-72 p-6 flex flex-col gap-4">
+          {/* User Profile Section */}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-row gap-3 items-center">
+              <ProfileAvatar size="lg" color="primary" variant="outlined" />
+              <h3 className="font-semibold text-xl">{user?.name}</h3>
+            </div>
+            <Divider />
+          </div>
+
+          {/* Navigation Links */}
+          <div className="flex flex-col gap-2">
+            <button
+              className="w-full text-left p-4 rounded-lg hover:bg-primary-bg transition-colors duration-200"
+              type="button"
+              onClick={() => handleNavigate("/dashboard")}
+            >
+              <span className="font-semibold text-lg text-primary">
+                Dashboard
+              </span>
+            </button>
+
+            <button
+              className="w-full text-left p-4 rounded-lg hover:bg-primary-bg transition-colors duration-200"
+              type="button"
+              onClick={() => handleNavigate("/pomodoro")}
+            >
+              <span className="font-semibold text-lg text-primary">
+                Pomodoro
+              </span>
+            </button>
+          </div>
+
+          <Divider />
+
+          {/* Menu Options */}
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              className="w-full p-3 rounded-lg hover:bg-primary-bg transition-colors duration-200 cursor-pointer"
+              onClick={() => handleNavigate("/settings")}
+            >
+              <div className="flex flex-row gap-3 items-center">
+                <div className="bg-primary-bg p-2 rounded-full">
+                  <IoMdSettings size={20} className="text-primary" />
+                </div>
+                <span className="font-medium text-lg">Perfil e definições</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="w-full p-3 rounded-lg hover:bg-primary-bg transition-colors duration-200 cursor-pointer"
+              onClick={handleLogout}
+            >
+              <div className="flex flex-row gap-3 items-center">
+                <div className="bg-primary-bg p-2 rounded-full">
+                  <IoMdExit size={20} className="text-primary" />
+                </div>
+                <span className="font-medium text-lg">Sair da conta</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </Drawer>
     </div>
   );
 };

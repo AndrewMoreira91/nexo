@@ -25,7 +25,11 @@ api.interceptors.response.use(
 		return response;
 	},
 	(error) => {
-		if (error.response.data.error === "TokenExpiredError" || error.response.status === 401) {
+		const isAuthPage = window.location.pathname === "/login" || window.location.pathname === "/register";
+		const isTokenError = error.response?.data?.error === "TokenExpiredError" ||
+			(error.response?.status === 401 && error.config?.url !== "/login");
+
+		if (isTokenError && !isAuthPage) {
 			localStorage.removeItem("accessToken");
 			localStorage.removeItem("user");
 			window.location.href = "/login";
