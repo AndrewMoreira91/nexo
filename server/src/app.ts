@@ -16,7 +16,7 @@ import { isDevelopment } from "./utils/chose-environment";
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
-	origin: isDevelopment() ? true : env.PRODUCTION_API_URL,
+	origin: isDevelopment() ? true : env.PRODUCTION_APP_URL,
 	methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
