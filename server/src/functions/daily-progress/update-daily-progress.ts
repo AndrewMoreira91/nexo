@@ -4,6 +4,7 @@ import { db } from "../../drizzle";
 import { dailyProgress } from "../../drizzle/schemas/daily-progress-schema";
 import { CustomError } from "../../errors/CustomError";
 import { dateNow } from "../../helpers/getDate";
+import { isDevelopment } from "../../utils/chose-environment";
 import { createDailyProgress } from "./create-daily-progress";
 
 interface UpdatedDailyProgressResponse {
@@ -35,7 +36,11 @@ export const updateDailyProgress = async ({
 		const yesterday = format(subDays(dateNow, 1), "yyyy-MM-dd");
 
 		const lastDailyProgress = await db
-			.select({ streak: dailyProgress.streak })
+			.select({
+				id: dailyProgress.id,
+				streak: dailyProgress.streak,
+				isGoalComplete: dailyProgress.isGoalComplete,
+			})
 			.from(dailyProgress)
 			.where(
 				and(
@@ -54,7 +59,22 @@ export const updateDailyProgress = async ({
 				),
 			);
 
-		const lastStreak = lastDailyProgress?.[0]?.streak ?? 0;
+		const isLastDayGoalCompleted = lastDailyProgress?.[0]?.isGoalComplete || false;
+
+		let lastStreak = lastDailyProgress?.[0]?.streak ?? 0;
+
+		if (isLastDayGoalCompleted) {
+			const lastDailyProgressUpdate = await db
+				.update(dailyProgress)
+				.set({
+					streak: 0,
+				})
+				.where(
+					eq(dailyProgress.id, lastDailyProgress[0].id),
+				);
+
+			lastStreak = 0;
+		}
 
 		if (alreadyDailyProgress.length > 0) {
 			const dailyProgressUpdated = await db
@@ -87,6 +107,7 @@ export const updateDailyProgress = async ({
 		};
 	} catch (error) {
 		if (error instanceof CustomError) throw error;
+		isDevelopment() && console.error("Erro ao atualizar o progresso diário", error);
 		throw new CustomError("Erro ao atualizar o progresso diário", 500);
 	}
 };

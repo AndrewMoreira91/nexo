@@ -55,6 +55,7 @@ export const endSession = async ({
 
 		const sessionsCompleted = userFocusSessions.length;
 		const isGoalComplete = user.dailySessionTarget <= sessionsCompleted;
+
 		const totalSessionFocusDuration = userFocusSessions.reduce(
 			(acc, session) => acc + session.duration,
 			0,
@@ -68,7 +69,6 @@ export const endSession = async ({
 		});
 
 		for (const taskId of completedTasksIds || []) {
-
 			await db
 				.update(tasks)
 				.set({

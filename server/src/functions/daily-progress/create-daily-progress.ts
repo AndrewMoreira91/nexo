@@ -4,6 +4,7 @@ import { db } from "../../drizzle";
 import { dailyProgress } from "../../drizzle/schemas/daily-progress-schema";
 import { CustomError } from "../../errors/CustomError";
 import { dateNow } from "../../helpers/getDate";
+import { isDevelopment } from "../../utils/chose-environment";
 import { findUserById } from "../user/get-user";
 
 export const createDailyProgress = async (userId: string) => {
@@ -29,18 +30,20 @@ export const createDailyProgress = async (userId: string) => {
 		const lastDay = setDate(dateNow, dateNow.getDate() - 1).toUTCString();
 
 		const lastDailyProgress = await db
-			.select({ streak: dailyProgress.streak })
+			.select({ streak: dailyProgress.streak, isGoalComplete: dailyProgress.isGoalComplete })
 			.from(dailyProgress)
 			.where(
 				and(eq(dailyProgress.userId, userId), eq(dailyProgress.date, lastDay)),
 			);
+
+		const isLastDayGoalCompleted = lastDailyProgress?.[0]?.isGoalComplete || false;
 
 		const dailyProgressData = await db
 			.insert(dailyProgress)
 			.values({
 				userId,
 				date: dateNow.toUTCString(),
-				streak: lastDailyProgress.length > 0 ? lastDailyProgress[0].streak : 0,
+				streak: isLastDayGoalCompleted ? lastDailyProgress[0].streak : 0,
 			})
 			.returning();
 
@@ -49,6 +52,7 @@ export const createDailyProgress = async (userId: string) => {
 		};
 	} catch (error) {
 		if (error instanceof CustomError) throw error;
+		isDevelopment() && console.error(error);
 		throw new CustomError("Erro ao criar progresso diário", 500);
 	}
 };

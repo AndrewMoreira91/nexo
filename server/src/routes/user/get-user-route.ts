@@ -1,5 +1,6 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { findUserById } from "../../functions/user/get-user";
+import { verifyStreak } from "../../middlewares/verifyStreak";
 import { verifyToken } from "../../middlewares/verifyToken";
 import { UserSchema } from "../../zod/schemas";
 
@@ -15,10 +16,11 @@ export const getUserRoute: FastifyPluginAsyncZod = async (app) => {
 				},
 				security: [{ bearerAuth: [] }],
 			},
-			preHandler: verifyToken
+			preHandler: verifyStreak,
+			preValidation: verifyToken
 		},
 		async (request, reply) => {
-			const {id} = request.user;
+			const { id } = request.user;
 
 			const user = await findUserById(id);
 

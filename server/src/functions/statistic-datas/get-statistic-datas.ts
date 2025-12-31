@@ -106,6 +106,8 @@ export const getStatisticDatas = async (
 
 		const dayWeekTrendItens = [];
 
+		// console.log(dailyProgressData);
+
 		for (const dailyProgress of dailyProgressData) {
 			const tasksCompleted = await db
 				.select({

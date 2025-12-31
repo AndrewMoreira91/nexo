@@ -39,6 +39,8 @@ const DashboardPage = () => {
       ? apiDate.date
       : new Date();
 
+  console.log(dateToday);
+
   const { data: dataStatistics } = useQuery({
     queryKey: ["dataStatistics"],
     queryFn: () =>

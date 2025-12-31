@@ -9,6 +9,7 @@ import { findUserById } from "../user/get-user";
 
 type ResultType = {
 	[key: string]: {
+		id: string;
 		date: string;
 		isGoalComplete: boolean;
 		sessionsCompleted: number;
@@ -37,6 +38,7 @@ export const getDatasProgress = async (
 
 		const dailyProgressData = await db
 			.select({
+				id: dailyProgress.id,
 				date: dailyProgress.date,
 				isGoalComplete: dailyProgress.isGoalComplete,
 				sessionsCompleted: dailyProgress.sessionsCompleted,
@@ -107,6 +109,7 @@ export const getDatasProgress = async (
 
 					if (result[formattedDate] === undefined) {
 						result[formattedDate] = {
+							id: data.id,
 							date: formattedDate,
 							isGoalComplete: false,
 							sessionsCompleted: 0,
