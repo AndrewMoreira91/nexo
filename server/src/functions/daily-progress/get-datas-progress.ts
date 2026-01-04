@@ -14,7 +14,6 @@ type ResultType = {
 		isGoalComplete: boolean;
 		sessionsCompleted: number;
 		totalSessionFocusDuration: number;
-		streak: number;
 	};
 };
 
@@ -43,7 +42,6 @@ export const getDatasProgress = async (
 				isGoalComplete: dailyProgress.isGoalComplete,
 				sessionsCompleted: dailyProgress.sessionsCompleted,
 				totalSessionFocusDuration: dailyProgress.totalSessionFocusDuration,
-				streak: dailyProgress.streak,
 			})
 			.from(dailyProgress)
 			.where(
@@ -114,7 +112,6 @@ export const getDatasProgress = async (
 							isGoalComplete: false,
 							sessionsCompleted: 0,
 							totalSessionFocusDuration: 0,
-							streak: 0,
 						};
 					}
 				}

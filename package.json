@@ -16,7 +16,7 @@
 		"stop:db": "cd server && docker-compose down",
 		"clean": "npm run stop:db && cd server && rmdir /s /q node_modules dist && cd ../web && rmdir /s /q node_modules dist",
 		"install:all": "npm install && cd server && npm install && cd ../web && npm install",
-		"migrate": "cd server && npm run migrate",
+		"db:migrate": "cd server && npm run db:migrate",
 		"studio": "cd server && npm run studio"
 	},
 	"keywords": [

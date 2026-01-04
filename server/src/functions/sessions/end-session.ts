@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
 import { db } from "../../drizzle";
 import { sessions } from "../../drizzle/schemas/session-schema";
@@ -5,6 +6,7 @@ import { tasks } from "../../drizzle/schemas/tasks-schema";
 import { CustomError } from "../../errors/CustomError";
 import { dateNow } from "../../helpers/getDate";
 import { updateDailyProgress } from "../daily-progress/update-daily-progress";
+import { calculateStreak } from "../user/calculate-streak";
 import { findUserById } from "../user/get-user";
 import { updateUser } from "../user/update-user";
 
@@ -30,11 +32,13 @@ export const endSession = async ({
 		if (activeSession[0].endTime)
 			throw new CustomError("Sessão já encerrada", 400);
 
+		const today = format(dateNow, "yyyy-MM-dd");
+
 		const session = await db
 			.update(sessions)
 			.set({
 				endTime: dateNow,
-				sessionEndDate: dateNow.toUTCString(),
+				sessionEndDate: today,
 				updated_at: dateNow,
 			})
 			.where(eq(sessions.id, sessionId))
@@ -49,7 +53,7 @@ export const endSession = async ({
 				and(
 					eq(sessions.userId, userId),
 					eq(sessions.type, "focus"),
-					eq(sessions.sessionEndDate, dateNow.toUTCString()),
+					eq(sessions.sessionEndDate, today),
 				),
 			);
 
@@ -78,19 +82,18 @@ export const endSession = async ({
 				.where(eq(tasks.id, taskId));
 		}
 
-		const longestStreak =
-			dailyProgress.streak > user.longestStreak
-				? dailyProgress.streak
-				: user.longestStreak;
+		// Calcular o streak após atualizar o progresso diário
+		const { currentStreak, longestStreak } = await calculateStreak(userId);
 
-		await updateUser({ userId, streak: dailyProgress.streak, longestStreak });
+		// Atualizar o usuário com o novo streak
+		await updateUser({ userId, streak: currentStreak, longestStreak });
 
 		return {
 			session: session[0],
 			isGoalComplete: dailyProgress.isGoalComplete,
 			sessionsCompleted: dailyProgress.sessionsCompleted,
 			totalSessionFocusDuration: dailyProgress.totalSessionFocusDuration,
-			streak: dailyProgress.streak,
+			streak: currentStreak,
 		};
 	} catch (error) {
 		console.error("Error in endSession:", error);

@@ -1,16 +1,18 @@
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "../../drizzle";
-import { dailyProgress } from "../../drizzle/schemas/daily-progress-schema";
 import { users } from "../../drizzle/schemas/user-schema";
-import { dateNow } from "../../helpers/getDate";
-
-import { format } from "date-fns";
 import { CustomError } from "../../errors/CustomError";
+import { dateNow } from "../../helpers/getDate";
+import { calculateStreak } from "../user/calculate-streak";
 
+/**
+ * Atualiza os dados diários de todos os usuários
+ * Esta função deve ser executada uma vez por dia (ex: via cron job)
+ * 
+ * Recalcula o streak de todos os usuários baseado no histórico
+ */
 export const dailyDataUpdate = async () => {
 	try {
-		const formattedDateToday = format(dateNow, "yyyy-MM-dd");
-
 		const usersData = await db
 			.select({
 				id: users.id,
@@ -19,39 +21,21 @@ export const dailyDataUpdate = async () => {
 			.from(users);
 
 		for (const user of usersData) {
-			const lastDailyProgress = await db
-				.select()
-				.from(dailyProgress)
-				.where(eq(dailyProgress.userId, user.id))
-				.limit(1)
-				.orderBy(sql`date DESC`);
+			// Recalcular o streak para cada usuário
+			const { currentStreak, longestStreak } = await calculateStreak(user.id);
 
-			if (
-				lastDailyProgress.length === 0 ||
-				lastDailyProgress[0].date !== formattedDateToday
-			) {
-				await db
-					.update(users)
-					.set({
-						streak: 0,
-						updated_at: dateNow,
-					})
-					.where(eq(users.id, user.id));
-
-				return;
-			}
-
-			if (lastDailyProgress[0].isGoalComplete) {
-				await db
-					.update(users)
-					.set({
-						streak: sql`streak + 1`,
-						longestStreak: sql`GREATEST(longest_streak, streak + 1)`,
-						updated_at: dateNow,
-					})
-					.where(eq(users.id, user.id));
-			}
+			// Atualizar o usuário com os novos valores
+			await db
+				.update(users)
+				.set({
+					streak: currentStreak,
+					longestStreak: longestStreak,
+					updated_at: dateNow,
+				})
+				.where(eq(users.id, user.id));
 		}
+
+		console.log(`Daily data update completed for ${usersData.length} users`);
 	} catch (error) {
 		if (error instanceof CustomError) throw error;
 		throw new CustomError(

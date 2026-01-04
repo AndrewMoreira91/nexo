@@ -67,7 +67,7 @@ if errorlevel 1 (
     echo.
     echo [INFO] Primeira execucao detectada. Executando migrations...
     timeout /t 4 /nobreak
-    call npm run migrate
+    call npm run db:migrate
     if errorlevel 1 (
         echo [WARNING] Falha ao executar migrations!
     ) else (

@@ -1,4 +1,4 @@
-import { setDate } from "date-fns";
+import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
 import { db } from "../../drizzle";
 import { dailyProgress } from "../../drizzle/schemas/daily-progress-schema";
@@ -10,6 +10,7 @@ import { findUserById } from "../user/get-user";
 export const createDailyProgress = async (userId: string) => {
 	try {
 		const user = await findUserById(userId);
+		const today = format(dateNow, "yyyy-MM-dd");
 
 		const alreadyDailyProgress = await db
 			.select()
@@ -17,7 +18,7 @@ export const createDailyProgress = async (userId: string) => {
 			.where(
 				and(
 					eq(dailyProgress.userId, userId),
-					eq(dailyProgress.date, dateNow.toUTCString()),
+					eq(dailyProgress.date, today),
 				),
 			);
 
@@ -27,23 +28,11 @@ export const createDailyProgress = async (userId: string) => {
 			};
 		}
 
-		const lastDay = setDate(dateNow, dateNow.getDate() - 1).toUTCString();
-
-		const lastDailyProgress = await db
-			.select({ streak: dailyProgress.streak, isGoalComplete: dailyProgress.isGoalComplete })
-			.from(dailyProgress)
-			.where(
-				and(eq(dailyProgress.userId, userId), eq(dailyProgress.date, lastDay)),
-			);
-
-		const isLastDayGoalCompleted = lastDailyProgress?.[0]?.isGoalComplete || false;
-
 		const dailyProgressData = await db
 			.insert(dailyProgress)
 			.values({
 				userId,
-				date: dateNow.toUTCString(),
-				streak: isLastDayGoalCompleted ? lastDailyProgress[0].streak : 0,
+				date: today,
 			})
 			.returning();
 

@@ -1,4 +1,4 @@
-import { format, subDays } from "date-fns";
+import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
 import { db } from "../../drizzle";
 import { dailyProgress } from "../../drizzle/schemas/daily-progress-schema";
@@ -15,7 +15,6 @@ interface UpdatedDailyProgressResponse {
 		isGoalComplete: boolean;
 		sessionsCompleted: number;
 		totalSessionFocusDuration: number;
-		streak: number;
 	};
 }
 
@@ -33,21 +32,7 @@ export const updateDailyProgress = async ({
 	totalSessionFocusDuration,
 }: UpdateDailyProgressProps): Promise<UpdatedDailyProgressResponse> => {
 	try {
-		const yesterday = format(subDays(dateNow, 1), "yyyy-MM-dd");
-
-		const lastDailyProgress = await db
-			.select({
-				id: dailyProgress.id,
-				streak: dailyProgress.streak,
-				isGoalComplete: dailyProgress.isGoalComplete,
-			})
-			.from(dailyProgress)
-			.where(
-				and(
-					eq(dailyProgress.userId, userId),
-					eq(dailyProgress.date, yesterday),
-				),
-			);
+		const today = format(dateNow, "yyyy-MM-dd");
 
 		const alreadyDailyProgress = await db
 			.select()
@@ -55,26 +40,9 @@ export const updateDailyProgress = async ({
 			.where(
 				and(
 					eq(dailyProgress.userId, userId),
-					eq(dailyProgress.date, dateNow.toUTCString()),
+					eq(dailyProgress.date, today),
 				),
 			);
-
-		const isLastDayGoalCompleted = lastDailyProgress?.[0]?.isGoalComplete || false;
-
-		let lastStreak = lastDailyProgress?.[0]?.streak ?? 0;
-
-		if (isLastDayGoalCompleted) {
-			const lastDailyProgressUpdate = await db
-				.update(dailyProgress)
-				.set({
-					streak: 0,
-				})
-				.where(
-					eq(dailyProgress.id, lastDailyProgress[0].id),
-				);
-
-			lastStreak = 0;
-		}
 
 		if (alreadyDailyProgress.length > 0) {
 			const dailyProgressUpdated = await db
@@ -83,13 +51,12 @@ export const updateDailyProgress = async ({
 					isGoalComplete,
 					sessionsCompleted,
 					totalSessionFocusDuration,
-					streak: isGoalComplete ? lastStreak + 1 : lastStreak,
 					updated_at: dateNow,
 				})
 				.where(
 					and(
 						eq(dailyProgress.userId, userId),
-						eq(dailyProgress.date, dateNow.toUTCString()),
+						eq(dailyProgress.date, today),
 					),
 				)
 				.returning();
@@ -102,8 +69,20 @@ export const updateDailyProgress = async ({
 		const { dailyProgress: dailyProgressCreated } =
 			await createDailyProgress(userId);
 
+		// Atualizar com os valores corretos após criação
+		const dailyProgressUpdated = await db
+			.update(dailyProgress)
+			.set({
+				isGoalComplete,
+				sessionsCompleted,
+				totalSessionFocusDuration,
+				updated_at: dateNow,
+			})
+			.where(eq(dailyProgress.id, dailyProgressCreated.id))
+			.returning();
+
 		return {
-			dailyProgress: dailyProgressCreated,
+			dailyProgress: dailyProgressUpdated[0],
 		};
 	} catch (error) {
 		if (error instanceof CustomError) throw error;

@@ -5,6 +5,7 @@ import { dailyProgress } from "../../drizzle/schemas/daily-progress-schema";
 import { tasks } from "../../drizzle/schemas/tasks-schema";
 import { CustomError } from "../../errors/CustomError";
 import { dateNow } from "../../helpers/getDate";
+import { calculateStreak } from "../user/calculate-streak";
 import { findUserById } from "../user/get-user";
 import { updateUser } from "../user/update-user";
 
@@ -61,7 +62,6 @@ export const getStatisticDatas = async (
 				isGoalComplete: dailyProgress.isGoalComplete,
 				sessionsCompleted: dailyProgress.sessionsCompleted,
 				totalSessionFocusDuration: dailyProgress.totalSessionFocusDuration,
-				streak: dailyProgress.streak,
 			})
 			.from(dailyProgress)
 			.where(
@@ -140,8 +140,6 @@ export const getStatisticDatas = async (
 			result.dailyMediaDuration =
 				result.totalSessionFocusDuration / dailyProgressData.length;
 
-			result.streak = dailyProgress.streak;
-
 			if (
 				result.bestDay.timeCompleted < dailyProgress.totalSessionFocusDuration
 			) {
@@ -172,10 +170,20 @@ export const getStatisticDatas = async (
 			}
 		}
 		result.weeklyTrend = weeklyTrend;
-		result.longestStreak = dailyProgressData.reduce((max, curr) => Math.max(max, curr.streak), 0);
 
-		if (user.streak !== result.streak) {
-			updateUser({ userId: user.id, streak: result.streak });
+		// Calcular o streak atual do usuário
+		const { currentStreak, longestStreak } = await calculateStreak(userId);
+
+		result.streak = currentStreak;
+		result.longestStreak = longestStreak;
+
+		// Atualizar o usuário se necessário
+		if (user.streak !== currentStreak || user.longestStreak !== longestStreak) {
+			await updateUser({
+				userId: user.id,
+				streak: currentStreak,
+				longestStreak: longestStreak
+			});
 		}
 
 		return { result };

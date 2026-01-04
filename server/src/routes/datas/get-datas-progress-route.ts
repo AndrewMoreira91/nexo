@@ -21,7 +21,6 @@ export const getDataProgressRoute: FastifyPluginAsyncZod = async (app) => {
 							isGoalComplete: z.boolean(),
 							sessionsCompleted: z.number(),
 							totalSessionFocusDuration: z.number(),
-							streak: z.number(),
 						}),
 					),
 				},

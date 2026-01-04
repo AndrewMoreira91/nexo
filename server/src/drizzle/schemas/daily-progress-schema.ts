@@ -14,7 +14,6 @@ export const dailyProgress = pgTable('daily_progress', {
   totalSessionFocusDuration: integer('total_session_focus_duration')
     .notNull()
     .default(0),
-  streak: integer('streak').notNull().default(0),
   ...timestamps,
 })
 
