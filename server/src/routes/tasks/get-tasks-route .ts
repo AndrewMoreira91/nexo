@@ -11,10 +11,10 @@ export const getTasksRoute: FastifyPluginAsyncZod = async (app) => {
 			schema: {
 				summary: "Get all tasks for a user",
 				tags: ["tasks"],
-				params: z.object({
+				querystring: z.object({
 					daysPrev: z.number().min(0).optional(),
-					isCompleted: z.boolean().optional(),
-					isDeleted: z.boolean().optional(),
+					isCompleted: z.string().optional(),
+					isDeleted: z.string().optional(),
 				}),
 				response: {
 					200: z.array(TaskSchema),
@@ -26,9 +26,15 @@ export const getTasksRoute: FastifyPluginAsyncZod = async (app) => {
 		async (req, reply) => {
 			const { id: userId } = req.user;
 
-			const params = req.params;
+			const { daysPrev, isCompleted, isDeleted } = req.query;
 
-			const { tasks } = await getTasks(userId, params);
+			console.log("Received get tasks request with query:", req.query);
+
+			const { tasks } = await getTasks(userId, {
+				daysPrev,
+				isCompleted: Boolean(isCompleted),
+				isDeleted: Boolean(isDeleted),
+			});
 
 			reply.code(201).send(tasks);
 		},

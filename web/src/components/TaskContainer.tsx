@@ -14,6 +14,7 @@ import { IoReload } from "react-icons/io5";
 import { MdError } from "react-icons/md";
 import { useDeleteTask, useFetchTasks, usePostTask } from "../hooks/task-hooks";
 import Button from "./Button";
+import CompletedTasksContainer from "./CompletedTasksContainer";
 import TaskItem from "./TaskItem";
 
 type TaskContainerProps = {
@@ -124,6 +125,11 @@ const TaskContainer: FC<TaskContainerProps> = ({
           />
         ))}
       </div>
+
+      <CompletedTasksContainer
+        onTaskSelected={onTaskSelected}
+        withCheckbox={withCheckbox}
+      />
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <ModalDialog>

@@ -1,24 +1,26 @@
 import { subDays } from "date-fns";
-import { and, eq, gt, isNull, or } from "drizzle-orm";
+import { and, desc, eq, gt, isNull } from "drizzle-orm";
 import { db } from "../../drizzle";
 import { tasks } from "../../drizzle/schemas/tasks-schema";
 import { CustomError } from "../../errors/CustomError";
 import { dateNow } from "../../helpers/getDate";
 
-type TaskParams = {
+type TaskQuery = {
 	daysPrev?: number;
 	isCompleted?: boolean;
 	isDeleted?: boolean;
 };
 
-export const getTasks = async (userId: string, params?: TaskParams) => {
+export const getTasks = async (userId: string, query?: TaskQuery) => {
 	try {
-		const defaultParams: TaskParams = {
+		const defaultParams: TaskQuery = {
 			daysPrev: 0,
 			isCompleted: false,
 			isDeleted: true,
-			...params,
+			...query,
 		};
+
+		console.log("Fetching tasks with params:", defaultParams);
 
 		const daysPrev = subDays(dateNow, defaultParams.daysPrev || 0);
 
@@ -29,17 +31,11 @@ export const getTasks = async (userId: string, params?: TaskParams) => {
 				and(
 					eq(tasks.userId, userId),
 					defaultParams.isDeleted ? undefined : isNull(tasks.deleted_at),
-					defaultParams.isCompleted !== undefined
-						? and(
-							eq(tasks.isCompleted, defaultParams.isCompleted),
-							gt(tasks.created_at, daysPrev)
-						)
-						: or(
-							eq(tasks.isCompleted, false),
-							gt(tasks.created_at, dateNow),
-						),
+					defaultParams.isCompleted ? eq(tasks.isCompleted, true) : undefined,
+					defaultParams.daysPrev ? gt(tasks.created_at, daysPrev) : undefined
 				),
-			);
+			)
+			.orderBy((t) => desc(defaultParams.isCompleted ? t.updated_at : t.created_at));
 
 		return {
 			tasks: tasksResponse,
