@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, FC, ReactNode } from "react";
 type ButtonPillProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
   isDisabled?: boolean;
-  theme?: "primary" | "secondary" | "danger";
+  theme?: "primary" | "secondary" | "danger" | "success";
   size?: "small" | "medium" | "large";
   className?: string;
 };
@@ -35,10 +35,15 @@ const ButtonPill: FC<ButtonPillProps> = ({
         theme === "secondary" &&
         "bg-gray-200 text-gray-600 hover:bg-gray-300"
       }
-			${
+      ${
         !isDisabled &&
         theme === "danger" &&
         "bg-primary-danger-bg text-primary-danger hover:opacity-80"
+      }
+      ${
+        !isDisabled &&
+        theme === "success" &&
+        "bg-primary-success-bg text-primary-success hover:opacity-80"
       }
       ${className}
 			`}
