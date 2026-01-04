@@ -7,54 +7,64 @@ import {
   ModalDialog,
   Skeleton,
   Stack,
-} from '@mui/joy'
-import { type FC, type FormEvent, useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
-import { IoReload } from 'react-icons/io5'
-import { MdError } from 'react-icons/md'
-import { useFetchTasks, usePostTask } from '../hooks/task-hooks'
-import Button from './Button'
-import TaskItem from './TaskItem'
+} from "@mui/joy";
+import { type FC, type FormEvent, useState } from "react";
+import { FaPlus } from "react-icons/fa";
+import { IoReload } from "react-icons/io5";
+import { MdError } from "react-icons/md";
+import { useDeleteTask, useFetchTasks, usePostTask } from "../hooks/task-hooks";
+import Button from "./Button";
+import TaskItem from "./TaskItem";
 
 type TaskContainerProps = {
-  onTaskSelected?: (taskId: string) => void
-  withCheckbox?: boolean
-}
+  onTaskSelected?: (taskId: string) => void;
+  withCheckbox?: boolean;
+};
 
 const TaskContainer: FC<TaskContainerProps> = ({
   onTaskSelected,
   withCheckbox,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const fetchTasks = useFetchTasks()
-  const postTask = usePostTask()
+  const fetchTasks = useFetchTasks();
+  const postTask = usePostTask();
+  const deleteTask = useDeleteTask();
 
   const handleNewTask = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setModalOpen(false)
+    event.preventDefault();
+    setModalOpen(false);
 
-    const taskValue = event.currentTarget.task.value
+    const taskValue = event.currentTarget.task.value;
 
-    postTask.mutate(taskValue)
+    postTask.mutate(taskValue);
 
     if (postTask.isError) {
-      alert('Erro ao criar a tarefa')
+      alert("Erro ao criar a tarefa");
     }
-  }
+  };
+
+  const handleClearCompletedTasks = () => {
+    fetchTasks.data?.forEach((task) => {
+      if (task.isCompleted) {
+        deleteTask.mutate(task.id);
+      }
+    });
+  };
 
   return (
     <>
       <div className="flex flex-row justify-between w-full relative">
         <div className="flex flex-row items-center gap-6">
-          <h5 className="font-bold text-xl">Tarefas</h5>
-          {/* <button
-						type="button"
-						className="text-primary font-semibold cursor-pointer hover:text-primary-hover"
-						onClick={handleDeleteTaskCompleted}
-					>
-						<span>Limpar tarefas completas</span>
-					</button> */}
+          <h5 className="sm:block hidden font-bold text-xl">Tarefas</h5>
+          <button
+            type="button"
+            onClick={handleClearCompletedTasks}
+            disabled={deleteTask.isPending}
+            className="text-primary font-semibold cursor-pointer hover:text-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span>Limpar tarefas completas</span>
+          </button>
         </div>
         <Button
           isLoading={postTask.isPending || fetchTasks.isLoading}
@@ -68,19 +78,19 @@ const TaskContainer: FC<TaskContainerProps> = ({
         loading={fetchTasks.isLoading}
         animation="wave"
         variant="text"
-        sx={{ width: '100%' }}
+        sx={{ width: "100%" }}
       />
       <Skeleton
         loading={fetchTasks.isLoading}
         animation="wave"
         variant="text"
-        sx={{ width: '100%' }}
+        sx={{ width: "100%" }}
       />
       <Skeleton
         loading={fetchTasks.isLoading}
         animation="wave"
         variant="text"
-        sx={{ width: '100%' }}
+        sx={{ width: "100%" }}
       />
 
       <div className="flex flex-col gap-4">
@@ -101,9 +111,9 @@ const TaskContainer: FC<TaskContainerProps> = ({
           </div>
         )}
         {fetchTasks.data?.length === 0 && (
-          <span>{'Você não tem nenhuma task :('}</span>
+          <span>{"Você não tem nenhuma task :("}</span>
         )}
-        {fetchTasks.data?.map(task => (
+        {fetchTasks.data?.map((task) => (
           <TaskItem
             key={task.id}
             id={task.id}
@@ -136,7 +146,7 @@ const TaskContainer: FC<TaskContainerProps> = ({
         </ModalDialog>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default TaskContainer
+export default TaskContainer;
