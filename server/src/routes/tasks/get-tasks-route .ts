@@ -32,8 +32,8 @@ export const getTasksRoute: FastifyPluginAsyncZod = async (app) => {
 
 			const { tasks } = await getTasks(userId, {
 				daysPrev,
-				isCompleted: Boolean(isCompleted),
-				isDeleted: Boolean(isDeleted),
+				isCompleted,
+				isDeleted,
 			});
 
 			reply.code(201).send(tasks);

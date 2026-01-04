@@ -2,6 +2,7 @@ import { Divider, Skeleton } from "@mui/joy";
 import { type FC, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { MdError } from "react-icons/md";
+import { useNavigate } from "react-router";
 import { useFetchCompletedTasks } from "../hooks/task-hooks";
 import TaskItem from "./TaskItem";
 
@@ -10,6 +11,8 @@ type CompletedTasksContainerProps = {
   withCheckbox?: boolean;
 };
 
+const MAX_DISPLAYED_TASKS = 5;
+
 const CompletedTasksContainer: FC<CompletedTasksContainerProps> = ({
   onTaskSelected,
   withCheckbox,
@@ -17,9 +20,12 @@ const CompletedTasksContainer: FC<CompletedTasksContainerProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const completedTasks = useFetchCompletedTasks();
 
-  const displayedTasks = completedTasks.data?.slice(0, 6) || [];
+  const displayedTasks =
+    completedTasks.data?.slice(0, MAX_DISPLAYED_TASKS) || [];
   const totalCompleted = completedTasks.data?.length || 0;
-  const hasMore = totalCompleted > 6;
+  const hasMore = totalCompleted > MAX_DISPLAYED_TASKS;
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -38,7 +44,7 @@ const CompletedTasksContainer: FC<CompletedTasksContainerProps> = ({
           </span>
           {hasMore && (
             <span className="text-sm text-gray-500">
-              Mostrando 6 de {totalCompleted}
+              Mostrando {MAX_DISPLAYED_TASKS} de {totalCompleted}
             </span>
           )}
         </div>
@@ -102,14 +108,14 @@ const CompletedTasksContainer: FC<CompletedTasksContainerProps> = ({
           </div>
 
           {hasMore && (
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <button className="mt-4 pt-4 border-t border-gray-200 cursor-pointer">
               <a
-                href="/statistics"
+                onClick={() => navigate("/statistics")}
                 className="text-primary font-semibold hover:text-primary-hover"
               >
                 Ver todas as tarefas completadas →
               </a>
-            </div>
+            </button>
           )}
         </div>
       )}

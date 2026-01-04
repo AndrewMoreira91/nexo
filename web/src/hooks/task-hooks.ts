@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   deleteTask,
+  fetchCompletedTasks,
   fetchTasks,
   postTask,
   updateTask,
@@ -59,11 +60,7 @@ export const useUpdateTask = () => {
 export const useFetchCompletedTasks = () => {
   return useQuery<TaskType[]>({
     queryKey: ['completedTasks'],
-    queryFn: async () => {
-      const { api } = await import('../libs/api')
-      const response = await api.get<TaskType[]>('/task?isCompleted=true&isDeleted=false')
-      return response.data.sort((a, b) => new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime())
-    },
+    queryFn: fetchCompletedTasks,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10, // 10 minutes
   })

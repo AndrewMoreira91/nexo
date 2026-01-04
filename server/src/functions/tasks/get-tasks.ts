@@ -7,22 +7,15 @@ import { dateNow } from "../../helpers/getDate";
 
 type TaskQuery = {
 	daysPrev?: number;
-	isCompleted?: boolean;
-	isDeleted?: boolean;
+	isCompleted?: string;
+	isDeleted?: string;
 };
 
-export const getTasks = async (userId: string, query?: TaskQuery) => {
+export const getTasks = async (userId: string, query: TaskQuery) => {
 	try {
-		const defaultParams: TaskQuery = {
-			daysPrev: 0,
-			isCompleted: false,
-			isDeleted: true,
-			...query,
-		};
+		console.log("Fetching tasks with params:", query);
 
-		console.log("Fetching tasks with params:", defaultParams);
-
-		const daysPrev = subDays(dateNow, defaultParams.daysPrev || 0);
+		const daysPrev = subDays(dateNow, query?.daysPrev || 0);
 
 		const tasksResponse = await db
 			.select()
@@ -30,12 +23,12 @@ export const getTasks = async (userId: string, query?: TaskQuery) => {
 			.where(
 				and(
 					eq(tasks.userId, userId),
-					defaultParams.isDeleted ? undefined : isNull(tasks.deleted_at),
-					defaultParams.isCompleted ? eq(tasks.isCompleted, true) : undefined,
-					defaultParams.daysPrev ? gt(tasks.created_at, daysPrev) : undefined
+					query.isDeleted ? undefined : isNull(tasks.deleted_at),
+					query.isCompleted ? eq(tasks.isCompleted, query.isCompleted === "true" ? true : false) : undefined,
+					query.daysPrev ? gt(tasks.created_at, daysPrev) : undefined
 				),
 			)
-			.orderBy((t) => desc(defaultParams.isCompleted ? t.updated_at : t.created_at));
+			.orderBy((t) => desc(query.isCompleted ? t.updated_at : t.created_at));
 
 		return {
 			tasks: tasksResponse,
