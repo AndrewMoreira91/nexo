@@ -169,6 +169,13 @@ const Header = () => {
               >
                 <span>Pomodoro</span>
               </button>
+              <button
+                className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                type="button"
+                onClick={() => navigate("/statistics")}
+              >
+                <span>Estatísticas</span>
+              </button>
               <Dropdown defaultOpen={false}>
                 <MenuButton variant="plain">
                   <ProfileAvatar size="lg" color="primary" />
@@ -274,6 +281,16 @@ const Header = () => {
             >
               <span className="font-semibold text-lg text-primary">
                 Pomodoro
+              </span>
+            </button>
+
+            <button
+              className="w-full text-left p-4 rounded-lg hover:bg-primary-bg transition-colors duration-200"
+              type="button"
+              onClick={() => handleNavigate("/statistics")}
+            >
+              <span className="font-semibold text-lg text-primary">
+                Estatísticas
               </span>
             </button>
           </div>

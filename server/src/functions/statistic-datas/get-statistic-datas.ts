@@ -18,6 +18,9 @@ type TaskType = {
 	dailyProgressId: string | null;
 	title: string;
 	isCompleted: boolean;
+	created_at: Date;
+	updated_at: Date | null;
+	deleted_at: Date | null;
 };
 
 type UserSessionStatistics = {
@@ -115,6 +118,9 @@ export const getStatisticDatas = async (
 					dailyProgressId: tasks.dailyProgressId,
 					title: tasks.title,
 					isCompleted: tasks.isCompleted,
+					created_at: tasks.created_at,
+					updated_at: tasks.updated_at,
+					deleted_at: tasks.deleted_at,
 				})
 				.from(tasks)
 				.where(

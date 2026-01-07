@@ -15,6 +15,7 @@ import {
   SimpleLineChart,
   SimplePieChart,
 } from "../components/ChartComponents";
+import CompletedTasksList from "../components/CompletedTasksList";
 import Container from "../components/Container";
 import Loader from "../components/Loader";
 import MenuData from "../components/MenuData";
@@ -194,6 +195,12 @@ const StatisticsPage = () => {
                 </Container>
               </div>
             )}
+
+            {/* Tarefas Completadas */}
+            <CompletedTasksList
+              tasks={dataStatistics?.tasksCompleted}
+              isLoading={isLoadingData}
+            />
 
             {/* Gráficos */}
             <div className="flex flex-col gap-8">
